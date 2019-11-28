@@ -1,0 +1,29 @@
+﻿nav {
+    /*background-color: black;*/
+    background-image: linear-gradient(to top, white 0%, black 20%, black 80%, white 100%);
+    width: 100vw;
+    height:auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 3px 0;
+    padding-left: 10vw;
+}
+    nav a {
+        font-size: 32px;
+        font-weight: 900;
+        list-style: none;
+        margin: 2px 14px;
+        padding: 5px;
+    }
+
+        nav a:hover {
+            background: radial-gradient(ellipse at center, grey 0, transparent 85%);
+        }
+
+    nav .selected {
+        margin: 0 12px;
+        background: radial-gradient(ellipse at center, grey 0, transparent 85%);
+        border: 2px dashed #E3E3E3;
+        overflow: visible;
+    }

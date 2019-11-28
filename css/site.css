@@ -1,0 +1,25 @@
+﻿body {
+    background-color: #1a181e !important;
+    font-family: Calibri;
+    color: #e1dbec;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Calibri;
+}
+
+#table td {
+    padding: 5px;
+    border: 1px solid #4c4557;
+}
+
+#table {
+    background-color: rgba(45,41,52,.6);
+}
+
+    #table img {
+        border-radius: 50%;
+    }
+
