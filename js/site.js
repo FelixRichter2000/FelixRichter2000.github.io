@@ -132,18 +132,11 @@ function updateUserAlgos() {
 
 function loadMissingMatchData() {
     Array.from(USER_ALGOS).forEach(function (i) {
-
         if (!LOADED_ALGOS.has(i)) {
-
-            //console.log('Loading algo:' + i);
-
             LOADED_ALGOS.add(i);
             $.ajax({
                 url: "https://terminal.c1games.com/api/game/algo/" + i.toString() + "/matches"
             }).done(function (result) {
-                console.log('Test Matches result ready!');
-                console.log(result);
-
                 matches = result.data.matches;
                 for (var m = 0; m < matches.length; m++) {
 
@@ -163,45 +156,56 @@ function loadMissingMatchData() {
                         USER_OPPONENTS[other_algo_id] = {};
                     }
 
-                    USER_OPPONENTS[other_algo_id][i] = haveIwon;
+                    USER_OPPONENTS[other_algo_id][i] = {
+                        haveIwon: haveIwon,
+                        match_id: match.id
+                    };
                 }
-
                 updateOverviewTable();
             });
         }
-        else {
-            //console.log('Algo already loaded:' + i);
-        }
-    }
-    );
+    });
 }
 
-updateOverviewTable();
 function updateOverviewTable() {
     var table = $('#overview_table');
     table.html("");
 
     numAlgos = 0;
 
+    for (var opponent_ids in SORTED) {
+        for (var opponent_id in SORTED[opponent_ids]) {
+            opponent_id = SORTED[opponent_ids][opponent_id].id;
+            if (opponent_id in USER_OPPONENTS) {
+                opponent = USER_OPPONENTS[opponent_id];
+
+                var row = $('<tr>')
+                    .append($('<td>')
+                        .append(DATA[opponent_id].name))
+                    .append($('<td>')
+                        .append(DATA[opponent_id].user));
+                Array.from(USER_ALGOS).forEach(function (i) {
+                    var td = $('<td>')
+                        .addClass(i in opponent ? opponent[i].haveIwon == true ? 'won' : 'lost' : '');
+                    if (i in opponent) {
+                        td.append($('<a target="_blank">')
+                            .attr('href', 'https://terminal.c1games.com/watch/' + opponent[i].match_id)
+                            .html('&nbsp;')
+                        );
+                    }
+                    row.append(td);
+                });
+                table.prepend(row);
+            }
+        }
+    }
+
     var row = $('<tr>')
-        .append($('<th>')
-            .append('Opponent'));
+        .append($('<th>'))
+        .append($('<th>'));
     Array.from(USER_ALGOS).forEach(function (i) {
         row.append($('<th>')
             .append(DATA[i].name));
     });
-    table.append(row);
-
-    for (var opponent_id in USER_OPPONENTS) {
-        opponent = USER_OPPONENTS[opponent_id];
-
-        var row = $('<tr>')
-            .append($('<td>')
-                .append(DATA[opponent_id].name));
-        Array.from(USER_ALGOS).forEach(function (i) {
-            row.append($('<td>')
-                .addClass(opponent[i] == true ? 'won' : opponent[i] == false ? 'lost' : ''))
-        });
-        table.append(row);
-    }
+    table.prepend(row);
 }

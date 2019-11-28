@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
-    <nav id="main_nav">
+    <nav id="main_nav" class="sticky">
         <a>Home</a>
         <a>Leaderboard</a>
-        <a>Overview</a>
+        <a>Overview Player</a>
+        <a>Overview Algo</a>
     </nav>
 
     <content id="main_content">
@@ -22,8 +23,6 @@
             <input id="username" type="text" value="Felix" />
         </div>
         <div id="Leaderboard">
-            <h1>Headline Leaderboard</h1>
-
             <div style="display:flex;">
                 <h2 id="numAlgos">0</h2>
                 <h2>&nbsp;algos have been loaded from&nbsp;</h2>
@@ -33,11 +32,10 @@
 
             <table id="leaderboard_table"></table>
         </div>
-        <div id="Overview">
-            <h1>Headline Overview</h1>
-
-
+        <div id="Overview Player">
             <table id="overview_table" class="table-header-rotated"></table>
+        </div>
+        <div id="Overview Algo">
 
         </div>
     </content>

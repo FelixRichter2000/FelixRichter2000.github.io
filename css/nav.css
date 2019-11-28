@@ -1,11 +1,13 @@
 ﻿nav {
     background-image: linear-gradient(to top, white 2%, black 20%, black 80%, white 98%);
     width: 100vw;
-    height:auto;
+    height: auto;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     padding-left: 10vw;
+    z-index: 100;
+    user-select: none;
 }
     nav a {
         font-size: 32px;
@@ -25,3 +27,10 @@
         border: 2px dashed rgba(255,255,255,20);
         overflow: visible;
     }
+
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+}

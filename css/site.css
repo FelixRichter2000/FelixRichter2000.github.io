@@ -1,4 +1,5 @@
 ﻿body {
+    margin-top: 62px;
     background-color: #1a181e !important;
     font-family: Calibri;
     color: #e1dbec;
@@ -19,31 +20,45 @@
     table-layout: fixed;
 }
 
+    #overview_table a {
+        display: block;
+        text-decoration: none;
+    }
+
     #overview_table td {
         width: 20px;
         max-width: 20px;
     }
 
-    #overview_table td.won {
-        background-color: green;
-    }
+        #overview_table td.won {
+            background-color: green;
+        }
 
-    #overview_table td.lost {
-        background-color: red;
-    }
+        #overview_table td.lost {
+            background-color: red;
+        }
 
-th:not(:first-child) {
+/*#overview_table:first-child {
+        position: fixed;
+        top: 62px;
+        width: 100%
+    }*/
+
+th:not(:first-child):not(:nth-child(2)) {
     width: 20px;
     max-width: 20px;
-    transform: rotate(-90deg) translateX(-110px);
+    transform: rotate(90deg) translateX(-110px);
 }
 
 th {
-    text-align: center;
-    position: relative;
-    transform: rotate(-90deg);
+    position: sticky;
+    top: 62px;
+    text-align: left;
+    /*position: relative;*/
+    transform: rotate(90deg);
     height: 250px;
     white-space: nowrap;
+    width: 300px;
 }
 
 #leaderboard_table, #overview_table {
@@ -57,6 +72,3 @@ th {
 #main_content div {
     display: none;
 }
-
-
-
