@@ -3,15 +3,29 @@ DATA = {};
 SORTED = {};
 USERS = new Set();
 
-loaded = 0
+USER_ALGOS = new Set();
+LOADED_ALGOS = new Set();
+USER_OPPONENTS = {};
 
+logged_in_user = 'Felix';
+loaded = 0;
 
+//Update logged_in_user
+$('#username').on('change', function () {
+    logged_in_user = $(this).val();
+    USER_ALGOS = new Set();
+    LOADED_ALGOS = new Set();
+    USER_OPPONENTS = {};
 
+    loadOverviewData();
+});
+
+//Load Leaderboard Data
 for (var i = 1; i < 6; i++) {
     $.ajax({
         url: "https://terminal.c1games.com/api/game/leaderboard?page=" + i.toString()
     }).done(function (result) {
-        console.log(result);
+        //console.log(result);
 
         var algos = result.data.algos;
         for (var i = 0; i < algos.length; i++) {
@@ -40,12 +54,14 @@ for (var i = 1; i < 6; i++) {
 
                 loaded++;
                 if (loaded % 10 == 0) {
-                    updateTable();
+                    loadOverviewData();
+                    updateLeaderboardTable();
                 }
             });
         }
 
-        updateTable();
+        loadOverviewData();
+        updateLeaderboardTable();
     });
 }
 
@@ -64,14 +80,11 @@ function handleAlgo(algo) {
     }
 }
 
-function updateTable() {
-    table = $('#table');
+function updateLeaderboardTable() {
+    var table = $('#leaderboard_table');
     table.html("");
 
     numAlgos = 0;
-
-    //for (var d in DATA) {
-    //    d = DATA[d];
 
     for (var r in SORTED) {
 
@@ -95,7 +108,6 @@ function updateTable() {
                         .append($('<img width="20" height="20">')
                             .attr('src', d.avatarUrl))
                         .append(' ' + d.user))
-
                 );
         }
     }
@@ -104,37 +116,92 @@ function updateTable() {
     $('#numPlayers').html(USERS.size);
 }
 
-function sortTable() {
-    var table, rows, switching, i, x, y, shouldSwitch;
-    table = document.getElementById("table");
-    switching = true;
-    /* Make a loop that will continue until
-    no switching has been done: */
-    while (switching) {
-        // Start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-        first, which contains table headers): */
-        for (i = 0; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
-            shouldSwitch = false;
-            /* Get the two elements you want to compare,
-            one from current row and one from the next: */
-            x = rows[i].getElementsByTagName("td")[1];
-            y = rows[i + 1].getElementsByTagName("td")[1];
-            // Check if the two rows should switch place:
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                // If so, mark as a switch and break the loop:
-                shouldSwitch = true;
-                break;
-            }
+function loadOverviewData() {
+    updateUserAlgos();
+    loadMissingMatchData();
+}
+
+function updateUserAlgos() {
+    for (var i in DATA) {
+        var d = DATA[i];
+        if (d.user == logged_in_user) {
+            USER_ALGOS.add(d.id);
         }
-        if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-            and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
+    }
+}
+
+function loadMissingMatchData() {
+    Array.from(USER_ALGOS).forEach(function (i) {
+
+        if (!LOADED_ALGOS.has(i)) {
+
+            //console.log('Loading algo:' + i);
+
+            LOADED_ALGOS.add(i);
+            $.ajax({
+                url: "https://terminal.c1games.com/api/game/algo/" + i.toString() + "/matches"
+            }).done(function (result) {
+                console.log('Test Matches result ready!');
+                console.log(result);
+
+                matches = result.data.matches;
+                for (var m = 0; m < matches.length; m++) {
+
+                    match = matches[m]
+
+                    losing = match.losing_algo;
+                    winning = match.winning_algo;
+
+                    //Check if I won
+                    var haveIwon = winning.user == logged_in_user;
+
+                    handleAlgo(haveIwon ? losing : winning);
+                    var other_algo_id = haveIwon ? losing.id : winning.id;
+
+                    //Add algo_id as new key with another dictionary as value, if it doesn't exist.
+                    if (!(other_algo_id in USER_OPPONENTS)) {
+                        USER_OPPONENTS[other_algo_id] = {};
+                    }
+
+                    USER_OPPONENTS[other_algo_id][i] = haveIwon;
+                }
+
+                updateOverviewTable();
+            });
         }
+        else {
+            //console.log('Algo already loaded:' + i);
+        }
+    }
+    );
+}
+
+updateOverviewTable();
+function updateOverviewTable() {
+    var table = $('#overview_table');
+    table.html("");
+
+    numAlgos = 0;
+
+    var row = $('<tr>')
+        .append($('<th>')
+            .append('Opponent'));
+    Array.from(USER_ALGOS).forEach(function (i) {
+        row.append($('<th>')
+            .append(DATA[i].name));
+    });
+    table.append(row);
+
+    for (var opponent_id in USER_OPPONENTS) {
+        opponent = USER_OPPONENTS[opponent_id];
+
+        var row = $('<tr>')
+            .append($('<td>')
+                .append(DATA[opponent_id].name));
+        Array.from(USER_ALGOS).forEach(function (i) {
+            row.append($('<td>')
+                .addClass(opponent[i] == true ? 'won' : opponent[i] == false ? 'lost' : ''))
+        });
+        table.append(row);
     }
 }

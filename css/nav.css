@@ -1,12 +1,10 @@
 ﻿nav {
-    /*background-color: black;*/
-    background-image: linear-gradient(to top, white 0%, black 20%, black 80%, white 100%);
+    background-image: linear-gradient(to top, white 2%, black 20%, black 80%, white 98%);
     width: 100vw;
     height:auto;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin: 3px 0;
     padding-left: 10vw;
 }
     nav a {
@@ -24,6 +22,6 @@
     nav .selected {
         margin: 0 12px;
         background: radial-gradient(ellipse at center, grey 0, transparent 85%);
-        border: 2px dashed #E3E3E3;
+        border: 2px dashed rgba(255,255,255,20);
         overflow: visible;
     }

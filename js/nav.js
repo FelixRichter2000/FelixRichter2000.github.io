@@ -5,7 +5,7 @@ nav_a_tags.each(function () {
     $(this).on('click', function () {
         var clicked_nav_item = $(this).html();
         for (var i = 0; i < nav_a_tags.length; i++) {
-            var current_nav_item = $(nav_a_tags[i]).html();
+            // var current_nav_item = $(nav_a_tags[i]).html();
             var current_content_item = $(nav_content_elements[i]).attr('id');
             if (clicked_nav_item == current_content_item) {
                 $(nav_content_elements[i]).show();
