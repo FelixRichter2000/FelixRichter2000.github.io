@@ -11,6 +11,10 @@
     font-family: Calibri;
 }
 
+ol {
+    padding-left: 40px;
+}
+
 #leaderboard_table td, #overview_table td, #overview_table th {
     padding: 5px;
     border: 1px solid #4c4557;
@@ -37,10 +41,10 @@ table button {
     text-align: left;
 }
 
-table button:hover {
-    color: #005bcf;
-    text-decoration: underline;
-}
+    table button:hover {
+        color: #005bcf;
+        text-decoration: underline;
+    }
 
 #main_content div {
     display: none;
