@@ -89,7 +89,7 @@ function updateOverviewTable() {
         .append($('<th>'));
     Array.from(USER_ALGOS).forEach(function (i) {
         row.append($('<th>')
-            .append(DATA[i].name));
+            .append(DATA[i].name + ' - (' + DATA[i].rating + ')'));
     });
     table.prepend(row);
 }
