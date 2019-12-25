@@ -1,4 +1,5 @@
-﻿
+﻿var urlParams = new URLSearchParams(window.location.search);
+
 DATA = {};
 SORTED = {};
 USERS = new Set();
@@ -9,6 +10,32 @@ USER_OPPONENTS = {};
 
 logged_in_user = '';
 loaded = 0;
+
+//Path query handler
+$('input[query]').on('change', function () {
+    updateQueryPath();
+});
+
+function updateQueryPath() {
+    var patname = window.location.path;
+    var newPath = (patname ? '/' + patname : '') + '?';
+
+    $('input[query]').each(function (i, el) {
+        newPath += el.name + '=' + el.value + '&';
+    });
+
+    newPath = newPath.slice(0, -1);
+    window.history.pushState('', document.title, newPath);
+    urlParams = new URLSearchParams(window.location.search);
+}
+
+$('input[query]').each(function (i, el) {
+    var value = urlParams.get(el.name);
+    if (value)
+        el.value = value;
+});
+
+updateQueryPath();
 
 //Update logged_in_user
 $('#username').on('change', function () {
@@ -24,7 +51,7 @@ function reloadOverviewPlayerData() {
 }
 
 //Load Leaderboard Data
-for (var i = 1; i < 2; i++) {
+for (var i = 1; i < parseInt(urlParams.get('amount')) + 1; i++) {
     $.ajax({
         url: "https://terminal.c1games.com/api/game/leaderboard?page=" + i.toString()
     }).done(function (result) {
