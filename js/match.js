@@ -19,6 +19,7 @@ let showNextTimer = setInterval(() => showNext(), 10);
 $replay_range.on('change', function () {
     showMatchData($(this).val());
     console.log($(this).val());
+    clearInterval(showNextTimer);
 });
 
 $watch_on_terminal.on('click', function () {
