@@ -29,7 +29,7 @@ function loadPlayer(player) {
 }
 
 function loadAlgo(algo) {
-    switchToTab('Overview Algo');
+    switchToTab('Algo');
 }
 
 (function () {

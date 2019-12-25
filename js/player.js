@@ -1,4 +1,12 @@
-﻿function loadOverviewData() {
+﻿function reloadOverviewPlayerData() {
+    USER_ALGOS = new Set();
+    LOADED_ALGOS = new Set();
+    USER_OPPONENTS = {};
+    loadOverviewData();
+}
+
+
+function loadOverviewData() {
     updateUserAlgos();
     loadMissingMatchData();
 }
