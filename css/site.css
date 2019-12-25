@@ -49,3 +49,12 @@ table button {
 #main_content div {
     display: none;
 }
+
+#match_table td {
+    width: 30px;
+    height: 30px;
+}
+
+#match_table{
+    margin-left: 20px;
+}

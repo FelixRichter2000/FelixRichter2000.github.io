@@ -36,6 +36,7 @@ function loadAlgo(algo) {
 function loadMatch(match) {
     selected_match = match;
     switchToTab('Match');
+    onMatchChanged();
 }
 
 
