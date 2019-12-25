@@ -24,7 +24,7 @@ function switchToTab(tab) {
 
 function loadPlayer(player) {
     logged_in_user = player;
-    switchToTab('Overview Player');
+    switchToTab('Player');
     reloadOverviewPlayerData();
 }
 
