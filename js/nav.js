@@ -34,9 +34,12 @@ function loadAlgo(algo) {
 }
 
 function loadMatch(match) {
+    hasChanged = selected_match !== match;
     selected_match = match;
     switchToTab('Match');
-    onMatchChanged();
+    if (hasChanged) {
+        onMatchChanged();
+    }
 }
 
 

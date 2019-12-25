@@ -1,5 +1,4 @@
-﻿
-$replay_table = $('#match_table');
+﻿$replay_table = $('#match_table');
 
 function onMatchChanged() {
     $('#match_id_label').html(selected_match);
