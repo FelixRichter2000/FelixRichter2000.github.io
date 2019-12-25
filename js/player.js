@@ -2,11 +2,7 @@
     USER_ALGOS = new Set();
     LOADED_ALGOS = new Set();
     USER_OPPONENTS = {};
-    loadOverviewData();
-}
 
-
-function loadOverviewData() {
     updateUserAlgos();
     loadMissingMatchData();
 }
@@ -14,7 +10,7 @@ function loadOverviewData() {
 function updateUserAlgos() {
     for (var i in DATA) {
         var d = DATA[i];
-        if (d.user == logged_in_user) {
+        if (d.user == selected_user) {
             USER_ALGOS.add(d.id);
         }
     }
@@ -36,7 +32,7 @@ function loadMissingMatchData() {
                     winning = match.winning_algo;
 
                     //Check if I won
-                    var haveIwon = winning.user == logged_in_user;
+                    var haveIwon = winning.user == selected_user;
 
                     handleAlgo(winning);
                     handleAlgo(losing);
@@ -70,20 +66,26 @@ function updateOverviewTable() {
             opponent_id = SORTED[opponent_ids][opponent_id].id;
             if (opponent_id in USER_OPPONENTS) {
                 opponent = USER_OPPONENTS[opponent_id];
-
+                algo_data = DATA[opponent_id];
                 var row = $('<tr>')
                     .append($('<td>')
-                        .append(DATA[opponent_id].name))
+                        .append($('<button>')
+                            .attr('onclick', 'loadAlgo(' + algo_data.id + ');')
+                            .append(algo_data.name)))
                     .append($('<td>')
-                        .append(DATA[opponent_id].user));
+                        .append($('<button>')
+                            .attr('onclick', 'loadPlayer("' + algo_data.user + '");')
+                            .append($('<img width="20" height="20">')
+                                .attr('src', algo_data.avatarUrl))
+                            .append(' ' + algo_data.user)))
                 Array.from(USER_ALGOS).forEach(function (i) {
                     var td = $('<td>')
                         .addClass(i in opponent ? opponent[i].haveIwon == true ? 'won' : 'lost' : '');
                     if (i in opponent) {
-                        td.append($('<a target="_blank">')
-                            .attr('href', 'https://terminal.c1games.com/watch/' + opponent[i].match_id)
-                            .html('&nbsp;')
-                        );
+                        td
+                            .append($('<button>')
+                                .attr('onclick', 'loadMatch(' + opponent[i].match_id + ');')
+                                .html('&nbsp;'));
                     }
                     row.append(td);
                 });
@@ -96,8 +98,11 @@ function updateOverviewTable() {
         .append($('<th>'))
         .append($('<th>'));
     Array.from(USER_ALGOS).forEach(function (i) {
+        algo_data = DATA[i];
         row.append($('<th>')
-            .append(DATA[i].name + ' - (' + DATA[i].rating + ')'));
+            .append($('<button>')
+                .attr('onclick', 'loadAlgo(' + algo_data.id + ');')
+                .append(DATA[i].name + ' - (' + DATA[i].rating + ')')))
     });
     table.prepend(row);
 }

@@ -8,5 +8,9 @@ USER_ALGOS = new Set();
 LOADED_ALGOS = new Set();
 USER_OPPONENTS = {};
 
-logged_in_user = '';
+selected_user = null;
+selected_algo = null;
+selected_match = null;
+
 loaded = 0;
+

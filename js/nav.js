@@ -23,14 +23,21 @@ function switchToTab(tab) {
 }
 
 function loadPlayer(player) {
-    logged_in_user = player;
+    selected_user = player;
     switchToTab('Player');
     reloadOverviewPlayerData();
 }
 
 function loadAlgo(algo) {
+    selected_algo = algo;
     switchToTab('Algo');
 }
+
+function loadMatch(match) {
+    selected_match = match;
+    switchToTab('Match');
+}
+
 
 (function () {
     for (var i = 0; i < nav_content_elements.length; i++) {

@@ -4,9 +4,14 @@ $('input[query]').on('change', function () {
 });
 
 $('input[query]').each(function (i, el) {
+    var $el = $(el);
     var value = urlParams.get(el.name);
-    if (value)
-        el.value = value;
+    if (value) {
+        if ($el.attr('type') == 'number')
+            el.value = value;
+        else if ($el.attr('type') == 'checkbox')
+            el.checked = value !== 'false';
+    }
 });
 
 updateQueryPath();
@@ -16,7 +21,11 @@ function updateQueryPath() {
     var newPath = (patname ? '/' + patname : '') + '?';
 
     $('input[query]').each(function (i, el) {
-        newPath += el.name + '=' + el.value + '&';
+        $el = $(el);
+        if($el.attr('type') == 'number')
+            newPath += el.name + '=' + el.value + '&';
+        else if ($el.attr('type') == 'checkbox')
+            newPath += el.name + '=' + el.checked + '&';
     });
 
     newPath = newPath.slice(0, -1);

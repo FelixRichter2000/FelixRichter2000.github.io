@@ -24,7 +24,7 @@ ol, ul{
     background-color: rgba(45,41,52,.6);
 }
 
-    #leaderboard_table img {
+    #leaderboard_table img, #overview_table img {
         border-radius: 50%;
     }
 
