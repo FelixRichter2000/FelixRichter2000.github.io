@@ -85,7 +85,7 @@ function showMatchData(i) {
                 //var combined = y * 1000 + x;
                 //var img = $replay_table.find('#' + combined);
 
-                var td = $replay_tds[y * 28 + x];
+                var td = $replay_tds[(27 - y) * 28 + x];
                 var img = $(td).find('img');
 
                 img.attr('src', currentImage);
