@@ -65,6 +65,42 @@ input[type=number] {
 }
 
 
+.IULabel {
+    position: absolute;
+    transform: translateX(26px) translateY(10px);
+}
+
+/*Play Button*/
+.play-background {
+    background-color: #367ebd;
+    width: 60px;
+    height: 36px;
+    border-radius: 5px;
+}
+.togglePlay {
+    border: 0;
+    background: transparent;
+    box-sizing: border-box;
+    width: 0;
+    height: 74px;
+    border-color: transparent transparent transparent #e1dbec;
+    transition: 100ms all ease;
+    cursor: pointer;
+    border-style: solid;
+    border-width: 37px 0 37px 60px;
+}
+
+    .togglePlay.paused {
+        border-style: double;
+        border-width: 0px 0 0px 60px;
+    }
+
+    .togglePlay:hover {
+        border-color: transparent transparent transparent #bfbfbf;
+    }
+
+
+
 
 /*Styling the range inputs*/
 input[type=range] {

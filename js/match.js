@@ -2,29 +2,48 @@
 $replay_range = $('#match_range');
 $watch_on_terminal = $('#watch_on_terminal');
 $replay_images = null;
+$replay_labels = null;
 $replay_tds = null;
 TURN_INFORMATION = {};
 current_match_data_index = 0;
 playback_speed = 30;
+var showNextTimer = null;
+var play = false;
+//Play/Pause button
+var $playButton = $(".togglePlay");
 
 const playerImages = [
     ['../images/Filter1.svg', '../images/Encryptor1.svg', '../images/Destructor1.svg', '../images/Ping1.svg', '../images/Emp1.svg', '../images/Scrambler1.svg', '../images/Remove1.svg'],
     ['../images/Filter2.svg', '../images/Encryptor2.svg', '../images/Destructor2.svg', '../images/Ping2.svg', '../images/Emp2.svg', '../images/Scrambler2.svg', '../images/Remove2.svg']];
 const emptyImage = '../images/EmptyField.svg';
 
-createMatchTable();
-selected_match = 5472882;
-onMatchChanged();
+$(document).ready(function () {
 
-// repeat with the interval 
-var showNextTimer = null;
-var play = false;
-setMatchSpeed(playback_speed);
+    $playButton.toggleClass("paused");
+    $playButton.click(function () {
+        $playButton.toggleClass("paused");
+        play = $playButton.hasClass("paused");
+    });
+
+    //Initializations
+    createMatchTable();
+    selected_match = 5472882;
+    onMatchChanged();
+
+    //MatchReplayLoop
+    setMatchSpeed(playback_speed);
+});
 
 function playMatch() {
     play = true;
+    $playButton.addClass("paused");
     showMatchData(0);
     current_match_data_index = 0;
+}
+
+function stopMatch() {
+    play = false;
+    $playButton.removeClass("paused");
 }
 
 function setMatchSpeed(speed) {
@@ -48,10 +67,10 @@ function updateReplayRangeSlider() {
     $replay_range.val(current_match_data_index);
 }
 
-$replay_range.on('change', function () {
-    showMatchData($(this).val());
-    console.log($(this).val());
-    play = false;
+$replay_range.on('input', function () {
+    current_match_data_index = parseInt($(this).val());
+    showMatchData(current_match_data_index);
+    stopMatch();
 });
 
 $watch_on_terminal.on('click', function () {
@@ -61,7 +80,7 @@ $watch_on_terminal.on('click', function () {
 
 function onMatchChanged() {
     $('#match_id_label').html(selected_match);
-    play = false;
+    stopMatch();
     resetReplayTable();
 
     loadMatchData();
@@ -137,7 +156,8 @@ function updateToNextFrame(frame) {
     }
 }
 
-function setImg(location, path) {
+var dict = {};
+function setImg(location, path, type = -1) {
     var x = location[0];
     var y = location[1];
     var td = $replay_tds[(27 - y) * 28 + x];
@@ -147,6 +167,7 @@ function setImg(location, path) {
 
 function resetReplayTable() {
     $replay_images.attr('src', emptyImage);
+    $replay_labels.html('');
 }
 
 function showMatchData(i) {
@@ -166,15 +187,26 @@ function showMatchData(i) {
             var currentUnits = playerUnits[imageIndex];
             var currentImage = images[imageIndex];
 
+            var dict = {};
+
             for (var unit in currentUnits) {
                 unit = currentUnits[unit];
                 var x = parseInt(unit[0]);
                 var y = parseInt(unit[1]);
 
-                var td = $replay_tds[(27 - y) * 28 + x];
+                var location = (27 - y) * 28 + x;
+
+                dict[location] = (location in dict ? dict[location] : 0) + 1;
+
+                var td = $replay_tds[location];
                 var img = $(td).find('img')[0];
+                var label = $(td).find('label')[0];
 
                 img.src = currentImage;
+
+                if (imageIndex > 2 && imageIndex < 6) {
+                    label.innerHTML = dict[location];
+                }
             }
         }
     }
@@ -188,6 +220,10 @@ function createMatchTable() {
             var new_td = $('<td>');
 
             if (Math.abs(x - 13.5) + Math.abs(y - 13.5) < 15) {
+                new_td
+                    .append($('<label>')
+                        .addClass('IULabel'));
+
                 new_td.append($('<img>')
                     .attr('id', (27 - y) * 1000 + x)
                     .attr('src', '../images/EmptyField.svg'));
@@ -199,5 +235,6 @@ function createMatchTable() {
             .append(new_row);
     }
     $replay_images = $replay_table.find('img');
+    $replay_labels = $replay_table.find('label');
     $replay_tds = $replay_table.find('td');
 }
