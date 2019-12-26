@@ -19,7 +19,7 @@
     </nav>
 
     <content id="main_content">
-        <div id="Home">
+        <tab id="Home">
             <h1>Introduction</h1>
 
             <span>
@@ -37,37 +37,41 @@
 
             <h1>Settings</h1>
             <ul>
-                <li><label>Amount of leaderboard pages that should be loaded:&nbsp;</label><input query type="number" name="amount" value="1" min="1" max="12" /><label>&nbsp;&nbsp;(1 being enough for most cases and 12 when you want to find algos at an elo of 800)</label></li>
-                <li><label>Load algos from matches recursively:&nbsp;</label><input query type="checkbox" name="recursive" /><label>&nbsp;&nbsp;(When this is selected, multiple algos from the same user will show up in the leaderboard)</label></li>
+                <li><label>Leaderboard pages:&nbsp;</label><input query type="number" name="amount" value="1" min="1" max="12" /></li>
+                <li><label>Load algos recursively:&nbsp;</label><input query type="checkbox" name="recursive" /><label>&nbsp;&nbsp;(Loads algos additionaly, that have played against any of the algos from the loaded leaderboard pages)</label></li>
             </ul>
             <h4>Reload the page, to apply settings.</h4>
 
             <label></label>
-        </div>
-        <div id="Leaderboard">
+        </tab>
+        <tab id="Leaderboard">
             <table id="leaderboard_table"></table>
-        </div>
-        <div id="Player">
+        </tab>
+        <tab id="Player">
             <table id="overview_table" class="table-header-rotated"></table>
-        </div>
-        <div id="Algo">
+        </tab>
+        <tab id="Algo">
             <span>Coming soon...</span>
-        </div>
-        <div id="Match">
-            <label>Match:&nbsp;</label>
+        </tab>
+        <tab id="Match">
 
-            <label id="match_id_label"></label>
-            <input type="button" id="watch_on_terminal" value="Watch on Terminal" />
+            <div style="position:absolute;">
+                <label>Match:&nbsp;</label>
+                <label id="match_id_label"></label>
+                <input type="button" id="watch_on_terminal" value="Watch on Terminal" />
+            </div>
+            <div style="display: flex;">
 
-            <input id="match_range" type="range" value="0" min="0" max="0" />
+                <table id="match_table">
+                </table>
 
-            <label>Work in progress...</label>
-
-            <br />
-            <table id="match_table">
-            </table>
-            
-        </div>
+                <div style="width:40px; height:840px;">
+                    <div style="width:840px; transform: translate3d(-400px, 408px, 0) rotate(90deg); position:absolute;">
+                        <input id="match_range" type="range" value="0" min="0" max="0" />
+                    </div>
+                </div>
+            </div>
+        </tab>
     </content>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

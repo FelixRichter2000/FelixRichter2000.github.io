@@ -12,14 +12,22 @@ function switchToTab(tab) {
     for (var i = 0; i < nav_a_tags.length; i++) {
         var current_content_item = $(nav_content_elements[i]).attr('id');
         if (tab == current_content_item) {
-            $(nav_content_elements[i]).show();
+            show(nav_content_elements[i]);
             $(nav_a_tags[i]).addClass("selected");
         }
         else {
-            $(nav_content_elements[i]).hide();
+            hide(nav_content_elements[i]);
             $(nav_a_tags[i]).removeClass("selected");
         }
     }
+}
+
+function show(el) {
+    el.style.display = 'block';
+}
+
+function hide(el) {
+    el.style.display = 'none';
 }
 
 function loadPlayer(player) {
@@ -46,11 +54,11 @@ function loadMatch(match) {
 (function () {
     for (var i = 0; i < nav_content_elements.length; i++) {
         if (i == 0) {
-            $(nav_content_elements[i]).show();
+            show(nav_content_elements[i]);
             $(nav_a_tags[i]).addClass("selected");
         }
         else {
-            $(nav_content_elements[i]).hide();
+            hide(nav_content_elements[i]);
         }
     }
 })();

@@ -46,7 +46,7 @@ table button {
         text-decoration: underline;
     }
 
-#main_content div {
+#main_content tab {
     display: none;
 }
 
@@ -55,10 +55,14 @@ table button {
     height: 30px;
 }
 
-#match_table{
-    margin-left: 20px;
+tab{
+    margin-left: 10px;
+    margin-top: 75px;
 }
 
+input[type=number] {
+    text-align: right;
+}
 
 
 
