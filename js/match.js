@@ -1,8 +1,8 @@
 ﻿$replay_table = $('#match_table');
 $replay_range = $('#match_range');
 $watch_on_terminal = $('#watch_on_terminal');
-$replay_images = $replay_table.find('img');
-$replay_tds = $replay_table.find('td');
+$replay_images = null;
+$replay_tds = null;
 TURN_INFORMATION = {};
 current_match_data_index = 0;
 
@@ -17,7 +17,7 @@ onMatchChanged();
 // repeat with the interval 
 let showNextTimer = null;
 function playMatch() {
-    showNextTimer = setInterval(() => showNext(), 1000 / 30);
+    showNextTimer = setInterval(() => showNext(), 1000 / 60);
 }
 
 $replay_range.on('change', function () {
