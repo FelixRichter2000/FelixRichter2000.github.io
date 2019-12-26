@@ -15,11 +15,12 @@ const emptyImage = '../images/EmptyField.svg';
 createMatchTable();
 selected_match = 5472882;
 onMatchChanged();
-setMatchSpeed(playback_speed);
 
 // repeat with the interval 
 var showNextTimer = null;
 var play = false;
+setMatchSpeed(playback_speed);
+
 function playMatch() {
     play = true;
     showMatchData(0);
