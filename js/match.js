@@ -7,14 +7,18 @@ TURN_INFORMATION = {};
 current_match_data_index = 0;
 
 const playerImages = [
-    ['../images/Filter1.svg', '../images/Encryptor1.svg', '../images/Destructor1.svg'],
-    ['../images/Filter2.svg', '../images/Encryptor2.svg', '../images/Destructor2.svg']];
+    ['../images/Filter1.svg', '../images/Encryptor1.svg', '../images/Destructor1.svg', '../images/Ping1.svg', '../images/Emp1.svg', '../images/Scrambler1.svg', '../images/Remove1.svg'],
+    ['../images/Filter2.svg', '../images/Encryptor2.svg', '../images/Destructor2.svg', '../images/Ping2.svg', '../images/Emp2.svg', '../images/Scrambler2.svg', '../images/Remove2.svg']];
+const emptyImage = '../images/EmptyField.svg';
 
-selected_match = 5456175;
+selected_match = 5472882;
 onMatchChanged();
 
 // repeat with the interval 
-let showNextTimer = setInterval(() => showNext(), 10);
+let showNextTimer = null;
+function playMatch() {
+    showNextTimer = setInterval(() => showNext(), 1000 / 30);
+}
 
 $replay_range.on('change', function () {
     showMatchData($(this).val());
@@ -34,7 +38,10 @@ function onMatchChanged() {
 }
 
 function showNext() {
-    showMatchData(current_match_data_index + 1);
+    for (var i = 0; i < 1; i++) {
+        updateToNextFrame(current_match_data_index);
+        current_match_data_index += 1;
+    }
     $replay_range.val(current_match_data_index);
 }
 
@@ -56,14 +63,66 @@ function processMatchData(data) {
         console.log(parsed);
         TURN_INFORMATION[i - 3] = parsed;
     }
+    playMatch();
+}
+
+function updateToNextFrame(frame) {
+    if (!(frame in TURN_INFORMATION)) return;
+
+    var info = TURN_INFORMATION[frame];
+
+    var spawns = info.events.spawn;
+    for (var i = 0; i < spawns.length; i++) {
+        var spawn = spawns[i];
+
+        var at = spawn[0];
+        var type = spawn[1];
+        var player = spawn[3] - 1;
+
+        var currentImage = playerImages[player][type];
+
+        setImg(at, currentImage);
+    }
+
+    var moves = info.events.move;
+    for (var i = 0; i < moves.length; i++) {
+        var move = moves[i];
+
+        var from = move[0];
+        var to = move[1];
+        var type = move[3];
+        var player = move[5] - 1;
+
+        var currentImage = playerImages[player][type];
+
+        setImg(from, emptyImage);
+        setImg(to, currentImage);
+    }
+
+    var deaths = info.events.death;
+    for (var i = 0; i < deaths.length; i++) {
+        var death = deaths[i];
+
+        var at = death[0];
+        var type = death[1];
+        var player = death[3] - 1;
+
+        setImg(at, emptyImage);
+    }
+}
+
+function setImg(location, path) {
+    var x = location[0];
+    var y = location[1];
+    var td = $replay_tds[(27 - y) * 28 + x];
+    var img = $(td).find('img')[0];
+    img.src = path;
 }
 
 function showMatchData(i) {
     if (!(i in TURN_INFORMATION)) return;
 
-    current_match_data_index = i;
-
-    $replay_images.attr('src', '../images/EmptyField.svg');
+    $replay_images.attr('src', emptyImage);
 
     var info = TURN_INFORMATION[i];
 
@@ -82,13 +141,10 @@ function showMatchData(i) {
                 var x = parseInt(unit[0]);
                 var y = parseInt(unit[1]);
 
-                //var combined = y * 1000 + x;
-                //var img = $replay_table.find('#' + combined);
-
                 var td = $replay_tds[(27 - y) * 28 + x];
-                var img = $(td).find('img');
+                var img = $(td).find('img')[0];
 
-                img.attr('src', currentImage);
+                img.src = currentImage;
             }
         }
     }
