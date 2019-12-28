@@ -14,3 +14,6 @@ selected_match = null;
 
 loaded = 0;
 
+const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
+
+

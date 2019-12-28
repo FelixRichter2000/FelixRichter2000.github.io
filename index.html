@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/nav.css" />
     <link rel="stylesheet" href="css/site.css" />
     <link rel="stylesheet" href="css/overview_player.css" />
+    <link rel="shortcut icon" href="#">
 </head>
 <body>
     <nav id="main_nav" class="sticky">
@@ -55,14 +56,23 @@
         </tab>
         <tab id="Match">
 
-            <div style="position:absolute;">
+            <div style="position:absolute; transform: translateY(800px);">
                 <label>Match:&nbsp;</label>
                 <label id="match_id_label"></label>
                 <input type="button" id="watch_on_terminal" value="Watch on Terminal" />
             </div>
-            <div class="play-background" style="position:absolute; transform: translateX(760px)">
-                <button class='togglePlay' style="position:absolute; transform: translateY(-19px) scale(.4)"></button>
+            <div style="position: absolute; transform: translate3d(600px, 800px, 0); display: flex; justify-content: space-between; width: 200px;">
+                <button id="skip_backward" class="replay-button noselect">
+                    <img src="../images/skip_backward.png" />
+                </button>
+                <div class="play-background">
+                    <button class='togglePlay' style="position:absolute; transform: translateY(-19px) scale(.4)"></button>
+                </div>
+                <button id="skip_foreward" class="replay-button noselect">
+                    <img src="../images/skip_forward.png" />
+                </button>
             </div>
+
 
             <div style="display: flex;">
 
@@ -74,13 +84,22 @@
                         <input id="match_range" type="range" value="0" min="0" max="0" />
                     </div>
                 </div>
+
+                <!--<div id="analytics_chart"></div>-->
             </div>
         </tab>
     </content>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
     <script src="js/globals.js"></script>
+    <script src="js/managers/UnitStack.js"></script>
+    <script src="js/managers/TurnInformation.js"></script>
+    <script src="js/managers/ReplayManager.js"></script>
+    <script src="js/managers/ReplayPlayer.js"></script>
+
+
     <script src="js/settings.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/leaderboard.js"></script>

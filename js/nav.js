@@ -46,7 +46,7 @@ function loadMatch(match) {
     selected_match = match;
     switchToTab('Match');
     if (hasChanged) {
-        onMatchChanged();
+        onMatchChanged(match);
     }
 }
 
