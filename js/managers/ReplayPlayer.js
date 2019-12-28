@@ -106,6 +106,7 @@
         this.$replay_range.val(0);
         this.turn = 0;
         this.frame = 0;
+        this.resetReplayTable();
         this.load_frame(0);
         this.start_play();
         this.max_frame = replayManager.get_max_frame();
