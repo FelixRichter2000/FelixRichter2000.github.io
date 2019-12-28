@@ -1,7 +1,6 @@
 ﻿body {
     margin-top: 62px;
     background-color: #1a181e !important;
-    font-family: Calibri;
     color: #e1dbec;
 }
 
@@ -101,10 +100,44 @@ input[type=number] {
 
 
 .replay-button {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: Consolas;
     background-color: #367ebd;
     border-radius: 5px;
     border: none;
     padding: 0 5px;
+}
+
+.player-stats input {
+    color: black;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: Consolas;
+    border-radius: 2px;
+}
+
+.player-stats *:not(input) {
+    color: black;
+    font-size: 16px;
+    font-weight: 900;
+    font-family: Consolas;
+    border-radius: 2px;
+    border: none;
+    padding: 3px;
+}
+
+.red * {
+    background-color: #f9502a;
+}
+
+.blue * {
+    background-color: lightblue;
+}
+
+.grey *:not(input) {
+    background-color: lightgray;
 }
 
 
@@ -238,3 +271,6 @@ input[type=range] {
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
+
+
+

@@ -6,6 +6,7 @@
         this.play = false;
         this.speed = 12;
         this.timer = null;
+        this.flipp = false;
 
         //Images
         this.playerImages = [
@@ -21,12 +22,20 @@
         this.$playButton = $(".togglePlay");
         this.$skip_foreward_button = $("#skip_foreward");
         this.$skip_backward_button = $("#skip_backward");
+        this.$one_foreward_button = $("#one_foreward");
+        this.$one_backward_button = $("#one_backward");
+        this.$fps_input = $("#FPS");
 
         this.init_table();
 
         this.$replay_images = this.$replay_table.find('img');
         this.$replay_labels = this.$replay_table.find('label');
         this.$replay_tds = this.$replay_table.find('td');
+
+        //Player Stats
+        this.constant_stat_names = ["User", "Algo"];
+        this.stat_names = ["Health", "Cores", "Bits", "Milliseconds"];
+        this.turn_labels = ["Turn", "Frame"];
 
         //Set initial Speed
         this.set_match_speed(this.speed);
@@ -50,6 +59,13 @@
             self.load_frame(parseInt(this.value));
         });
 
+        this.$fps_input.on('change', function () {
+            let val = parseInt(this.value);
+            if (val) {
+                self.set_match_speed(val);
+            }
+        });
+
         this.$skip_foreward_button.on('click', function () {
             self.go_to_next_turn();
         });
@@ -57,9 +73,69 @@
         this.$skip_backward_button.on('click', function () {
             self.go_to_previous_turn();
         });
+
+        this.$one_foreward_button.on('click', function () {
+            let frame = self.frame;
+            if (self.frame < self.max_frame)
+                frame += 1;
+            self.load_frame(frame);
+        });
+
+        this.$one_backward_button.on('click', function () {
+            let frame = self.frame;
+            if (self.frame > 0) 
+                frame -= 1;
+            self.load_frame(frame);
+        });
     }
     let proto = replayPlayer.prototype;
 
+    //event handlers
+    proto.on_replay_changed = function () {
+        this.$match_id_label.html(replayManager.get_match_id());
+        this.$replay_range.attr('max', replayManager.get_max_frame() - 1);
+        this.$replay_range.val(0);
+        this.turn = 0;
+        this.frame = 0;
+        this.resetReplayTable();
+        this.load_frame(0);
+        this.start_play();
+        this.max_frame = replayManager.get_max_frame();
+    }
+    proto.on_user_data_loaded = function () {
+        user_data = replayManager.get_user_data();
+
+        //Check whether flip is necessary
+        this.flipp = selected_user === user_data[0][1];
+
+        for (var i = 0; i < this.constant_stat_names.length; i++) {
+            let elements = $('[name=' + this.constant_stat_names[i] + ']');
+            for (var j = 0; j < elements.length; j++) {
+                let element = elements[j];
+                element.innerHTML = user_data[i][this.flipp ? (j + 1) % 2 : j];
+            }
+        }
+    }
+    proto.tick = function () {
+        if (!this.play) return;
+
+        if (this.frame > this.max_frame) {
+            this.stop_play();
+            return;
+        }
+
+        this.update_to_next_frame();
+    }
+
+    //publicly used methods
+    proto.start_play = function () {
+        this.play = true;
+        this.$playButton.addClass("paused");
+    }
+    proto.stop_play = function () {
+        this.play = false;
+        this.$playButton.removeClass("paused");
+    }
     proto.go_to_next_turn = function () {
         let frame = replayManager.get_next_turn_first_frame(this.frame);
         this.load_frame(frame + 2);
@@ -69,6 +145,53 @@
         let frame = replayManager.get_previous_turn_first_frame(this.frame);
         this.load_frame(frame + 2);
         this.update_replay_range_slider();
+    }
+    proto.set_match_speed = function (fps) {
+        this.speed = fps;
+        self = this;
+        if (this.timer)
+            clearInterval(this.timer);
+        this.timer = setInterval(self.tick.bind(self), 1000 / fps);
+    }
+
+    //utility
+    proto.resetReplayTable = function () {
+        this.$replay_images.attr('src', this.emptyImage);
+        this.$replay_labels.html('');
+    }
+    proto.set_img = function (location, path) {
+        let x = location[0];
+        let y = location[1];
+
+        if (this.flipp) {
+            y = 27 - y;
+            x = 27 - x;
+        }
+
+        let td = this.$replay_tds[(27 - y) * 28 + x];
+        let img = $(td).find('img')[0];
+        img.src = path;
+    }
+    proto.set_amont = function (location, amount) {
+        let x = location[0];
+        let y = location[1];
+
+        if (this.flipp) {
+            y = 27 - y;
+            x = 27 - x;
+        }
+
+        let td = this.$replay_tds[(27 - y) * 28 + x];
+
+        let label = $(td).find('label')[0];
+        label.innerHTML = amount;
+    }
+    proto.flip_player_if_necessary = function (player) {
+        return this.flipp ? (player + 1) % 2 : player;
+    }
+    proto.get_image = function (player, type) {
+        player = this.flip_player_if_necessary(player);
+        return this.playerImages[player][type];
     }
     proto.init_table = function () {
         for (var y = 0; y < 28; y++) {
@@ -92,43 +215,43 @@
                 .append(new_row);
         }
     }
-    proto.start_play = function () {
-        this.play = true;
-        this.$playButton.addClass("paused");
-    }
-    proto.stop_play = function () {
-        this.play = false;
-        this.$playButton.removeClass("paused");
-    }
-    proto.on_replay_changed = function () {
-        this.$match_id_label.html(replayManager.get_match_id());
-        this.$replay_range.attr('max', replayManager.get_max_frame() - 1);
-        this.$replay_range.val(0);
-        this.turn = 0;
-        this.frame = 0;
-        this.resetReplayTable();
-        this.load_frame(0);
-        this.start_play();
-        this.max_frame = replayManager.get_max_frame();
-    }
-    proto.set_match_speed = function (fps) {
-        this.speed = fps;
-        self = this;
-        if (this.timer)
-            clearInterval(this.timer);
-        this.timer = setInterval(self.tick.bind(self), 1000 / fps);
-    }
-    proto.tick = function () {
-        if (!this.play) return;
 
-        if (this.frame >= this.max_frame) {
-            this.stop_play();
-            return;
-        }
-
-        this.update_to_next_frame();
+    //visual stat updater
+    proto.update_all_visual_stats = function () {
         this.update_replay_range_slider();
+        this.update_player_stats();
+        this.update_turn_stats();
     }
+    proto.update_replay_range_slider = function () {
+        this.$replay_range.val(this.frame);
+    }
+    proto.update_player_stats = function () {
+        state_data = replayManager.get_user_state_data(this.frame - 1);
+
+        for (var i = 0; i < this.stat_names.length; i++) {
+            let elements = $('[name=' + this.stat_names[i] + ']');
+            for (var j = 0; j < elements.length; j++) {
+                let element = elements[j];
+                element.innerHTML = state_data[i][this.flipp ? (j + 1) % 2 : j];
+            }
+        }
+    }
+    proto.update_turn_stats = function () {
+        state_data = replayManager.get_user_state_data(this.frame - 1);
+
+        let data = [replayManager.get_turn(this.frame), this.frame];
+
+        for (var i = 0; i < this.turn_labels.length; i++) {
+            let elements = $('[name=' + this.turn_labels[i] + ']');
+            for (var j = 0; j < elements.length; j++) {
+                let element = elements[j];
+                element.innerHTML = data[i];
+            }
+        }
+    }
+    
+
+    //big replay update methods
     proto.load_frame = function (frame) {
         this.stop_play();
 
@@ -137,14 +260,10 @@
             this.resetReplayTable();
             this.show_turns_first_frame();
         }
-        
+
         while (this.frame < frame) {
             this.update_to_next_frame();
         }
-    }
-    proto.resetReplayTable = function () {
-        this.$replay_images.attr('src', this.emptyImage);
-        this.$replay_labels.html('');
     }
     proto.show_turns_first_frame = function () {
         let info = replayManager.get_turn_info_for(this.frame);
@@ -182,24 +301,8 @@
                 }
             }
         }
-    }
-    proto.set_img = function (location, path) {
-        let x = location[0];
-        let y = location[1];
-        let td = this.$replay_tds[(27 - y) * 28 + x];
-        let img = $(td).find('img')[0];
-        img.src = path;
-    }
-    proto.set_amont = function (location, amount) {
-        let x = location[0];
-        let y = location[1];
-        let td = this.$replay_tds[(27 - y) * 28 + x];
 
-        let label = $(td).find('label')[0];
-        label.innerHTML = amount;
-    }
-    proto.update_replay_range_slider = function () {
-        this.$replay_range.val(this.frame);
+        this.update_all_visual_stats();
     }
     proto.update_to_next_frame = function () {
         if (this.frame > replayManager.get_max_frame) return;
@@ -210,7 +313,7 @@
             var type = spawn[1];
             var player = spawn[3] - 1;
 
-            var currentImage = this.playerImages[player][type];
+            var currentImage = this.get_image(player, type);
 
             this.set_img(at, currentImage);
         });
@@ -231,7 +334,7 @@
             var type = info[1];
             var player = info[3] - 1;
 
-            var currentImage = this.playerImages[player][type];
+            var currentImage = this.get_image(player, type);
 
             this.set_img(at, currentImage);
             this.set_amont(at, units_spawned);
@@ -246,7 +349,7 @@
             let to = stack_move[2];
             let amount = stack_move[3];
 
-            let currentImage = this.playerImages[player][type];
+            let currentImage = this.get_image(player, type);
 
             this.set_img(from, this.emptyImage);
             this.set_amont(from, null);
@@ -270,6 +373,8 @@
                 this.set_amont(location, units_left);
             }
         });
+
+        this.update_all_visual_stats();
 
         this.frame += 1;
     }

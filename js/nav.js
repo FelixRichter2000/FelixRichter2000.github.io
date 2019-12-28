@@ -42,12 +42,9 @@ function loadAlgo(algo) {
 }
 
 function loadMatch(match) {
-    hasChanged = selected_match !== match;
     selected_match = match;
     switchToTab('Match');
-    if (hasChanged) {
-        onMatchChanged(match);
-    }
+    onMatchChanged(match);
 }
 
 

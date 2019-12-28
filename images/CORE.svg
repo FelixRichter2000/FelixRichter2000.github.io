@@ -1,0 +1,19 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.5 58.33">
+    <defs>
+        <style>
+            .cls-1 {
+                fill: none;
+                stroke: inherit;
+            }
+        </style>
+    </defs>
+    <g id="CoreLayer_2" data-name="Layer 2">
+        <g id="CoreLayer_1-2" data-name="Layer 1">
+            <polygon points="26.72 0.58 1.48 14.03 0.51 42.62 24.78 57.75 50.02 44.3 50.99 15.71 26.72 0.58" class="cls-1"></polygon>
+            <polygon points="26.24 14.87 13.62 21.6 13.13 35.89 25.27 43.46 37.89 36.73 38.37 22.44 26.24 14.87" class="cls-1"></polygon>
+            <line x1="26.72" y1="0.58" x2="26.24" y2="14.87" class="cls-1"></line>
+            <line x1="25.27" y1="43.46" x2="24.78" y2="57.75" class="cls-1"></line>
+            <polygon points="26.05 20.32 18.24 24.48 17.94 33.33 25.45 38.01 33.26 33.85 33.56 25 26.05 20.32" class="cls-1"></polygon>
+        </g>
+    </g>
+</svg>

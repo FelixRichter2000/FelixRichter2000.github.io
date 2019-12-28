@@ -9,22 +9,18 @@
     proto.END_GAME = 2;
 
     proto.init = function () {
+        this.frame_information = {};
         this.turn_information = {};
         this.total_frames = -1;
         this.frame_to_turn_frame_info = {};
         this.turn_number_to_first_frame = {};
         this.highest_turn_number = -1;
-        //this.match = null;
     }
-
     proto.load = function (data) {
         this.init();
 
         let splittet = data.split("\n").slice(3, -1);
 
-        let running_frame_number = 0;
-
-        let index = 0;
         for (let split of splittet) {
             //parse split
             let parsed = JSON.parse(split);
@@ -43,6 +39,8 @@
             }
 
             this.total_frames += 1;
+
+            this.frame_information[this.total_frames] = parsed;
             this.frame_to_turn_frame_info[this.total_frames] = [turn_number, this.turn_information[turn_number].last_frame];
 
             if (turn_number > this.highest_turn_number) {
@@ -52,9 +50,11 @@
 
         }
 
+        //Quickfix
+        this.frame_to_turn_frame_info[this.total_frames + 1] = this.frame_to_turn_frame_info[this.total_frames];
+
         window.replayPlayer.on_replay_changed();
     }
-
     proto.get_next_turn_first_frame = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];
         let turn_number = frame_info[0];
@@ -86,15 +86,15 @@
         let first_frame = this.turn_number_to_first_frame[turn_number];
         return first_frame;
     }
-
     proto.get = function (key) {
         return this.turn_information[key];
     }
+    proto.should_flip = function () {
 
+    }
     proto.get_max_frame = function () {
         return this.total_frames;
     }
-
     proto.get_events_for = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];
         let turn_number = frame_info[0];
@@ -103,7 +103,6 @@
         let events = this.turn_information[turn_number].get_events_for(turn_frame);
         return events;
     }
-
     proto.get_turn_info_for = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];
         let turn_number = frame_info[0];
@@ -112,18 +111,21 @@
         let frame_zero_units = this.turn_information[turn_number].get_frame_zero_units();
         return frame_zero_units;
     }
-
+    proto.get_turn = function (frame) {
+        let frame_info = this.frame_to_turn_frame_info[frame];
+        let turn_number = frame_info[0];
+        return turn_number;
+    }
     proto.get_first_frame_of_turn = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];
         let turn_frame = frame_info[1];
         return frame - turn_frame;
     }
-
     proto.set_match_id = function (match_id) {
         this.match = match_id;
+        this.load_user_data();
         this.load_data();
     }
-
     proto.load_data = function () {
         let self = this;
         $.ajax({
@@ -132,9 +134,59 @@
             self.load(response);
         });
     }
+    proto.load_user_data = function () {
+        let self = this;
+        $.ajax({
+            url: "https://terminal.c1games.com/api/game/match/" + this.match + "/algos"
+        }).done(function (response) {
+            self.process_user_data(response);
+        });
+    }
+    proto.process_user_data = function (response) {
+        let data = {
+            0: [],
+            1: [],
+        };
 
+        for (var i = 0; i < 2; i++) {
+            let algo_data = response.data.algos[i];
+            let user = algo_data.user;
+            let algo = algo_data.name;
+
+            data[0].push(user);
+            data[1].push(algo);
+        }
+
+        this.user_data = data;
+
+        window.replayPlayer.on_user_data_loaded();
+    }
+    proto.get_user_data = function () {
+        return this.user_data;
+    }
     proto.get_match_id = function () {
         return this.match;
+    }
+    proto.get_user_state_data = function (frame) {
+        if (frame < 0)
+            frame = 0;
+
+        let data = {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        }
+
+        let frame_info = this.frame_information[frame];
+        let p1 = frame_info.p1Stats;
+        let p2 = frame_info.p2Stats;
+        for (var i = 0; i < 4; i++) {
+            data[i].push(p1[i]);
+            data[i].push(p2[i]);
+        }
+
+        return data;
     }
 
     if (!window.ReplayManager) {
