@@ -268,36 +268,27 @@
     proto.show_turns_first_frame = function () {
         let info = replayManager.get_turn_info_for(this.frame);
 
-        var units = [info.p1Units, info.p2Units];
+        let units = [info.p1Units, info.p2Units];
 
-        for (var playerIndex = 0; playerIndex < units.length; playerIndex++) {
-            var playerUnits = units[playerIndex];
-            var images = this.playerImages[playerIndex];
+        for (let playerIndex = 0; playerIndex < units.length; playerIndex++) {
+            let playerUnits = units[playerIndex];
+            let images = this.playerImages[this.flipp ? (playerIndex + 1) % 2 : playerIndex];
 
-            for (var imageIndex = 0; imageIndex < images.length; imageIndex++) {
-                var currentUnits = playerUnits[imageIndex];
-                var currentImage = images[imageIndex];
+            for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
+                let currentUnits = playerUnits[imageIndex];
+                let currentImage = images[imageIndex];
 
-                var dict = {};
+                let dict = {};
 
-                for (var unit in currentUnits) {
+                for (let unit in currentUnits) {
                     unit = currentUnits[unit];
-                    var x = parseInt(unit[0]);
-                    var y = parseInt(unit[1]);
 
-                    var location = (27 - y) * 28 + x;
+                    let x = parseInt(unit[0]);
+                    let y = parseInt(unit[1]);
 
-                    dict[location] = (location in dict ? dict[location] : 0) + 1;
+                    let loc = [x, y];
 
-                    var td = this.$replay_tds[location];
-                    var img = $(td).find('img')[0];
-                    var label = $(td).find('label')[0];
-
-                    img.src = currentImage;
-
-                    if (imageIndex > 2 && imageIndex < 6) {
-                        label.innerHTML = dict[location];
-                    }
+                    this.set_img(loc, currentImage);
                 }
             }
         }
