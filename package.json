@@ -1,0 +1,19 @@
+{
+  "name": "terminal_web_live",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelixRichter2000/FelixRichter2000.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FelixRichter2000/FelixRichter2000.github.io/issues"
+  },
+  "homepage": "https://github.com/FelixRichter2000/FelixRichter2000.github.io#readme"
+}
