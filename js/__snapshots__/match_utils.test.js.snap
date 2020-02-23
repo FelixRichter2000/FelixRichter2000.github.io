@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test generate_default_td_contents multiple ("filter", "destructor", "encryptor") 1`] = `"<label class=\\"quantity\\"></label><img src=\\"filter\\"><img src=\\"destructor\\"><img src=\\"encryptor\\">"`;
+
+exports[`Test generate_default_td_contents single source 1`] = `"<label class=\\"quantity\\"></label><img src=\\"1\\">"`;
+
+exports[`Test generate_default_td_contents two sources (1, 2) 1`] = `"<label class=\\"quantity\\"></label><img src=\\"1\\"><img src=\\"2\\">"`;
+
+exports[`Test generate_terminal_trs Generate generate_terminal_trs size 4 1`] = `"<tr><td></td><td>.</td><td>.</td><td></td></tr><tr><td>.</td><td>.</td><td>.</td><td>.</td></tr><tr><td>.</td><td>.</td><td>.</td><td>.</td></tr><tr><td></td><td>.</td><td>.</td><td></td></tr>"`;
+
+exports[`Test generate_terminal_trs Generate generate_terminal_trs size 8 1`] = `"<tr><td></td><td></td><td></td><td>.</td><td>.</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>.</td><td>.</td><td>.</td><td>.</td><td></td><td></td></tr><tr><td></td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td></td></tr><tr><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td></tr><tr><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td></tr><tr><td></td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td>.</td><td></td></tr><tr><td></td><td></td><td>.</td><td>.</td><td>.</td><td>.</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>.</td><td>.</td><td></td><td></td><td></td></tr>"`;
