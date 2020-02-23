@@ -16,6 +16,7 @@ describe('Test generate_default_td_contents', function () {
         expect(match_utils.generate_default_td_contents(["filter", "destructor", "encryptor"]))
             .toMatchSnapshot();
     });
+
 });
 
 
