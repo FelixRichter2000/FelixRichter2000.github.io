@@ -64,7 +64,7 @@ input[type=number] {
 }
 
 
-.IULabel {
+.IULabel, .quantity {
     position: absolute;
     transform: translateX(26px) translateY(10px);
 }
