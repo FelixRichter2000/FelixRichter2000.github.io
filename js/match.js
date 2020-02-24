@@ -4,7 +4,6 @@
 });
 
 $(document).ready(function () {
-    window.replayPlayer = new ReplayPlayer(ReplayManager);
     ReplayManager.set_match_id(5472882);
 });
 

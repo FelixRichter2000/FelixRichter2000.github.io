@@ -135,3 +135,23 @@ describe('Test generate_terminal_trs', function () {
 });
 
 
+describe('Test put_value_in_range', function () {
+
+    test('Generate put_value_in_range -1 range(0, 4)', () => {
+        expect(match_utils.put_value_in_range(-1, {min: 0, max: 4 }))
+            .toBe(0);
+    });
+
+    test('Generate put_value_in_range 1 range(0, 4)', () => {
+        expect(match_utils.put_value_in_range(1, { min: 0, max: 4 }))
+            .toBe(1);
+    });
+
+    test('Generate put_value_in_range 10 range(0, 4)', () => {
+        expect(match_utils.put_value_in_range(10, { min: 0, max: 4 }))
+            .toBe(4);
+    });
+
+});
+
+

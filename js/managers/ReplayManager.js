@@ -16,6 +16,11 @@
         this.turn_number_to_first_frame = {};
         this.highest_turn_number = -1;
     }
+    proto.set_match_id = function (match_id) {
+        this.match = match_id;
+        this.load_user_data();
+        this.load_data();
+    }
     proto.load = function (data) {
         this.init();
 
@@ -53,7 +58,7 @@
         //Quickfix
         this.frame_to_turn_frame_info[this.total_frames + 1] = this.frame_to_turn_frame_info[this.total_frames];
 
-        window.replayPlayer.on_replay_changed();
+        window.viewer.on_replay_changed();
     }
     proto.get_next_turn_first_frame = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];
@@ -121,11 +126,6 @@
         let turn_frame = frame_info[1];
         return frame - turn_frame;
     }
-    proto.set_match_id = function (match_id) {
-        this.match = match_id;
-        this.load_user_data();
-        this.load_data();
-    }
     proto.load_data = function () {
         let self = this;
         $.ajax({
@@ -159,7 +159,7 @@
 
         this.user_data = data;
 
-        window.replayPlayer.on_user_data_loaded();
+        window.viewer.on_user_data_loaded();
     }
     proto.get_user_data = function () {
         return this.user_data;

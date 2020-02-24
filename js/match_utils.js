@@ -36,6 +36,16 @@
         return trs;
     };
 
+    match_utils.put_value_in_range = function (value, range){
+        if (value < range.min) {
+            return range.min;
+        }
+        if (value > range.max) {
+            return range.max;
+        }
+        return value;
+    }
+
     if (!global.match_utils) {
         global.match_utils = match_utils;
     }
