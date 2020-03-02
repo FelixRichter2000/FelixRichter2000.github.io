@@ -1,0 +1,30 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --match-cell-size: calc(min(100vw, 100vh) / 34);
+}
+
+html, body {
+    background-color: #1a181e;
+    height: 100%;
+    width: 100%;
+}
+
+#watch_table {
+    height: var(--match-table-size);
+    width: var(--match-table-size);
+}
+
+td {
+    width: var(--match-cell-size);
+    height: var(--match-cell-size);
+}
+
+    td img {
+        width: var(--match-cell-size);
+        height: var(--match-cell-size);
+        position: absolute;
+    }

@@ -19,6 +19,24 @@ describe('Test generate_default_td_contents', function () {
 
 });
 
+describe('Test generate_default_td_contents_v2', function () {
+
+    test('single source', () => {
+        expect(match_utils.generate_default_td_contents_v2('default', ['1']))
+            .toMatchSnapshot();
+    });
+
+    test('two sources (1, 2)', () => {
+        expect(match_utils.generate_default_td_contents_v2('default', ['1', '2']))
+            .toMatchSnapshot();
+    });
+
+    test('multiple ("filter", "destructor", "encryptor")', () => {
+        expect(match_utils.generate_default_td_contents_v2('default', ["filter", "destructor", "encryptor"]))
+            .toMatchSnapshot();
+    });
+
+});
 
 describe('Test generate_settings', function () {
 
@@ -153,5 +171,16 @@ describe('Test put_value_in_range', function () {
     });
 
 });
+
+
+describe('Test create_viewer', function () {
+
+    test('Generate create_viewer', () => {
+        expect(match_utils.create_viewer())
+            .toMatchSnapshot();
+    });
+
+});
+
 
 
