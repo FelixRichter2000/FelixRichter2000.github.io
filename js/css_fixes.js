@@ -2,15 +2,14 @@
 // Then we set the value in the --vh custom property to the root of the document
 document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
 document.documentElement.style.setProperty('--vw', `${window.innerWidth}px`);
-document.documentElement.style.setProperty('--min-size', `${Math.min(window.innerWidth, window.innerHeight)}px`);
-document.documentElement.style.setProperty('--tile-size', `${Math.min(window.innerWidth, window.innerHeight) / 34}px`);
+document.documentElement.style.setProperty('--min-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight))}px`);
+document.documentElement.style.setProperty('--tile-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight) / 34 - 1)}px`);
 
 // We listen to the resize event
 window.addEventListener('resize', () => {
     // We execute the same script as before
     document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
     document.documentElement.style.setProperty('--vw', `${window.innerWidth}px`);
-    document.documentElement.style.setProperty('--min-size', `${Math.min(window.innerWidth, window.innerHeight)}px`);
-    document.documentElement.style.setProperty('--tile-size', `${Math.min(window.innerWidth, window.innerHeight) / 34}px`);
-
+    document.documentElement.style.setProperty('--min-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight))}px`);
+    document.documentElement.style.setProperty('--tile-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight) / 34 - 1)}px`);
 });
