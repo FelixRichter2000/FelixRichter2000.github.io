@@ -20,9 +20,11 @@
     proto.load = function (data) {
         let splittet = data.split("\n").slice(3, -1);
 
+        return;
+
         for (let split of splittet) {
 
-            replay_parser.parse_replay_row_to_array(split);
+            //replay_parser.parse_replay_row_to_array(split);
 
             //parse split
             let parsed = JSON.parse(split);
@@ -134,7 +136,7 @@
     proto.load_user_data = function () {
         let self = this;
         $.ajax({
-            url: "https://terminal.c1games.com/api/game/match/" + this.match + "/algos"
+            url: "https://terminal.c1games.com/api/game/match/" + this.match_id + "/algos"
         }).done(function (response) {
             self.process_user_data(response);
         });
