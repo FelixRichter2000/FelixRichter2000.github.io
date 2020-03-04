@@ -27,5 +27,12 @@ td {
         width: var(--tile-size);
         height: var(--tile-size);
         position: absolute;
+        transform: translateY(var(--half-tile-size));
     }
 
+
+.IULabel, .quantity {
+    position: absolute;
+    transform: translateX(26px) translateY(10px);
+    color: white;
+}
