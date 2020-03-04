@@ -1,4 +1,5 @@
-﻿
+﻿let replayReader = new ReplayReader(5472882);
+
 //Init table
 const watch_table = document.getElementById('watch_table');
 watch_table.innerHTML = match_utils.create_viewer();
