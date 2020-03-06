@@ -10,7 +10,8 @@
     let proto = replay_reader.prototype;
 
     proto.init = function () {
-        this.data = new Int8Array();
+        this.data = [];
+        this.total_frames = 0;
     }
     proto.set_match_id = function (match_id) {
         this.match_id = match_id;
@@ -18,46 +19,8 @@
         this.load_data();
     }
     proto.load = function (data) {
-        let splittet = data.split("\n").slice(3, -1);
-
-        return;
-
-        for (let split of splittet) {
-
-            //replay_parser.parse_replay_row_to_array(split);
-
-            //parse split
-            let parsed = JSON.parse(split);
-
-            let turnInfo = parsed.turnInfo;
-
-            let phase = turnInfo[0]; //0 = Deploy Phase, 1 = Action Phase, 2 = End Game.
-            let turn_number = turnInfo[1];
-            let action_phase_frame_number = turnInfo[2]; //starts with 0 every action phase, is -1 when a turn frame since not in action phase.
-
-            if (phase === DEPLOY_PHASE) {
-                this.turn_information[turn_number] = new TurnInformation(parsed);
-            }
-            else if (phase === ACTION_PHASE) {
-                this.turn_information[turn_number].add_frame(parsed);
-            }
-
-            this.total_frames += 1;
-
-            this.frame_information[this.total_frames] = parsed;
-            this.frame_to_turn_frame_info[this.total_frames] = [turn_number, this.turn_information[turn_number].last_frame];
-
-            if (turn_number > this.highest_turn_number) {
-                this.highest_turn_number = turn_number;
-                this.turn_number_to_first_frame[turn_number] = this.total_frames;
-            }
-
-        }
-
-        //Quickfix
-        this.frame_to_turn_frame_info[this.total_frames + 1] = this.frame_to_turn_frame_info[this.total_frames];
-
-        window.viewer.on_replay_changed();
+        this.data = match_utils.parse_complete_file(data);
+        this.total_frames = this.data.length;
     }
     proto.get_next_turn_first_frame = function (frame) {
         let frame_info = this.frame_to_turn_frame_info[frame];

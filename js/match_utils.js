@@ -17,7 +17,9 @@
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
             "images/Remove1.svg"],
 
-        default_img: "images/EmptyField.svg"
+        default_img: "images/EmptyField.svg",
+
+        arena_size: 28,
     }
 
     let mu = {
@@ -104,6 +106,16 @@
         return images;
     }
 
+    mu.get_images_one_dimensional = function (table) {
+        //Init references to images
+        const tds = table.getElementsByTagName('td');
+        let images = [];
+        for (let td of tds) {
+            images = [...images, ...td.getElementsByClassName('match-changing-img')];
+        }
+        return images;
+    }
+
     mu.put_value_in_range = function (value, range) {
         if (value < range.min) {
             return range.min;
@@ -146,7 +158,7 @@
 
     mu.set_value = (array, index, group_index, value, settings) => {
         let final_index = mu.calculate_final_index(index, group_index, settings);
-        array[final_index] += value;
+        array[final_index] = value;
     };
 
     mu.add_one = (array, index, group_index, settings) => {
@@ -163,23 +175,70 @@
         return new Int8Array(size);
     }
 
+    mu.combine_firewalls = (p1Units, p2Units) => {
+        return p1Units.slice(0, 3).map(function (p1U, i) {
+            return [...p1U, ...p2Units[i]];
+        });
+    };
+
+    mu.combine_removals_and_upgrades = (p1Units, p2Units) => {
+        return p1Units.slice(6, 8).map(function (p1U, i) {
+            return [...p1U, ...p2Units[i + 6]];
+        });
+    };
+
+    mu.parse_row_to_single_array = (row) => {
+        let parsed = JSON.parse(row);
+
+        return [
+            ...mu.combine_firewalls(parsed.p1Units, parsed.p2Units),
+            ...parsed.p1Units.slice(3, 6),
+            ...parsed.p2Units.slice(3, 6),
+            ...mu.combine_removals_and_upgrades(parsed.p1Units, parsed.p2Units),
+        ];
+    };
+
     mu.parse_replay_row_to_array = (row, settings) => {
+        settings = settings || mu.generate_settings(config.arena_size);
         let frame_data_array = mu.create_new_array(settings);
         let map = mu.generate_location_to_index_map(settings);
 
-        let parsed = JSON.parse(row);
+        let all_data = mu.parse_row_to_single_array(row);
 
-        let grouped = [parsed.p1Units[0], parsed.p2Units[0]];
-
-        for (let group_index in grouped) {
-            for (let location of grouped[group_index]) {
+        for (let group_index = 0; group_index < all_data.length; group_index++) {
+            for (let location of all_data[group_index]) {
                 let index = mu.location_to_index(location, map, settings);
                 mu.set_value(frame_data_array, index, group_index, 1, settings);
+
+                if (group_index >= 3 && group_index <= 8) {
+                    mu.add_one(frame_data_array, index, settings.image_count - 1, settings);
+                }
             }
         }
 
-        return grouped;
+        return frame_data_array;
     };
+
+    mu.parse_complete_file = (file) => {
+        let rows = file.split("\n").slice(3, -1);
+        let data = [];
+
+        for (let row of rows) {
+            data.push(match_utils.parse_replay_row_to_array(row));
+        }
+        return data;
+    }
+
+    mu.update_changes = (i1, i2, data, images) => {
+        const data_i1 = data[i1];
+        const data_i2 = data[i2];
+        const data_length = data_i1.length;
+        for (var i = 0; i < data_length; i++) {
+            if (data_i1[i] != data_i2[i]) {
+                images[i].hidden = data_i2[i] == 0;
+            }
+        }
+    }
 
 
 

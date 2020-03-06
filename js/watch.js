@@ -1,12 +1,18 @@
-﻿let replayReader = new ReplayReader(5472882);
+﻿let replayReader = new ReplayReader(5979377);
 
 //Init table
 const watch_table = document.getElementById('watch_table');
 watch_table.innerHTML = match_utils.create_viewer();
 
 //Init references to images
-const viewer_elements = match_utils.get_images(watch_table);
+//const viewer_elements = match_utils.get_images(watch_table);
+const viewer_elements = match_utils.get_images_one_dimensional(watch_table);
 const viewer_elements_length = viewer_elements.length;
+
+//Set all to hidden
+for (var i = 0; i < viewer_elements_length; i++) {
+    viewer_elements[i].hidden = true;
+}
 
 //For loop
 let mod = 60;
@@ -22,7 +28,10 @@ setInterval(tick, 1000 / fps_goal);
 function tick() {
     counter++;
     display_fps();
-    updateImages();
+
+    match_utils.update_changes(counter, counter + 1, replayReader.data, viewer_elements);
+
+    //updateImages();
 }
 
 function updateImages() {
