@@ -9,7 +9,7 @@
         information: [
             "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove1.svg",
+            "images/Remove1.svg", "images/Remove1.svg",
         ],
 
         sources: ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg",
@@ -111,7 +111,10 @@
         const tds = table.getElementsByTagName('td');
         let images = [];
         for (let td of tds) {
-            images = [...images, ...td.getElementsByClassName('match-changing-img')];
+            let ims = td.getElementsByClassName('match-changing-img');
+            if (ims.length > 0) {
+                images = [...images, ...ims, {hidden: true}];
+            }
         }
         return images;
     }
@@ -229,16 +232,24 @@
         return data;
     }
 
-    mu.update_changes = (i1, i2, data, images) => {
-        const data_i1 = data[i1];
-        const data_i2 = data[i2];
-        const data_length = data_i1.length;
-        for (var i = 0; i < data_length; i++) {
-            if (data_i1[i] != data_i2[i]) {
-                images[i].hidden = data_i2[i] == 0;
+    mu.update_changes = (i_previous, i_current, data, images) => {
+        const data_previous = data[i_previous];
+        const data_current = data[i_current];
+
+        if (!data_previous) return;
+        if (!data_current) return;
+
+        const data_length = data_previous.length;
+
+        if (i_current >= data_length) return;
+
+        for (let i = 0; i < data_length; i++) {
+            if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
+                images[i].hidden = data_current[i] == 0;
             }
         }
     }
+
 
 
 

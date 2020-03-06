@@ -26,10 +26,13 @@ const fps_goal = 60;
 
 setInterval(tick, 1000 / fps_goal);
 function tick() {
+
+    if (replayReader.total_frames == 0) return;
+
     counter++;
     display_fps();
 
-    match_utils.update_changes(counter, counter + 1, replayReader.data, viewer_elements);
+    match_utils.update_changes(counter - 1, counter, replayReader.data, viewer_elements);
 
     //updateImages();
 }
