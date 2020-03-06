@@ -9,7 +9,7 @@
         information: [
             "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove1.svg", "images/Remove1.svg",
+            "images/Remove2.svg", "images/Remove1.svg",
         ],
 
         sources: ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg",
@@ -113,7 +113,8 @@
         for (let td of tds) {
             let ims = td.getElementsByClassName('match-changing-img');
             if (ims.length > 0) {
-                images = [...images, ...ims, {hidden: true}];
+                let quantity_label = td.getElementsByClassName('quantity');
+                images = [...images, ...ims, ...quantity_label];
             }
         }
         return images;
@@ -245,6 +246,9 @@
 
         for (let i = 0; i < data_length; i++) {
             if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
+                if (images[i].tagName === 'LABEL') {
+                    images[i].innerHTML = data_current[i];
+                }
                 images[i].hidden = data_current[i] == 0;
             }
         }
