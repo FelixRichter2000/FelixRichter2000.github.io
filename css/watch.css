@@ -33,6 +33,6 @@ td {
 
 .IULabel, .quantity {
     position: absolute;
-    transform: translateX(26px) translateY(10px);
+    transform: translateX(26px) translateY(5px);
     color: white;
 }
