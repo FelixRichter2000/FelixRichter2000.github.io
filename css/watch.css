@@ -21,7 +21,8 @@ td img {
     position: absolute;
     transform: translateX(var(--tile-size));
     color: white;
-    font-size: var(--tile-size);
+    font-size: var(--half-tile-size);
+    z-index: 1;
 }
 
 #watch_table {
