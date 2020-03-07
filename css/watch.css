@@ -33,6 +33,7 @@ td {
 
 .IULabel, .quantity {
     position: absolute;
-    transform: translateX(26px) translateY(5px);
+    transform: translateX(var(--tile-size));  /*translateY(var(--half-tile-size))*/
     color: white;
+    font-size: var(--tile-size);
 }
