@@ -22,38 +22,37 @@
         arena_size: 28,
     }
 
-    let mu = {
+    let mu = {};
 
-        generate_default_td_contents_v2: (default_src, src_options) => {
+    mu.generate_default_td_contents_v2 = (default_src, src_options) => {
 
-            let content = '<label class="quantity"></label>';
-            content += `<img class="match-default-img" src="${default_src}">`;
+        let content = '<label class="quantity"></label>';
+        content += `<img class="match-default-img" src="${default_src}">`;
 
-            for (var i = 0; i < src_options.length; i++) {
-                content += `<img class="match-changing-img" src="${src_options[i]}">`;
-            }
-            return content;
-        },
+        for (var i = 0; i < src_options.length; i++) {
+            content += `<img class="match-changing-img" src="${src_options[i]}">`;
+        }
+        return content;
+    };
 
-        generate_default_td_contents: (src_options) => {
-            let content = '<label class="quantity"></label>';
-            for (var i = 0; i < src_options.length; i++) {
-                content += `<img src="${src_options[i]}">`;
-            }
-            return content;
-        },
+    mu.generate_default_td_contents = (src_options) => {
+        let content = '<label class="quantity"></label>';
+        for (var i = 0; i < src_options.length; i++) {
+            content += `<img src="${src_options[i]}">`;
+        }
+        return content;
+    };
 
-        generate_settings: (size, image_count = 12) => {
-            return {
-                size,
-                half_size: size / 2,
-                image_count: image_count,
-            };
-        },
+    mu.generate_settings = (size, image_count = 12) => {
+        return {
+            size,
+            half_size: size / 2,
+            image_count: image_count,
+        };
+    };
 
-        is_in_arena_bounds: (x, y, settings) => {
-            return Math.abs(x - settings.half_size + .5) + Math.abs(y - settings.half_size + .5) < (settings.half_size + 1);
-        },
+    mu.is_in_arena_bounds = (x, y, settings) => {
+        return Math.abs(x - settings.half_size + .5) + Math.abs(y - settings.half_size + .5) < (settings.half_size + 1);
     };
 
     mu.generate_terminal_trs_v2 = (settings, p1_td_content, p2_td_content) => {
@@ -91,7 +90,7 @@
     mu.create_viewer = function () {
         let td_content_p1 = mu.generate_default_td_contents_v2(config.default_img, [...config.firewalls[0], ...config.information]);
         let td_content_p2 = mu.generate_default_td_contents_v2(config.default_img, [...config.firewalls[1], ...config.information]);
-        let settings = mu.generate_settings(28);
+        let settings = mu.generate_settings(config.arena_size);
         let trs = mu.generate_terminal_trs_v2(settings, td_content_p1, td_content_p2);
         return trs;
     }
