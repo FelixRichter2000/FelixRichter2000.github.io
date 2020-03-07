@@ -2,12 +2,18 @@
     padding: 0;
     margin: 0;
     font-family: Calibri;
+    font-size: var(--tile-size);
 }
 
 html, body {
     background-color: #1a181e;
     height: 100%;
     width: 100%;
+}
+
+:root {
+    --red: #f9502a;
+    --green: #53b3a0;
 }
 
 td img {
@@ -25,7 +31,47 @@ td img {
     z-index: 1;
 }
 
-#watch_table {
+.full_size {
     width: var(--min-size);
     height: var(--min-size);
+}
+
+#watch_table {
+    position: absolute;
+}
+
+#grid_overlay {
+    position: relative;
+}
+
+    #grid_overlay div {
+        position: absolute;
+        color: white;
+        background-color: #999999;
+        width: 30%;
+        height: 10%;
+    }
+
+        #grid_overlay div * {
+            right: 0;
+        }
+
+#top-left {
+    top: 0px;
+    left: 0px;
+}
+
+#top-right {
+    top: 0px;
+    right: 0px;
+}
+
+.red {
+    color: var(--red);
+    text-align: right;
+}
+
+.green {
+    color: var(--green);
+    text-align: left;
 }
