@@ -263,7 +263,7 @@ describe('Test parse_row_to_single_array', function () {
     test('parse_row_to_single_array ', () => {
         let row = '{"p1Units": [[1, 1], [2], [3], [4], [5], [6], [7, 77], [8, 88]], "p2Units": [[10], [20, 21], [30], [40], [50], [60], [70, 71], [80, 81]]}';
 
-        expect(mu.parse_row_to_single_array(row))
+        expect(mu.parse_row_to_single_array(JSON.parse(row)))
             .toEqual([[1, 1, 10], [2, 20, 21], [3, 30], [4], [5], [6], [40], [50], [60], [7, 77, 70, 71], [8, 88, 80, 81]]);
     });
 
@@ -275,7 +275,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[[0, 0, 60, "32"]], [], [], [], [], [], [], []], "p2Units": [[[0, 1, 60, "33"]], [], [], [], [], [], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -290,7 +290,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [[0, 0, 60, "32"]], [], [], [], [], [], []], "p2Units": [[], [[0, 1, 60, "33"]], [], [], [], [], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -305,7 +305,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [[0, 0, 60, "32"]], [], [], [], [], []], "p2Units": [[], [], [[0, 1, 60, "33"]], [], [], [], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -320,7 +320,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [[0, 0, 60, "32"]], [], [], [], []], "p2Units": [[], [], [], [[0, 1, 60, "33"]], [], [], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -335,7 +335,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [], [[0, 0, 60, "32"]], [], [], []], "p2Units": [[], [], [], [], [[0, 1, 60, "33"]], [], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -350,7 +350,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [], [], [[0, 0, 60, "32"]], [], []], "p2Units": [[], [], [], [], [], [[0, 1, 60, "33"]], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
@@ -365,7 +365,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [], [], [], [[0, 0, 60, "32"]], []], "p2Units": [[], [], [], [], [], [], [[0, 1, 60, "33"]], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -380,7 +380,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [], [], [], [], [[0, 0, 60, "32"]]], "p2Units": [[], [], [], [], [], [], [], [[0, 1, 60, "33"]]]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -395,7 +395,7 @@ describe('Test parse_replay_row_to_array', function () {
         let row = '{"p1Units": [[], [], [], [[0, 0], [0, 0]], [], [], [], []], "p2Units": [[], [], [], [], [[0, 0]], [[0, 0]], [], []]}';
         let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(row, settings))
+        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
