@@ -189,13 +189,11 @@
     };
 
     mu.parse_row_to_single_array = (row) => {
-        let parsed = JSON.parse(row);
-
         return [
-            ...mu.combine_firewalls(parsed.p1Units, parsed.p2Units),
-            ...parsed.p1Units.slice(3, 6),
-            ...parsed.p2Units.slice(3, 6),
-            ...mu.combine_removals_and_upgrades(parsed.p1Units, parsed.p2Units),
+            ...mu.combine_firewalls(row.p1Units, row.p2Units),
+            ...row.p1Units.slice(3, 6),
+            ...row.p2Units.slice(3, 6),
+            ...mu.combine_removals_and_upgrades(row.p1Units, row.p2Units),
         ];
     };
 
@@ -220,13 +218,18 @@
         return frame_data_array;
     };
 
-    mu.parse_complete_file = (file) => {
-        let rows = file.split("\n").slice(3, -1);
+    mu.parse_file_to_raw_array = (file) => {
         let data = [];
+        let rows = file.split("\n").slice(3, -1);
+        for (let row of rows)
+            data.push(JSON.parse(row));
+        return data;
+    }
 
-        for (let row of rows) 
-            data.push(match_utils.parse_replay_row_to_array(row));
-
+    mu.parse_complete_file = (rows) => {
+        let data = [];
+        for (let row of rows)
+            data.push(mu.parse_replay_row_to_array(row));
         return data;
     }
 

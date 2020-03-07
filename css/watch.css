@@ -17,7 +17,7 @@ td img {
     transform: translateY(var(--negative-half-tile-size));
 }
 
-.IULabel, .quantity {
+.quantity {
     position: absolute;
     transform: translateX(var(--tile-size));
     color: white;
@@ -26,7 +26,6 @@ td img {
 }
 
 #watch_table {
-    /*background-color: darkblue;*/
     width: var(--min-size);
     height: var(--min-size);
 }
