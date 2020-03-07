@@ -10,8 +10,8 @@
     let proto = replay_reader.prototype;
 
     proto.init = function () {
-        this.raw_data = [];
-        this.data = [];
+        this.raw_frame_data = [];
+        this.fast_frame_data = [];
         this.user_data = [];
     }
     proto.set_match_id = function (match_id) {
@@ -19,9 +19,9 @@
         this.load_user_data();
         this.load_data();
     }
-    proto.process_match_data = function (data) {
-        this.raw_data = match_utils.parse_file_to_raw_array(data);
-        this.data = match_utils.parse_complete_file(this.raw_data);
+    proto.process_match_data = function (file) {
+        this.raw_frame_data = match_utils.parse_file_to_raw_array(file);
+        this.fast_frame_data = match_utils.parse_complete_file(this.raw_frame_data);
     }
     proto.load_data = function () {
         let self = this;
