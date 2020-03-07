@@ -226,9 +226,9 @@
         let rows = file.split("\n").slice(3, -1);
         let data = [];
 
-        for (let row of rows) {
+        for (let row of rows) 
             data.push(match_utils.parse_replay_row_to_array(row));
-        }
+
         return data;
     }
 
