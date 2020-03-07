@@ -9,13 +9,13 @@
         information: [
             "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove2.svg", "images/Remove1.svg",
+            "images/Remove.svg", "images/Upgrade.svg",
         ],
 
         sources: ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg",
             "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove1.svg"],
+            "images/Remove.svg"],
 
         default_img: "images/EmptyField.svg",
 
