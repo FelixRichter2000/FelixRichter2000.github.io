@@ -1,4 +1,4 @@
-﻿let replayReader = new ReplayReader(5979377);
+﻿let reader = new ReplayReader(5979377);
 
 //Init table
 const watch_table = document.getElementById('watch_table');
@@ -27,12 +27,12 @@ const fps_goal = 60;
 setInterval(tick, 1000 / fps_goal);
 function tick() {
 
-    if (replayReader.raw_frame_data.length == 0) return;
+    if (reader.raw_frame_data.length == 0) return;
 
     counter++;
     display_fps();
 
-    match_utils.update_changes(counter - 1, counter, replayReader.fast_frame_data, viewer_elements);
+    match_utils.update_changes(counter - 1, counter, reader.fast_frame_data, viewer_elements);
 
     //updateImages();
 }

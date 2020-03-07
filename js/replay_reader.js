@@ -1,7 +1,4 @@
 ﻿(function () {
-    const DEPLOY_PHASE = 0;
-    const ACTION_PHASE = 1;
-    const END_GAME = 2;
 
     var replay_reader = function (match_id) {
         this.init();
