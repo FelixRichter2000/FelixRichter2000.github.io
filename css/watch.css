@@ -4,37 +4,28 @@
     font-family: Calibri;
 }
 
-:root {
-    /*--match-cell-size: calc(var(--min-size)) / 40);*/
-}
-
 html, body {
     background-color: #1a181e;
     height: 100%;
     width: 100%;
 }
 
-/*#watch_table {
-    height: var(--match-table-size);
-    width: var(--match-table-size);
-}*/
-
-td {
+td img {
     width: var(--tile-size);
     height: var(--tile-size);
+    position: absolute;
+    transform: translateY(var(--negative-half-tile-size));
 }
-
-    td img {
-        width: var(--tile-size);
-        height: var(--tile-size);
-        position: absolute;
-        transform: translateY(var(--half-tile-size));
-    }
-
 
 .IULabel, .quantity {
     position: absolute;
-    transform: translateX(var(--tile-size));  /*translateY(var(--half-tile-size))*/
+    transform: translateX(var(--tile-size));
     color: white;
     font-size: var(--tile-size);
+}
+
+#watch_table {
+    /*background-color: darkblue;*/
+    width: var(--min-size);
+    height: var(--min-size);
 }

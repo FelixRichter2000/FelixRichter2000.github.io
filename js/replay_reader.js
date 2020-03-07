@@ -11,6 +11,7 @@
 
     proto.init = function () {
         this.data = [];
+        this.user_data = [];
         this.total_frames = 0;
     }
     proto.set_match_id = function (match_id) {
@@ -55,27 +56,27 @@
 
         this.user_data = data;
     }
-    proto.get_user_state_data = function (frame) {
-        if (frame < 0)
-            frame = 0;
+    //proto.get_user_state_data = function (frame) {
+    //    if (frame < 0)
+    //        frame = 0;
 
-        let data = {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
-        }
+    //    let data = {
+    //        0: [],
+    //        1: [],
+    //        2: [],
+    //        3: [],
+    //    }
 
-        let frame_info = this.frame_information[frame];
-        let p1 = frame_info.p1Stats;
-        let p2 = frame_info.p2Stats;
-        for (var i = 0; i < 4; i++) {
-            data[i].push(p1[i]);
-            data[i].push(p2[i]);
-        }
+    //    let frame_info = this.frame_information[frame];
+    //    let p1 = frame_info.p1Stats;
+    //    let p2 = frame_info.p2Stats;
+    //    for (var i = 0; i < 4; i++) {
+    //        data[i].push(p1[i]);
+    //        data[i].push(p2[i]);
+    //    }
 
-        return data;
-    }
+    //    return data;
+    //}
 
     if (!window.ReplayReader) {
         window.ReplayReader = replay_reader;

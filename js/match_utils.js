@@ -96,7 +96,6 @@
     }
 
     mu.get_images = function (table) {
-        //Init references to images
         const tds = table.getElementsByTagName('td');
         const images = [];
         for (let td of tds) {
@@ -106,7 +105,6 @@
     }
 
     mu.get_images_one_dimensional = function (table) {
-        //Init references to images
         const tds = table.getElementsByTagName('td');
         let images = [];
         for (let td of tds) {
