@@ -1,11 +1,13 @@
-﻿let reader = new ReplayReader(5979377);
+﻿//Get match id from query
+let urlParams = new URLSearchParams(window.location.search);
+let match_id = urlParams.get('id') || 5979377;
+let reader = new ReplayReader(match_id);
 
 //Init table
 const watch_table = document.getElementById('watch_table');
 watch_table.innerHTML = match_utils.create_viewer();
 
 //Init references to images
-//const viewer_elements = match_utils.get_images(watch_table);
 const viewer_elements = match_utils.get_images_one_dimensional(watch_table);
 const viewer_elements_length = viewer_elements.length;
 
