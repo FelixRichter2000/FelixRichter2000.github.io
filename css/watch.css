@@ -1,8 +1,10 @@
 ﻿* {
     padding: 0;
     margin: 0;
-    font-family: Calibri;
+    font-family: Impact;
     font-size: var(--tile-size);
+    text-transform: uppercase;
+    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
 html, body {
@@ -14,6 +16,7 @@ html, body {
 :root {
     --red: #f9502a;
     --green: #53b3a0;
+    --white: #f2f2f2;
 }
 
 td img {
@@ -26,7 +29,7 @@ td img {
 .quantity {
     position: absolute;
     transform: translateX(var(--tile-size));
-    color: white;
+    color: var(--white);
     font-size: var(--half-tile-size);
     z-index: 1;
 }
@@ -46,32 +49,69 @@ td img {
 
     #grid_overlay div {
         position: absolute;
-        color: white;
-        background-color: #999999;
-        width: 30%;
-        height: 10%;
+        color: var(--white);
+        width: 42%;
+        height: 20%;
+        margin: 1%;
     }
 
-        #grid_overlay div * {
-            right: 0;
-        }
-
-#top-left {
+.top-left {
     top: 0px;
     left: 0px;
 }
 
-#top-right {
+.bottom-left {
+    bottom: 0px;
+    left: 0px;
+}
+
+.top-right {
     top: 0px;
     right: 0px;
 }
 
+    .top-right * {
+        float: right;
+    }
+
 .red {
     color: var(--red);
-    text-align: right;
 }
 
 .green {
     color: var(--green);
+}
+
+.right {
+    right: 1%;
+    text-align: right;
+}
+
+.left {
+    left: 1%;
     text-align: left;
 }
+
+.left-mask {
+    clip-path: polygon(0% 0%, 100% 0%, 91% 100%, 0% 100%);
+}
+
+.right-mask {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 9% 100%);
+}
+
+.bar {
+    width: 100%;
+    height: var(--bar-size);
+    transition-duration: .3s;
+}
+
+.p1-bar {
+    width: 50%;
+}
+
+.p2-bar {
+    width: 50%;
+}
+
+

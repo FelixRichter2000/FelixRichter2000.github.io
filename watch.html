@@ -8,27 +8,33 @@
     <link rel="stylesheet" href="css/watch.css" />
 </head>
 <body>
-    <label id="fps" style="color: white; position: absolute;"></label>
-
+    <!-- Main view table -->
     <table id="watch_table" class="full_size"></table>
 
     <!-- Inside table elements -->
-    <!--<div id="grid_overlay" class="full_size">
-        <div id="top-left">
-            <label class="green">Player 1</label>
+    <div id="grid_overlay" class="full_size">
+        <div class="top-left">
+
+            <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+            <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
+
+            <span class="left" style="position: absolute;" >Felix</span>
             <br />
-            <span>Felix</span>
-            <br />
-            <span>EAGLE_BK1</span>
+            <span class="left" style="position: absolute;">EAGLE_BK1</span>
         </div>
-        <div id="top-right">
-            <label class="red">Player 2</label>
+        <div class="top-right">
+            <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+            <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
+
+            <span class="right" style="position: absolute;">Felix</span>
             <br />
-            <span>Felix</span>
-            <br />
-            <span>EAGLE_BK1</span>
+            <span class="right" style="position: absolute;">EAGLE_BK1</span>
         </div>
-    </div>-->
+
+        <div class="bottom-left">
+            <label id="fps"></label>
+        </div>
+    </div>
 
 
     <script src="lib/jquery.js"></script>
