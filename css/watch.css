@@ -57,6 +57,7 @@ td img {
     #grid_overlay div {
         position: absolute;
         color: var(--white);
+        /*background-color: blue;*/
         width: 42%;
         height: 20%;
         margin: 1%;
@@ -65,16 +66,25 @@ td img {
 .top-left {
     top: 0px;
     left: 0px;
+    position: absolute;
 }
 
 .bottom-left {
     bottom: 0px;
     left: 0px;
+    position: absolute;
+}
+
+.bottom-right {
+    bottom: 0px;
+    right: 0px;
+    position: absolute;
 }
 
 .top-right {
     top: 0px;
     right: 0px;
+    position: absolute;
 }
 
     .top-right * {
@@ -93,14 +103,19 @@ td img {
 
 .right {
     right: 1%;
-    top: -1%;
     text-align: right;
+    position: absolute;
+}
+
+.top-fix {
+    top: -1%;
+    position: absolute;
 }
 
 .left {
     left: 1%;
-    top: -1%;
     text-align: left;
+    position: absolute;
 }
 
 .left-mask {
@@ -118,11 +133,11 @@ td img {
 }
 
 .p1-bar {
-    width: 50%;
+    width: 0%;
 }
 
 .p2-bar {
-    width: 50%;
+    width: 0%;
 }
 
 .smaller-text {
@@ -133,24 +148,80 @@ td img {
     font-size: var(--very-small-size);
 }
 
-.algo-name {
+.algo-name, .match-id {
     top: 20%;
+    position: absolute;
 }
 
 .cores {
     top: 46%;
+    position: absolute;
 }
 
 .bits {
     top: 60%;
+    position: absolute;
 }
 
-.left-indented{
+.bottom-1 {
+    bottom: 1%;
+    position: absolute;
+}
+
+.bottom-2 {
+    bottom: 15%;
+    position: absolute;
+}
+
+.bottom-3 {
+    bottom: 29%;
+    position: absolute;
+}
+
+.bottom-4 {
+    bottom: 43%;
+    position: absolute;
+}
+
+.bottom-5 {
+    bottom: 57%;
+    position: absolute;
+}
+
+.bottom-6 {
+    bottom: 71%;
+    position: absolute;
+}
+
+.left-indented {
     right: 65%;
+    position: absolute;
 }
 
-.right-indented{
+.left-indented-deep {
+    right: 44%;
+    position: absolute;
+}
+
+.right-indented {
     left: 65%;
+    position: absolute;
+}
+
+.playback-button {
+    width: 100%;
+    height: 80%;
+}
+
+#playback-section button {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    margin-left: var(--very-small-size);
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    outline: none;
 }
 
 

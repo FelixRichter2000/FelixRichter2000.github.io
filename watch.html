@@ -5,49 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Advanced Leaderboard</title>
     <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="css/slider.css" />
     <link rel="stylesheet" href="css/watch.css" />
 </head>
 <body>
-    <!-- Main view table -->
-    <table id="watch_table" class="full_size"></table>
+    <div class="full_size" style="margin-left: 0; margin-right: auto;">
 
-    <!-- Inside table elements -->
-    <div id="grid_overlay" class="full_size">
-        <div class="top-left">
+        <!-- Main view table -->
+        <table id="watch_table" class="full_size"></table>
 
-            <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
-            <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
-            <span class="left smaller-text" style="position: absolute; left: 80%;">20</span>
+        <!-- Inside table elements -->
+        <div id="grid_overlay" class="full_size">
+            <div class="top-left">
+                <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+                <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
+                <span class="left smaller-text top-fix" style="position: absolute; left: 80%;">0</span>
 
-            <span class="left smaller-text" style="position: absolute;">Felix</span>
-            <span class="left smaller-text green algo-name" style="position: absolute;">EAGLE_BK1</span>
+                <span class="left smaller-text top-fix" style="position: absolute;">BY PLAYER</span>
+                <span class="left smaller-text green algo-name top-fix" style="position: absolute;">BY ALGO</span>
 
-            <label class="left cores very-small-text" style="position: absolute;">CORES:</label>
-            <label class="left bits very-small-text" style="position: absolute;">BITS:</label>
+                <label class="left cores very-small-text" style="position: absolute;">CORES:</label>
+                <span class="left-indented cores very-small-text" style="position: absolute;">100</span>
 
-            <span class="left-indented cores very-small-text" style="position: absolute;">100</span>
-            <span class="left-indented bits very-small-text" style="position: absolute;">899</span>
+                <label class="left bits very-small-text" style="position: absolute;">BITS:</label>
+                <span class="left-indented bits very-small-text" style="position: absolute;">899</span>
+            </div>
+            <div class="top-right">
+                <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+                <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
+                <span class="right smaller-text top-fix" style="position: absolute; right: 80%;">0</span>
+
+                <span class="right smaller-text top-fix" style="position: absolute;">BY PLAYER</span>
+                <span class="right smaller-text red algo-name" style="position: absolute;">BY ALGO</span>
+
+                <label class="right-indented cores very-small-text top-fix" style="position: absolute;">CORES:</label>
+                <span class="right cores very-small-text" style="position: absolute;">100</span>
+
+                <label class="right-indented bits very-small-text" style="position: absolute;">BITS:</label>
+                <span class="right bits very-small-text" style="position: absolute;">899</span>
+            </div>
+            <div class="bottom-left">
+
+                <label class="left bottom-5 very-small-text" style="position: absolute;">MATCH:</label>
+                <span class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>
+            </div>
+            <div class="bottom-right">
+                <label class="right-indented bottom-5 very-small-text" style="position: absolute;">TURN:</label>
+                <span class="right bottom-5 very-small-text" style="position: absolute;">99</span>
+
+                <label class="right-indented bottom-4 very-small-text" style="position: absolute;">FRAME:</label>
+                <span class="right bottom-4 very-small-text" style="position: absolute;">799</span>
+
+
+                <section class="right bottom-2" style="width: 74%;">
+                    <!--<input type="range" name="name" value="" />-->
+                </section>
+                <section id="playback-section" class="right bottom-1">
+                    <button>
+                        <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
+                    </button>
+                    <button>
+                        <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
+                    </button>
+                    <button>
+                        <img class="playback-button" src="images/play.svg" />
+                    </button>
+                    <button>
+                        <img class="playback-button" src="images/next_frame.svg" />
+                    </button>
+                    <button>
+                        <img class="playback-button" src="images/next_turn.svg" />
+                    </button>
+                </section>
+            </div>
+
+            <div class="bottom-left">
+                <label id="fps" hidden></label>
+            </div>
         </div>
-        <div class="top-right">
-            <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
-            <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
-            <span class="right smaller-text" style="position: absolute; right: 80%;">20</span>
 
-            <span class="right smaller-text" style="position: absolute;">Felix</span>
-            <span class="right smaller-text red algo-name" style="position: absolute;">EAGLE_BK1</span>
-
-            <label class="right-indented cores very-small-text" style="position: absolute;">CORES:</label>
-            <label class="right-indented bits very-small-text" style="position: absolute;">BITS:</label>
-
-            <span class="right cores very-small-text" style="position: absolute;">100</span>
-            <span class="right bits very-small-text" style="position: absolute;">899</span>
-        </div>
-
-        <div class="bottom-left">
-            <label id="fps"></label>
-        </div>
     </div>
-
 
     <script src="lib/jquery.js"></script>
     <script src="js/dynamic_css.js"></script>
