@@ -1,10 +1,11 @@
 ﻿* {
     padding: 0;
     margin: 0;
-    font-family: Impact;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /*Barlow;*/ /*Impact;*/
     font-size: var(--tile-size);
     text-transform: uppercase;
-    text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+    -webkit-text-fill-color: var(--white);
+    font-weight: 800;
 }
 
 html, body {
@@ -16,7 +17,8 @@ html, body {
 :root {
     --red: #f9502a;
     --green: #53b3a0;
-    --white: #f2f2f2;
+    --white: white;
+    /*--white: #f2f2f2;*/
 }
 
 td img {
@@ -24,6 +26,11 @@ td img {
     height: var(--tile-size);
     position: absolute;
     transform: translateY(var(--negative-half-tile-size));
+}
+
+.border {
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
 }
 
 .quantity {
@@ -76,19 +83,23 @@ td img {
 
 .red {
     color: var(--red);
+    -webkit-text-fill-color: var(--red);
 }
 
 .green {
     color: var(--green);
+    -webkit-text-fill-color: var(--green);
 }
 
 .right {
     right: 1%;
+    top: -1%;
     text-align: right;
 }
 
 .left {
     left: 1%;
+    top: -1%;
     text-align: left;
 }
 
@@ -112,6 +123,34 @@ td img {
 
 .p2-bar {
     width: 50%;
+}
+
+.smaller-text {
+    font-size: var(--smaller-size);
+}
+
+.very-small-text {
+    font-size: var(--very-small-size);
+}
+
+.algo-name {
+    top: 20%;
+}
+
+.cores {
+    top: 46%;
+}
+
+.bits {
+    top: 60%;
+}
+
+.left-indented{
+    right: 65%;
+}
+
+.right-indented{
+    left: 65%;
 }
 
 
