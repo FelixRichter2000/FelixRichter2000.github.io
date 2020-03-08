@@ -12,6 +12,9 @@
         this.count = 0;
         this.user_data = [];
     }
+    proto.is_ready = function () {
+        return this.count > 0 && this.user_data.length > 0;
+    }
     proto.set_match_id = function (match_id) {
         this.match_id = match_id;
         this.load_user_data();
@@ -39,43 +42,23 @@
         });
     }
     proto.process_user_data = function (response) {
-        let data = {
-            0: [],
-            1: [],
-        };
-
-        for (var i = 0; i < 2; i++) {
-            let algo_data = response.data.algos[i];
-            let user = algo_data.user;
-            let algo = algo_data.name;
-
-            data[0].push(user);
-            data[1].push(algo);
-        }
-
-        this.user_data = data;
+        this.user_data = response.data.algos;
     }
-    //proto.get_user_state_data = function (frame) {
-    //    if (frame < 0)
-    //        frame = 0;
+    proto.get_next_turn = function (frame) {
+        frame++;
+        while (this.raw_frame_data[frame].turnInfo[0] !== 0 && frame < this.count) {
+            frame++;
+        }
+        return frame;
+    }
+    proto.get_previous_turn = function (frame) {
+        frame--;
+        while (this.raw_frame_data[frame].turnInfo[0] !== 0 && frame > 0) {
+            frame--;
+        }
+        return frame;
+    }
 
-    //    let data = {
-    //        0: [],
-    //        1: [],
-    //        2: [],
-    //        3: [],
-    //    }
-
-    //    let frame_info = this.frame_information[frame];
-    //    let p1 = frame_info.p1Stats;
-    //    let p2 = frame_info.p2Stats;
-    //    for (var i = 0; i < 4; i++) {
-    //        data[i].push(p1[i]);
-    //        data[i].push(p2[i]);
-    //    }
-
-    //    return data;
-    //}
 
     if (!window.ReplayReader) {
         window.ReplayReader = replay_reader;

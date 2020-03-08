@@ -9,35 +9,10 @@
             load_frame(frame - 1);
         },
         go_to_next_turn: function () {
-            load_frame(frame + 8);
+            load_frame(reader.get_next_turn(frame));
         },
         go_to_previous_turn: function () {
-            load_frame(frame - 8);
-        },
-        on_replay_changed: function () {
-            //$match_id_label.html(reader.get_match_id());
-            //$replay_range.attr('max', reader.get_max_frame() - 1);
-            //$replay_range.val(0);
-            //turn = 0;
-            //frame = 0;
-            //resetReplayTable();
-            //load_frame(0);
-            //viewer.start_play();
-            //max_frame = reader.get_max_frame();
-        },
-        on_user_data_loaded: function () {
-            //user_data = reader.get_user_data();
-
-            ////Check whether flip is necessary
-            //flipp = selected_user === user_data[0][1];
-
-            //for (let i = 0; i < constant_stat_names.length; i++) {
-            //    let elements = $('[name=' + constant_stat_names[i] + ']');
-            //    for (var j = 0; j < elements.length; j++) {
-            //        let element = elements[j];
-            //        element.innerHTML = user_data[i][flipp ? (j + 1) % 2 : j];
-            //    }
-            //}
+            load_frame(reader.get_previous_turn(frame));
         },
         toggle_play: function () {
             //$playButton.toggleClass("paused");
@@ -70,6 +45,9 @@
         },
         slower_playback: function () {
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
+        },
+        get_reader: function () {
+            return reader;
         }
     };
 
@@ -115,6 +93,10 @@
     //let $one_foreward_button = $("#one_foreward");
     //let $one_backward_button = $("#one_backward");
     //let $fps_input = $("#FPS");
+    let healths = document.getElementsByName('health');
+    let cores = document.getElementsByName('core');
+    let bits = document.getElementsByName('bit');
+
 
     //Player stats
     //let constant_stat_names = ["User", "Algo"];
@@ -154,53 +136,16 @@
 
     //Private methods
     function tick() {
-        if (!play) return;
+        if (first_time && reader.is_ready()) {
+            first_time = false;
 
-        if (frame >= reader.fast_frame_data.length) {
-            viewer.stop_play();
-            return;
+            update_static_stats();
         }
+
+        if (!play) return;
 
         update_to_next_frame();
     }
-    function resetReplayTable() {
-        //$replay_images.attr('src', emptyImage);
-        //$replay_labels.html('');
-    }
-    //function set_img(location, path) {
-    //    let x = location[0];
-    //    let y = location[1];
-
-    //    if (flipp) {
-    //        y = 27 - y;
-    //        x = 27 - x;
-    //    }
-
-    //    let td = $replay_tds[(27 - y) * 28 + x];
-    //    let img = $(td).find('img')[0];
-    //    img.src = path;
-    //}
-    //function set_amont(location, amount) {
-    //    let x = location[0];
-    //    let y = location[1];
-
-    //    if (flipp) {
-    //        y = 27 - y;
-    //        x = 27 - x;
-    //    }
-
-    //    let td = $replay_tds[(27 - y) * 28 + x];
-
-    //    let label = $(td).find('label')[0];
-    //    label.innerHTML = amount;
-    //}
-    //function flip_player_if_necessary(player) {
-    //    return flipp ? (player + 1) % 2 : player;
-    //}
-    //function get_image(player, type) {
-    //    player = flip_player_if_necessary(player);
-    //    return playerImages[player][type];
-    //}
 
     ////visual stat updater
     function update_all_visual_stats() {
@@ -211,65 +156,35 @@
     function update_replay_range_slider() {
         //$replay_range.val(frame);
     }
-    function update_player_stats() {
-        //state_data = reader.get_user_state_data(frame - 1);
-
-        //for (var i = 0; i < stat_names.length; i++) {
-        //    let elements = $('[name=' + stat_names[i] + ']');
-        //    for (var j = 0; j < elements.length; j++) {
-        //        let element = elements[j];
-        //        element.innerHTML = state_data[i][flipp ? (j + 1) % 2 : j];
-        //    }
-        //}
+    function update_static_stats() {
+        let players = document.getElementsByName('player');
+        let algos = document.getElementsByName('algo');
+        let data = reader.user_data;
+        for (var i = 0; i < data.length; i++) {
+            players[i].innerHTML = data[i].user;
+            algos[i].innerHTML = data[i].name;
+        }
     }
     function update_turn_stats() {
-        //state_data = reader.get_user_state_data(frame - 1);
+        let healths = document.getElementsByName('health');
+        let cores = document.getElementsByName('core');
+        let bits = document.getElementsByName('bit');
 
-        //let data = [reader.get_turn(frame), frame];
+        let data = reader.raw_frame_data[frame];
+        let combined = [data.p1Stats, data.p2Stats];
+        for (var i = 0; i < combined.length; i++) {
+            healths[i].innerHTML = combined[i][0];
+            cores[i].innerHTML = combined[i][1];
+            bits[i].innerHTML = combined[i][2];
+        }
 
-        //for (var i = 0; i < turn_labels.length; i++) {
-        //    let elements = $('[name=' + turn_labels[i] + ']');
-        //    for (var j = 0; j < elements.length; j++) {
-        //        let element = elements[j];
-        //        element.innerHTML = data[i];
-        //    }
-        //}
-    }
-
-    function show_turns_first_frame() {
-        //let info = reader.get_turn_info_for(frame);
-
-        //let units = [info.p1Units, info.p2Units];
-
-        //for (let playerIndex = 0; playerIndex < units.length; playerIndex++) {
-        //    let playerUnits = units[playerIndex];
-        //    let images = playerImages[flipp ? (playerIndex + 1) % 2 : playerIndex];
-
-        //    for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
-        //        let currentUnits = playerUnits[imageIndex];
-        //        let currentImage = images[imageIndex];
-
-        //        let dict = {};
-
-        //        for (let unit in currentUnits) {
-        //            unit = currentUnits[unit];
-
-        //            let x = parseInt(unit[0]);
-        //            let y = parseInt(unit[1]);
-
-        //            let loc = [x, y];
-
-        //            set_img(loc, currentImage);
-        //        }
-        //    }
-        //}
-
-        //update_all_visual_stats();
+        //For the health bars
+        document.documentElement.style.setProperty('--p1-health', `${Math.max(combined[0][0] / .3, 0)}%`);
+        document.documentElement.style.setProperty('--p2-health', `${Math.max(combined[1][0] / .3, 0)}%`);
     }
     function update_to_next_frame() {
         //Check if data is already there and in range
-        if (reader.raw_frame_data.length == 0
-            || frame >= reader.raw_frame_data.length) {
+        if (reader.raw_frame_data.length == 0) {
             viewer.stop_play();
             return;
         }
@@ -282,6 +197,8 @@
 
         match_utils.update_changes(frame, new_frame, reader.fast_frame_data, viewer_elements);
         frame = new_frame;
+
+        update_turn_stats();
     }
 
 

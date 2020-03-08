@@ -133,11 +133,11 @@ td img {
 }
 
 .p1-bar {
-    width: 0%;
+    width: var(--p1-health, 100%);
 }
 
 .p2-bar {
-    width: 0%;
+    width: var(--p2-health, 100%);
 }
 
 .smaller-text {
@@ -194,7 +194,7 @@ td img {
 }
 
 .left-indented {
-    right: 65%;
+    right: 60%;
     position: absolute;
 }
 
@@ -204,7 +204,7 @@ td img {
 }
 
 .right-indented {
-    left: 65%;
+    left: 60%;
     position: absolute;
 }
 
