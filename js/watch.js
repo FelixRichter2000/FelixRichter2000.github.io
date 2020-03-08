@@ -1,77 +1,82 @@
-﻿//Get match id from query
-let urlParams = new URLSearchParams(window.location.search);
-let match_id = urlParams.get('id') || 5979377;
-let reader = new ReplayReader(match_id);
+﻿//let player = new repla
 
-//Init table
-const watch_table = document.getElementById('watch_table');
-watch_table.innerHTML = match_utils.create_viewer();
 
-//Init references to images
-const viewer_elements = match_utils.get_images_one_dimensional(watch_table);
-const viewer_elements_length = viewer_elements.length;
 
-//Set all to hidden
-for (var i = 0; i < viewer_elements_length; i++) {
-    viewer_elements[i].hidden = true;
-}
 
-//For loop
-let mod = 60;
-let counter = 0;
-var lastLoop = new Date();
+////Get match id from query
+//let urlParams = new URLSearchParams(window.location.search);
+//let match_id = urlParams.get('id') || 5979377;
+//let reader = new ReplayReader(match_id);
 
-//For fps display
-const fps_display = document.getElementById("fps");
+////Init table
+//const watch_table = document.getElementById('watch_table');
+//watch_table.innerHTML = match_utils.create_viewer();
 
-const fps_goal = 60;
+////Init references to images
+//const viewer_elements = match_utils.get_images_one_dimensional(watch_table);
+//const viewer_elements_length = viewer_elements.length;
 
-setInterval(tick, 1000 / fps_goal);
-function tick() {
+////Set all to hidden
+//for (var i = 0; i < viewer_elements_length; i++) {
+//    viewer_elements[i].hidden = true;
+//}
 
-    if (reader.raw_frame_data.length == 0) return;
+////For loop
+//let mod = 60;
+//let counter = 0;
+//var lastLoop = new Date();
 
-    counter++;
-    display_fps();
+////For fps display
+//const fps_display = document.getElementById("fps");
 
-    match_utils.update_changes(counter - 1, counter, reader.fast_frame_data, viewer_elements);
+//const fps_goal = 60;
 
-    //updateImages();
-}
+//setInterval(tick, 1000 / fps_goal);
+//function tick() {
 
-function updateImages() {
-    //show/hide images
-    for (let i = 0; i < viewer_elements_length; i++) {
+//    if (reader.raw_frame_data.length == 0) return;
 
-        let current = viewer_elements[i];
+//    counter++;
+//    display_fps();
 
-        if (current.length == 0) {
-            continue;
-        }
+//    match_utils.update_changes(counter - 1, counter, reader.fast_frame_data, viewer_elements);
 
-        //current j
-        let j = (counter + i) % mod;
-        if (j < current.length) {
-            let img = current[j];
-            img.hidden = false;
-        }
+//    //updateImages();
+//}
 
-        //old j
-        j = (counter + i - 1) % mod;
-        if (j < current.length) {
-            img = current[j];
-            img.hidden = true;
-        }
-    }
-}
+//function updateImages() {
+//    //show/hide images
+//    for (let i = 0; i < viewer_elements_length; i++) {
 
-function display_fps() {
-    //fps display
-    if (counter % fps_goal == 0) {
-        var thisLoop = new Date();
-        var fps = 1000 / (thisLoop - lastLoop) * fps_goal;
-        lastLoop = thisLoop;
-        fps_display.innerHTML = fps;
-    }
-}
+//        let current = viewer_elements[i];
+
+//        if (current.length == 0) {
+//            continue;
+//        }
+
+//        //current j
+//        let j = (counter + i) % mod;
+//        if (j < current.length) {
+//            let img = current[j];
+//            img.hidden = false;
+//        }
+
+//        //old j
+//        j = (counter + i - 1) % mod;
+//        if (j < current.length) {
+//            img = current[j];
+//            img.hidden = true;
+//        }
+//    }
+//}
+
+//function display_fps() {
+//    //fps display
+//    if (counter % fps_goal == 0) {
+//        var thisLoop = new Date();
+//        var fps = 1000 / (thisLoop - lastLoop) * fps_goal;
+//        lastLoop = thisLoop;
+//        fps_display.innerHTML = fps;
+//    }
+//}
 
