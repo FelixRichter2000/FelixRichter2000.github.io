@@ -21,59 +21,60 @@
                 <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
                 <span name="health" class="left smaller-text top-fix" style="position: absolute; left: 80%;">0</span>
 
-                <span name="player" class="left smaller-text top-fix" style="position: absolute;">BY PLAYER</span>
+                <span name="player" class="left smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
                 <span name="algo" class="left smaller-text green algo-name top-fix" style="position: absolute;">BY ALGO</span>
 
                 <label class="left cores very-small-text" style="position: absolute;">CORES:</label>
-                <span name="core" class="left-indented cores very-small-text" style="position: absolute;">100</span>
+                <span name="core" class="left-indented cores very-small-text" style="position: absolute;">40</span>
 
                 <label class="left bits very-small-text" style="position: absolute;">BITS:</label>
-                <span name="bit" class="left-indented bits very-small-text" style="position: absolute;">899</span>
+                <span name="bit" class="left-indented bits very-small-text" style="position: absolute;">5</span>
             </div>
             <div class="top-right">
                 <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
                 <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
                 <span name="health" class="right smaller-text top-fix" style="position: absolute; right: 80%;">0</span>
 
-                <span name="player" class="right smaller-text top-fix" style="position: absolute;">BY PLAYER</span>
+                <span name="player" class="right smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
                 <span name="algo" class="right smaller-text red algo-name" style="position: absolute;">BY ALGO</span>
 
                 <label class="right-indented cores very-small-text top-fix" style="position: absolute;">CORES:</label>
-                <span name="core" class="right cores very-small-text" style="position: absolute;">100</span>
+                <span name="core" class="right cores very-small-text" style="position: absolute;">40</span>
 
                 <label class="right-indented bits very-small-text" style="position: absolute;">BITS:</label>
-                <span name="bit" class="right bits very-small-text" style="position: absolute;">899</span>
+                <span name="bit" class="right bits very-small-text" style="position: absolute;">5</span>
             </div>
             <div class="bottom-left">
 
-                <label class="left bottom-5 very-small-text" style="position: absolute;">MATCH:</label>
-                <span class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>
+                <!--<label class="left bottom-5 very-small-text" style="position: absolute;">MATCH:</label>
+                <span id="match_id" class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>-->
             </div>
             <div class="bottom-right">
                 <label class="right-indented bottom-5 very-small-text" style="position: absolute;">TURN:</label>
-                <span class="right bottom-5 very-small-text" style="position: absolute;">99</span>
+                <span id="turn_number" class="right bottom-5 very-small-text" style="position: absolute;">0</span>
 
                 <label class="right-indented bottom-4 very-small-text" style="position: absolute;">FRAME:</label>
-                <span class="right bottom-4 very-small-text" style="position: absolute;">799</span>
+                <span id="frame_number" class="right bottom-4 very-small-text" style="position: absolute;">0</span>
 
 
                 <section class="right bottom-2" style="width: 74%;">
                     <!--<input type="range" name="name" value="" />-->
                 </section>
                 <section id="playback-section" class="right bottom-1">
-                    <button>
+                    <button onclick="viewer.previous_turn();">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button>
+                    <button onclick="viewer.previous_frame();">
                         <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button>
-                        <img class="playback-button" src="images/play.svg" />
+                    <button onclick="viewer.toggle_play();">
+                        <img name="play_button_img" class="playback-button" src="images/play.svg" />
+                        <img name="play_button_img" class="playback-button" src="images/pause.svg" hidden />
                     </button>
-                    <button>
+                    <button onclick="viewer.next_frame();">
                         <img class="playback-button" src="images/next_frame.svg" />
                     </button>
-                    <button>
+                    <button onclick="viewer.next_turn();">
                         <img class="playback-button" src="images/next_turn.svg" />
                     </button>
                 </section>

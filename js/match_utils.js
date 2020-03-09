@@ -254,6 +254,12 @@
         }
     }
 
+    mu.toggle_hidden = function (elements) {
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].hidden = !elements[i].hidden;
+        }
+    }
+
 
 
 

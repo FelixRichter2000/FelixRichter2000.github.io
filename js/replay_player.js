@@ -8,28 +8,21 @@
         previous_frame: function () {
             load_frame(frame - 1);
         },
-        go_to_next_turn: function () {
+        next_turn: function () {
             load_frame(reader.get_next_turn(frame));
         },
-        go_to_previous_turn: function () {
+        previous_turn: function () {
             load_frame(reader.get_previous_turn(frame));
         },
         toggle_play: function () {
-            //$playButton.toggleClass("paused");
-            if (play) {
-                viewer.stop_play();
-            }
-            else {
-                viewer.start_play();
-            }
+            match_utils.toggle_hidden(play_button_images);
+            play = !play;
         },
         start_play: function () {
             play = true;
-            //$playButton.addClass("paused");
         },
         stop_play: function () {
             play = false;
-            //$playButton.removeClass("paused");
         },
         set_match_speed: function (fps) {
             current_fps = match_utils.put_value_in_range(fps, { min: 4, max: 60 });
@@ -82,57 +75,17 @@
         viewer_elements[i].hidden = true;
     }
 
-    //Jquery
-    //let $match_id_label = $('#match_id_label');
-    //let $replay_table = $('#match_table');
-    //let $replay_range = $('#match_range');
-    //let $watch_on_terminal = $('#watch_on_terminal');
-    //let $playButton = $(".togglePlay");
-    //let $skip_foreward_button = $("#skip_foreward");
-    //let $skip_backward_button = $("#skip_backward");
-    //let $one_foreward_button = $("#one_foreward");
-    //let $one_backward_button = $("#one_backward");
-    //let $fps_input = $("#FPS");
+    //Reusable references to html elements
     let healths = document.getElementsByName('health');
     let cores = document.getElementsByName('core');
     let bits = document.getElementsByName('bit');
+    let play_button_images = document.getElementsByName('play_button_img');
+    let turn_number = document.getElementById('turn_number');
+    let frame_number = document.getElementById('frame_number');
 
-
-    //Player stats
-    //let constant_stat_names = ["User", "Algo"];
-    //let stat_names = ["Health", "Cores", "Bits", "Milliseconds"];
-    //let turn_labels = ["Turn", "Frame"];
 
     //Set initial speed
     viewer.set_match_speed(12); // TODO: replace 12 with settings default value
-
-    //Init Play/Pause Button
-    //$playButton.toggleClass("paused");
-
-    //$playButton.click(function () {
-    //    viewer.toggle_play();
-    //});
-
-    //Init Slider input events
-    //$replay_range.on('input', function () {
-    //    load_frame(parseInt(this.value));
-    //});
-
-    //$fps_input.on('change', function () {
-    //    let val = parseInt(this.value);
-    //    if (val) {
-    //        set_match_speed(val);
-    //    }
-    //});
-
-    // Navigate button handlers
-    //$skip_foreward_button.on('click', () => viewer.go_to_next_turn());
-    //$skip_backward_button.on('click', () => viewer.go_to_previous_turn());
-    //$one_foreward_button.on('click', () => viewer.next_frame());
-    //$one_backward_button.on('click', () => viewer.previous_frame());
-
-
-
 
     //Private methods
     function tick() {
@@ -148,14 +101,6 @@
     }
 
     ////visual stat updater
-    function update_all_visual_stats() {
-        //update_replay_range_slider();
-        //update_player_stats();
-        //update_turn_stats();
-    }
-    function update_replay_range_slider() {
-        //$replay_range.val(frame);
-    }
     function update_static_stats() {
         let players = document.getElementsByName('player');
         let algos = document.getElementsByName('algo');
@@ -178,12 +123,16 @@
             bits[i].innerHTML = combined[i][2];
         }
 
+        //Turn & Frame
+        turn_number.innerHTML = data.turnInfo[1];
+        frame_number.innerHTML = frame;
+
         //For the health bars
         document.documentElement.style.setProperty('--p1-health', `${Math.max(combined[0][0] / .3, 0)}%`);
         document.documentElement.style.setProperty('--p2-health', `${Math.max(combined[1][0] / .3, 0)}%`);
     }
     function update_to_next_frame() {
-        //Check if data is already there and in range
+        //Check if data is already there
         if (reader.raw_frame_data.length == 0) {
             viewer.stop_play();
             return;
@@ -221,13 +170,13 @@
             code: "ArrowRight",
             ctrlKey: true,
             shiftKey: false,
-            callback: viewer.go_to_next_turn,
+            callback: viewer.next_turn,
         },
         {
             code: "ArrowLeft",
             ctrlKey: true,
             shiftKey: false,
-            callback: viewer.go_to_previous_turn,
+            callback: viewer.previous_turn,
         },
         {
             code: "ArrowUp",

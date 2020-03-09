@@ -224,4 +224,8 @@ td img {
     outline: none;
 }
 
+.black {
+    color: black;
+    -webkit-text-fill-color: black;
+}
 
