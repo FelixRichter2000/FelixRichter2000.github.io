@@ -8,6 +8,8 @@
     document.documentElement.style.setProperty('--very-small-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight) / 42)}px`);
     document.documentElement.style.setProperty('--half-tile-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight) / 28) / 2}px`);
     document.documentElement.style.setProperty('--negative-half-tile-size', `${Math.floor(Math.min(window.innerWidth, window.innerHeight) / 28) / -2}px`);
+
+    document.getElementById('grid_overlay').hidden = false;
 }
 
 update_custome_css_variables();
