@@ -250,8 +250,6 @@
         for (let i = 0; i < data_length; i++) {
             if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
 
-                //Get correct image based on switched
-                //let current_image = images[switched ? images_length - i - 1 : i];
                 const switched_index = mu.calculate_switched_index(i, switched, images_length);
                 let current_image = images[switched_index];
 
