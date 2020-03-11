@@ -368,52 +368,59 @@
 
 
     // Keyboard Control Config
-    let callbacks = [
+    let keybord_controls = [
         {
             code: "ArrowRight",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.next_frame,
         },
         {
             code: "ArrowLeft",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.previous_frame,
         },
         {
             code: "ArrowRight",
             ctrlKey: true,
             shiftKey: false,
-            callback: viewer.go_to_next_turn,
+            altKey: false,
+            callback: viewer.next_turn,
         },
         {
             code: "ArrowLeft",
             ctrlKey: true,
             shiftKey: false,
-            callback: viewer.go_to_previous_turn,
+            altKey: false,
+            callback: viewer.previous_turn,
         },
         {
             code: "ArrowUp",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.faster_playback,
         },
         {
             code: "ArrowDown",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.slower_playback,
         },
         {
             code: "Space",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.toggle_play,
         }
     ];
 
-    register_key_controls(callbacks);
+    register_key_controls(keybord_controls);
 
 
     if (!window.viewer) {

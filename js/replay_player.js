@@ -14,6 +14,10 @@
         previous_turn: function () {
             load_frame(reader.get_previous_turn(frame));
         },
+        switch_view: function () {
+            match_utils.switch_view(frame, reader.fast_frame_data, viewer_elements, switched);
+            switched = !switched;
+        },
         toggle_play: function () {
             match_utils.toggle_hidden(play_button_images);
             play = !play;
@@ -51,7 +55,7 @@
     let max_frame = 0;
     let play = true;
     let timer = null;
-    let flipp = false;
+    let switched = false;
     let current_fps = 12;
     let first_time = true;
 
@@ -144,7 +148,7 @@
         new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: reader.count - 1 });
         if (frame == new_frame) return;
 
-        match_utils.update_changes(frame, new_frame, reader.fast_frame_data, viewer_elements);
+        match_utils.update_changes(frame, new_frame, reader.fast_frame_data, viewer_elements, switched);
         frame = new_frame;
 
         update_turn_stats();
@@ -153,52 +157,66 @@
 
 
     // Keyboard Control Config
-    let callbacks = [
+    let keybord_controls = [
         {
             code: "ArrowRight",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.next_frame,
         },
         {
             code: "ArrowLeft",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.previous_frame,
         },
         {
             code: "ArrowRight",
             ctrlKey: true,
             shiftKey: false,
+            altKey: false,
             callback: viewer.next_turn,
         },
         {
             code: "ArrowLeft",
             ctrlKey: true,
             shiftKey: false,
+            altKey: false,
             callback: viewer.previous_turn,
         },
         {
             code: "ArrowUp",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.faster_playback,
         },
         {
             code: "ArrowDown",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.slower_playback,
         },
         {
             code: "Space",
             ctrlKey: false,
             shiftKey: false,
+            altKey: false,
             callback: viewer.toggle_play,
+        },
+        {
+            code: "KeyX",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: true,
+            callback: viewer.switch_view,
         }
     ];
 
-    register_key_controls(callbacks);
+    register_key_controls(keybord_controls);
 
 
     if (!window.viewer) {

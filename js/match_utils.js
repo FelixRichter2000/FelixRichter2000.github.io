@@ -20,6 +20,8 @@
         default_img: "images/EmptyField.svg",
 
         arena_size: 28,
+
+        group_size: 12,
     }
 
     let mu = {};
@@ -233,7 +235,7 @@
         return data;
     }
 
-    mu.update_changes = (i_previous, i_current, data, images) => {
+    mu.update_changes = (i_previous, i_current, data, images, switched) => {
         const data_previous = data[i_previous];
         const data_current = data[i_current];
 
@@ -241,25 +243,101 @@
         if (!data_current) return;
 
         const data_length = data_previous.length;
+        const images_length = images.length;
 
         if (i_current >= data_length) return;
 
         for (let i = 0; i < data_length; i++) {
             if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
-                if (images[i].tagName === 'LABEL') {
-                    images[i].innerHTML = data_current[i];
+
+                //Get correct image based on switched
+                //let current_image = images[switched ? images_length - i - 1 : i];
+                const switched_index = mu.calculate_switched_index(i, switched, images_length);
+                let current_image = images[switched_index];
+
+                if (current_image.tagName === 'LABEL') {
+                    current_image.innerHTML = data_current[i];
                 }
-                images[i].hidden = data_current[i] == 0;
+                current_image.hidden = data_current[i] == 0;
             }
         }
     }
 
-    mu.toggle_hidden = function (elements) {
+    mu.calculate_switched_index = (index, switched, total_length) => {
+        if (!switched) return index;
+
+        const switch_range_min = 3;
+        const switch_range_max = 8;
+
+        //Formular explanation with two examples
+
+        //index = 13
+        // -> field: 0, 1, 2, 3
+        // -> element: 0, 1 <-- 13 % 4
+
+        //index = 12
+        // -> element: 12 % 4 = 0
+
+        //group_size = 4
+
+        //total_length = 12 * 4 = 48
+
+        // 48 - 13 = 34 -> lets call it switched_index
+        // -> false element: 34 % 4 = 2
+        // -> corret element: 34 - 34 % 4 (= 32) + 4 - 2 - 1            ...    = 33
+        // -> general: switched_index - switched_index % group_size + group_size - switched_index % group_size - 1
+        // -> simplilfied: switched_index - 2 * (switched_index % group_size) + group_size - 1
+
+
+        // 48 - 12 - 1 = 35
+        // -> false element: 35 % 4 = 3
+        // -> correct element: 35 - 2 * (35 % 4) + 4 - 1 = 32
+        // ---> element: 32 % 4 = 0
+
+        // . 0 0 .
+        // 0 X 0 0
+        // 0 0 0 0
+        // . 0 0 .
+
+
+        const switched_index = total_length - index - 1;
+        let final_index = switched_index - 2 * (switched_index % config.group_size) + config.group_size - 1;
+
+        //without ending
+        const ending = final_index % config.group_size;
+
+        if (ending >= switch_range_min && ending <= switch_range_max) {
+            const without_ending = final_index - ending;
+
+            //Fix information unit indexes
+            // switch following indexes
+            // 4 - 6, 7 - 9
+
+            //4 -> 7
+            //7 -> 4
+            //6 -> 9
+
+            //(4 - 4 + 3 ) % 6 + 4 = 
+
+            //fixed ending
+            const fixed_ending = (ending - switch_range_min + 3) % 6 + switch_range_min;
+
+            final_index = without_ending + fixed_ending; 
+        }
+
+        return final_index;
+    }
+
+    mu.toggle_hidden = (elements) => {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
         }
     }
 
+    mu.switch_view = (i_current, data, images, switched) => {
+        mu.update_changes(i_current, 0, data, images, switched);
+        mu.update_changes(0, i_current, data, images, !switched);
+    }
 
 
 

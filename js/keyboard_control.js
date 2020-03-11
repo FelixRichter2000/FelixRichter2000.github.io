@@ -6,6 +6,7 @@
     const areKeyEventsEqual = (e1, e2) =>
         e1.code === e2.code
         && e1.ctrlKey === e2.ctrlKey
+        && e1.altKey === e2.altKey
         && e1.shiftKey === e2.shiftKey;
 
     // Keyboard handler
