@@ -337,6 +337,12 @@
         mu.update_changes(0, i_current, data, images, !switched);
     }
 
+    mu.toggle_player_index = (player_index, switched) => {
+        if (switched) 
+            return (player_index + 1) % 2;
+        return player_index;
+    }
+
 
 
     if (!global.match_utils) {

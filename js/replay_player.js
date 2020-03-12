@@ -4,9 +4,11 @@
     let viewer = {
         next_frame: function () {
             load_frame(frame + 1);
+            this.stop_play();
         },
         previous_frame: function () {
             load_frame(frame - 1);
+            this.stop_play();
         },
         next_turn: function () {
             load_frame(reader.get_next_turn(frame));
@@ -15,8 +17,12 @@
             load_frame(reader.get_previous_turn(frame));
         },
         switch_view: function () {
+            if (!reader.is_ready()) return;
             match_utils.switch_view(frame, reader.fast_frame_data, viewer_elements, switched);
             switched = !switched;
+
+            update_static_stats();
+            update_turn_stats();
         },
         toggle_play: function () {
             match_utils.toggle_hidden(play_button_images);
@@ -110,9 +116,11 @@
         let algos = document.getElementsByName('algo');
         let data = reader.user_data;
         for (var i = 0; i < data.length; i++) {
-            players[i].innerHTML = data[i].user;
-            algos[i].innerHTML = data[i].name;
+            let toggled_index = match_utils.toggle_player_index(i, switched);
+            players[toggled_index].innerHTML = data[i].user;
+            algos[toggled_index].innerHTML = data[i].name;
         }
+        document.getElementById('grid_overlay').hidden = false;
     }
     function update_turn_stats() {
         let healths = document.getElementsByName('health');
@@ -122,18 +130,20 @@
         let data = reader.raw_frame_data[frame];
         let combined = [data.p1Stats, data.p2Stats];
         for (var i = 0; i < combined.length; i++) {
-            healths[i].innerHTML = combined[i][0];
-            cores[i].innerHTML = combined[i][1];
-            bits[i].innerHTML = combined[i][2];
+            let toggled_index = match_utils.toggle_player_index(i, switched);
+
+            healths[toggled_index].innerHTML = combined[i][0];
+            cores[toggled_index].innerHTML = combined[i][1];
+            bits[toggled_index].innerHTML = combined[i][2];
+
+            //For the health bars
+            document.documentElement.style.setProperty(`--p${toggled_index + 1}-health`, `${Math.max(combined[i][0] / .3, 0)}%`);
+            //document.documentElement.style.setProperty(`--p1-health`, `${Math.max(combined[0][0] / .3, 0)}%`);
         }
 
         //Turn & Frame
         turn_number.innerHTML = data.turnInfo[1];
         frame_number.innerHTML = frame;
-
-        //For the health bars
-        document.documentElement.style.setProperty('--p1-health', `${Math.max(combined[0][0] / .3, 0)}%`);
-        document.documentElement.style.setProperty('--p2-health', `${Math.max(combined[1][0] / .3, 0)}%`);
     }
     function update_to_next_frame() {
         //Check if data is already there
@@ -145,6 +155,8 @@
         load_frame(frame + 1);
     }
     function load_frame(new_frame) {
+        if (!reader.is_ready()) return;
+
         new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: reader.count - 1 });
         if (frame == new_frame) return;
 
