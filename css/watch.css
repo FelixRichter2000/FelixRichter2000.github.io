@@ -213,7 +213,7 @@ td img {
     height: 80%;
 }
 
-#playback-section button {
+.playback-section button {
     width: var(--tile-size);
     height: var(--tile-size);
     margin-left: var(--very-small-size);

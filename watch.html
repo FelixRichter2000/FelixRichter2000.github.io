@@ -60,7 +60,7 @@
                 <section class="right bottom-2" style="width: 74%;">
                     <!--<input type="range" name="name" value="" />-->
                 </section>
-                <section id="playback-section" class="right bottom-1">
+                <section class="playback-section right bottom-1">
                     <button onclick="viewer.previous_turn();">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
                     </button>
@@ -82,6 +82,11 @@
 
             <div class="bottom-left">
                 <label id="fps" hidden></label>
+                <section class="playback-section bottom-6">
+                    <button onclick="viewer.switch_view();">
+                        <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
+                    </button>
+                </section>
             </div>
         </div>
 

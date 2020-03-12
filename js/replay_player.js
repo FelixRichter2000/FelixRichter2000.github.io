@@ -138,7 +138,6 @@
 
             //For the health bars
             document.documentElement.style.setProperty(`--p${toggled_index + 1}-health`, `${Math.max(combined[i][0] / .3, 0)}%`);
-            //document.documentElement.style.setProperty(`--p1-health`, `${Math.max(combined[0][0] / .3, 0)}%`);
         }
 
         //Turn & Frame
