@@ -15,7 +15,7 @@
         <table id="watch_table" class="full_size"></table>
 
         <!-- Inside table elements -->
-        <div id="grid_overlay" class="full_size" hidden>
+        <div id="grid_overlay" class="full_size" >
             <div class="top-left">
                 <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
                 <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
@@ -60,6 +60,11 @@
                 <section class="right bottom-2" style="width: 74%;">
                     <!--<input type="range" name="name" value="" />-->
                 </section>
+                <section class="playback-section bottom-4 left-indented">
+                    <button onclick="viewer.switch_view();">
+                        <img class="playback-button" src="images/switch_view.svg" />
+                    </button>
+                </section>
                 <section class="playback-section right bottom-1">
                     <button onclick="viewer.previous_turn();">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
@@ -82,11 +87,7 @@
 
             <div class="bottom-left">
                 <label id="fps" hidden></label>
-                <section class="playback-section bottom-6">
-                    <button onclick="viewer.switch_view();">
-                        <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
-                    </button>
-                </section>
+                
             </div>
         </div>
 

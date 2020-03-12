@@ -16,6 +16,7 @@
         let match = callbacks.find((e) => areKeyEventsEqual(e, keyEvent));
         if (match) {
             match.callback();
+            keyEvent.preventDefault();
         }
     });
 
