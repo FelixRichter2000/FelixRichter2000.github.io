@@ -11,7 +11,7 @@
 
     // Keyboard handler
     document.addEventListener('keydown', function (keyEvent) {
-        console.log(keyEvent);
+        //console.log(keyEvent);
 
         let match = callbacks.find((e) => areKeyEventsEqual(e, keyEvent));
         if (match) {

@@ -15,6 +15,7 @@
         },
         previous_turn: function () {
             load_frame(reader.get_previous_turn(frame));
+            viewer.stop_play();
         },
         switch_view: function () {
             if (!reader.is_ready()) return;
