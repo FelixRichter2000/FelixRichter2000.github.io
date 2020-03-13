@@ -105,6 +105,8 @@
             first_time = false;
 
             update_static_stats();
+
+            viewer.toggle_play();
         }
 
         if (!play) return;

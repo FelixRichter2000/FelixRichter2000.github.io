@@ -42,9 +42,12 @@ function loadAlgo(algo) {
 }
 
 function loadMatch(match) {
-    selected_match = match;
-    switchToTab('Match');
-    onMatchChanged(match);
+    //selected_match = match;
+    //switchToTab('Match');
+    //onMatchChanged(match);
+
+    var win = window.open(`https://felixrichter2000.github.io/watch?id=${match}`, '_blank');
+    win.focus();
 }
 
 
