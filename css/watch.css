@@ -16,7 +16,8 @@ html, body {
 
 :root {
     --red: #f9502a;
-    --green: #53b3a0;
+    /*--green: #53b3a0;*/
+    --green: #00ABA8;
     --white: white;
     /*--white: #f2f2f2;*/
 }
