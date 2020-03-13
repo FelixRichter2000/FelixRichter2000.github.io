@@ -33,7 +33,8 @@
             play = true;
         },
         stop_play: function () {
-            play = false;
+            if (play)
+                viewer.toggle_play();
         },
         set_match_speed: function (fps) {
             current_fps = match_utils.put_value_in_range(fps, { min: 4, max: 60 });
