@@ -46,14 +46,14 @@
     }
     proto.get_next_turn = function (frame) {
         frame++;
-        while (this.raw_frame_data[frame].turnInfo[0] !== 0 && frame < this.count) {
+        while (frame < this.count && this.raw_frame_data[frame].turnInfo[0] !== 0) {
             frame++;
         }
         return frame;
     }
     proto.get_previous_turn = function (frame) {
         frame--;
-        while (this.raw_frame_data[frame].turnInfo[0] !== 0 && frame > 0) {
+        while (frame > 0 && this.raw_frame_data[frame].turnInfo[0] !== 0) {
             frame--;
         }
         return frame;

@@ -4,11 +4,11 @@
     let viewer = {
         next_frame: function () {
             load_frame(frame + 1);
-            this.stop_play();
+            viewer.stop_play();
         },
         previous_frame: function () {
             load_frame(frame - 1);
-            this.stop_play();
+            viewer.stop_play();
         },
         next_turn: function () {
             load_frame(reader.get_next_turn(frame));
