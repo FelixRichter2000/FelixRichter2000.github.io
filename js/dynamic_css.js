@@ -15,3 +15,8 @@ update_custome_css_variables();
 window.addEventListener('resize', () => {
     update_custome_css_variables();
 });
+
+window.addEventListener('orientationchange', () => {
+    update_custome_css_variables();
+});
+
