@@ -51,8 +51,13 @@
         slower_playback: function () {
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
+        //Temporary
         get_reader: function () {
             return reader;
+        },
+        watch_on_terminal: function () {
+            var win = window.open(`https://terminal.c1games.com/watch/${match_id}`, '_blank');
+            win.focus();
         }
     };
 
