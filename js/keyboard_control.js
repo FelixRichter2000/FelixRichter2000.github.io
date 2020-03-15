@@ -16,7 +16,11 @@
         let match = callbacks.find((e) => areKeyEventsEqual(e, keyEvent));
         if (match) {
             match.callback();
+
+            //prevent default things
             keyEvent.preventDefault();
+            let el = document.querySelector(':focus');
+            if (el) el.blur();
         }
     });
 
