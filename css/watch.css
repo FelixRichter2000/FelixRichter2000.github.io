@@ -29,10 +29,19 @@ td img {
     transform: translateY(var(--negative-half-tile-size));
 }
 
-.border {
-    -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: black;
+svg {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    position: absolute;
+    transform: translateY(var(--negative-half-tile-size)) rotate(-90deg);
+    transition: 0.35s stroke-dashoffset;
+    transform-origin: 50% 50%;
 }
+
+    .border {
+        -webkit-text-stroke-width: 2px;
+        -webkit-text-stroke-color: black;
+    }
 
 .quantity {
     position: absolute;
@@ -229,4 +238,14 @@ td img {
     color: black;
     -webkit-text-fill-color: black;
 }
+
+.damage-bar {
+    stroke:#1a181e;
+    stroke-opacity: 0.6;
+    stroke-width: 29;
+    fill: transparent;
+    stroke-dasharray: 100.530964915, 100.530964915; 
+    stroke-dashoffset: 0;
+}
+
 

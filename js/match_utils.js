@@ -6,6 +6,8 @@
             ["images/Filter2.svg", "images/Encryptor2.svg", "images/Destructor2.svg"],
         ],
 
+        damage_img: "images/damage.svg",
+
         information: [
             "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
             "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
@@ -19,9 +21,20 @@
 
         default_img: "images/EmptyField.svg",
 
+        damage_svg: '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg >',
+
+        upgrade_index: 10,
+        health_index: 11,
+
         arena_size: 28,
 
-        group_size: 12,
+        group_size: 13,
+
+        full_health: {
+            0: [60, 120],
+            1: [30, 30],
+            2: [75, 75],
+        },
     }
 
     let mu = {};
@@ -32,8 +45,14 @@
         content += `<img class="match-default-img" src="${default_src}">`;
 
         for (var i = 0; i < src_options.length; i++) {
+
+            //Add damage bar in-between
+            if (i === 3) 
+                content += config.damage_svg;
+
             content += `<img class="match-changing-img" src="${src_options[i]}">`;
         }
+
         return content;
     };
 
@@ -45,7 +64,7 @@
         return content;
     };
 
-    mu.generate_settings = (size, image_count = 12) => {
+    mu.generate_settings = (size, image_count = config.group_size) => {
         return {
             size,
             half_size: size / 2,
@@ -113,7 +132,8 @@
             let ims = td.getElementsByClassName('match-changing-img');
             if (ims.length > 0) {
                 let quantity_label = td.getElementsByClassName('quantity');
-                images = [...images, ...ims, ...quantity_label];
+                let damage_bar = td.getElementsByClassName('damage-bar');
+                images = [...images, ...ims, ...damage_bar, ...quantity_label];
             }
         }
         return images;
@@ -157,6 +177,11 @@
 
     mu.calculate_final_index = (index, group_index, settings) => {
         return index * settings.image_count + group_index;
+    }
+
+    mu.is_upgraded = (array, index, settings) => {
+        let final_index = mu.calculate_final_index(index, config.upgrade_index, settings);
+        return array[final_index];
     }
 
     mu.set_value = (array, index, group_index, value, settings) => {
@@ -206,13 +231,22 @@
 
         let all_data = mu.parse_row_to_single_array(row);
 
-        for (let group_index = 0; group_index < all_data.length; group_index++) {
+        //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
+        for (let group_index = all_data.length - 1; group_index >= 0; group_index--) {
             for (let location of all_data[group_index]) {
                 let index = mu.location_to_index(location, map, settings);
                 mu.set_value(frame_data_array, index, group_index, 1, settings);
 
                 if (group_index >= 3 && group_index <= 8) {
                     mu.add_one(frame_data_array, index, settings.image_count - 1, settings);
+                }
+
+                if (group_index < 3) {
+                    let health = location[2];
+                    let is_upgraded = mu.is_upgraded(frame_data_array, index, settings);
+                    let total_health = config.full_health[group_index][is_upgraded];
+                    let percental_health_left = health / total_health * 100;
+                    mu.set_value(frame_data_array, index, config.health_index, percental_health_left, settings);
                 }
             }
         }
@@ -255,6 +289,9 @@
 
                 if (current_image.tagName === 'LABEL') {
                     current_image.innerHTML = data_current[i];
+                }
+                else if (current_image.tagName === 'circle') {
+                    current_image.style.strokeDashoffset = 1.00530964915 * data_current[i];
                 }
                 current_image.hidden = data_current[i] == 0;
             }
