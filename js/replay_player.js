@@ -51,6 +51,9 @@
         slower_playback: function () {
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
+        show_field_info: function (x, y) {
+
+        },
         //Temporary
         get_reader: function () {
             return reader;
