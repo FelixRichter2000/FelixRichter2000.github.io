@@ -84,7 +84,7 @@
     watch_table.innerHTML = match_utils.create_viewer();
 
     //Init references to images
-    const viewer_elements = match_utils.get_images_one_dimensional(watch_table);
+    const viewer_elements = match_utils.get_all_td_children_one_dimensional(watch_table);
     const viewer_elements_length = viewer_elements.length;
 
     //Set all to hidden

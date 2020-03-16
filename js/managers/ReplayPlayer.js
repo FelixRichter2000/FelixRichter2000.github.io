@@ -117,7 +117,7 @@
     {
         let td_content = match_utils.generate_default_td_contents([emptyImage]);
         let settings = match_utils.generate_settings(28);
-        let trs = match_utils.generate_terminal_trs(settings, td_content);
+        let trs = match_utils.generate_terminal_trs(settings, td_content, td_content);
         $replay_table.append(trs);
     }
 

@@ -3,37 +3,39 @@
 describe('Test generate_default_td_contents', function () {
 
     test('single source', () => {
-        expect(mu.generate_default_td_contents(['1']))
-            .toMatchSnapshot();
+        expect(mu.generate_default_td_contents('default', ['1']))
+            .toBe("<label class=\"quantity\"></label>" +
+                "<img class=\"match-default-img\" src=\"default\">" +
+                "<img class=\"match-changing-img\" src=\"1\">");
     });
 
     test('two sources (1, 2)', () => {
-        expect(mu.generate_default_td_contents(['1', '2']))
-            .toMatchSnapshot();
+        expect(mu.generate_default_td_contents('default', ['1', '2']))
+            .toBe("<label class=\"quantity\"></label>" +
+                "<img class=\"match-default-img\" src=\"default\">" +
+                "<img class=\"match-changing-img\" src=\"1\">" +
+                "<img class=\"match-changing-img\" src=\"2\">");
     });
 
     test('multiple ("filter", "destructor", "encryptor")', () => {
-        expect(mu.generate_default_td_contents(["filter", "destructor", "encryptor"]))
-            .toMatchSnapshot();
+        expect(mu.generate_default_td_contents('default', ["filter", "destructor", "encryptor"]))
+            .toBe("<label class=\"quantity\">" +
+                "</label><img class=\"match-default-img\" src=\"default\">" +
+                "<img class=\"match-changing-img\" src=\"filter\">" +
+                "<img class=\"match-changing-img\" src=\"destructor\">" +
+                "<img class=\"match-changing-img\" src=\"encryptor\">");
     });
 
-});
-
-describe('Test generate_default_td_contents_v2', function () {
-
-    test('single source', () => {
-        expect(mu.generate_default_td_contents_v2('default', ['1']))
-            .toMatchSnapshot();
-    });
-
-    test('two sources (1, 2)', () => {
-        expect(mu.generate_default_td_contents_v2('default', ['1', '2']))
-            .toMatchSnapshot();
-    });
-
-    test('multiple ("filter", "destructor", "encryptor")', () => {
-        expect(mu.generate_default_td_contents_v2('default', ["filter", "destructor", "encryptor"]))
-            .toMatchSnapshot();
+    test('multiple ("filter", "destructor", "encryptor", "ping", "emp") also adds damage bar in between', () => {
+        expect(mu.generate_default_td_contents('default', ["filter", "destructor", "encryptor", "ping", "emp"]))
+            .toBe("<label class=\"quantity\"></label>" +
+                "<img class=\"match-default-img\" src=\"default\">" +
+                "<img class=\"match-changing-img\" src=\"filter\">" +
+                "<img class=\"match-changing-img\" src=\"destructor\">" +
+                "<img class=\"match-changing-img\" src=\"encryptor\">" +
+                "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
+                "<img class=\"match-changing-img\" src=\"ping\">" +
+                "<img class=\"match-changing-img\" src=\"emp\">");
     });
 
 });
@@ -141,13 +143,11 @@ describe('Test is_in_arena_bounds', function () {
 describe('Test generate_terminal_trs', function () {
 
     test('Generate generate_terminal_trs size 4', () => {
-        expect(mu.generate_terminal_trs({ size: 4, half_size: 2 }, '.'))
-            .toMatchSnapshot();
-    });
-
-    test('Generate generate_terminal_trs size 8', () => {
-        expect(mu.generate_terminal_trs({ size: 8, half_size: 4 }, '.'))
-            .toMatchSnapshot();
+        expect(mu.generate_terminal_trs({ size: 4, half_size: 2 }, 'p1', 'p2'))
+            .toBe("<tr><td></td><td>p2</td><td>p2</td><td></td></tr>" +
+                "<tr><td>p2</td><td>p2</td><td>p2</td><td>p2</td></tr>" +
+                "<tr><td>p1</td><td>p1</td><td>p1</td><td>p1</td></tr>" +
+                "<tr><td></td><td>p1</td><td>p1</td><td></td></tr>");
     });
 
 });
@@ -175,12 +175,70 @@ describe('Test put_value_in_range', function () {
 
 describe('Test create_viewer', function () {
 
-    //test('Generate create_viewer', () => {
-    //    expect(mu.create_viewer())
-    //        .toMatchSnapshot();
-    //});
+    test('Generate create_viewer', () => {
+
+        expect(mu.create_viewer())
+            .toMatchSnapshot();
+    });
 
 });
+
+describe('Test get_all_td_children_one_dimensional', function () {
+
+    test('Call get_all_td_children_one_dimensional', () => {
+
+        document.body.innerHTML = "<table id='test'><tr><td>" +
+            "<label class=\"quantity\"></label>" +
+            "<img class='match-changing-img'/>" +
+            "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
+            "<img class='match-changing-img'/>" +
+            "<img class='match-changing-img'/></td><td>" +
+            "<label class=\"quantity\"></label>" +
+            "<img class='match-changing-img'/>" +
+            "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
+            "<img class='match-changing-img'/>" +
+            "<img class='match-changing-img'/></td></tr></table>";
+
+        let table = document.getElementById('test');
+        let children = mu.get_all_td_children_one_dimensional(table);
+
+        expect(children.length)
+            .toBe(10);
+
+        expect(children[0].tagName)
+            .toBe('IMG');
+
+        expect(children[1].tagName)
+            .toBe('IMG');
+
+        expect(children[2].tagName)
+            .toBe('IMG');
+
+        expect(children[3].tagName)
+            .toBe('circle');
+
+        expect(children[4].tagName)
+            .toBe('LABEL');
+
+        expect(children[5].tagName)
+            .toBe('IMG');
+
+        expect(children[6].tagName)
+            .toBe('IMG');
+
+        expect(children[7].tagName)
+            .toBe('IMG');
+
+        expect(children[8].tagName)
+            .toBe('circle');
+
+        expect(children[9].tagName)
+            .toBe('LABEL');
+    });
+
+});
+
+
 
 describe('Test spez', function () {
 

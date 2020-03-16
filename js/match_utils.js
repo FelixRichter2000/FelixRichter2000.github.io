@@ -39,8 +39,7 @@
 
     let mu = {};
 
-    mu.generate_default_td_contents_v2 = (default_src, src_options) => {
-
+    mu.generate_default_td_contents = (default_src, src_options) => {
         let content = '<label class="quantity"></label>';
         content += `<img class="match-default-img" src="${default_src}">`;
 
@@ -56,14 +55,6 @@
         return content;
     };
 
-    mu.generate_default_td_contents = (src_options) => {
-        let content = '<label class="quantity"></label>';
-        for (var i = 0; i < src_options.length; i++) {
-            content += `<img src="${src_options[i]}">`;
-        }
-        return content;
-    };
-
     mu.generate_settings = (size, image_count = config.group_size) => {
         return {
             size,
@@ -76,7 +67,7 @@
         return Math.abs(x - settings.half_size + .5) + Math.abs(y - settings.half_size + .5) < (settings.half_size + 1);
     };
 
-    mu.generate_terminal_trs_v2 = (settings, p1_td_content, p2_td_content) => {
+    mu.generate_terminal_trs = (settings, p1_td_content, p2_td_content) => {
         let trs = '';
         for (var y = 0; y < settings.size; y++) {
             trs += '<tr>';
@@ -92,40 +83,15 @@
         return trs;
     };
 
-    mu.generate_terminal_trs = (settings, td_content) => {
-        let trs = '';
-        for (var y = 0; y < settings.size; y++) {
-            trs += '<tr>';
-            for (var x = 0; x < settings.size; x++) {
-                trs += '<td>';
-                if (mu.is_in_arena_bounds(x, y, settings)) {
-                    trs += td_content;
-                }
-                trs += '</td>';
-            }
-            trs += '</tr>';
-        }
-        return trs;
-    };
-
     mu.create_viewer = function () {
-        let td_content_p1 = mu.generate_default_td_contents_v2(config.default_img, [...config.firewalls[0], ...config.information]);
-        let td_content_p2 = mu.generate_default_td_contents_v2(config.default_img, [...config.firewalls[1], ...config.information]);
+        let td_content_p1 = mu.generate_default_td_contents(config.default_img, [...config.firewalls[0], ...config.information]);
+        let td_content_p2 = mu.generate_default_td_contents(config.default_img, [...config.firewalls[1], ...config.information]);
         let settings = mu.generate_settings(config.arena_size);
-        let trs = mu.generate_terminal_trs_v2(settings, td_content_p1, td_content_p2);
+        let trs = mu.generate_terminal_trs(settings, td_content_p1, td_content_p2);
         return trs;
     }
 
-    mu.get_images = function (table) {
-        const tds = table.getElementsByTagName('td');
-        const images = [];
-        for (let td of tds) {
-            images.push(td.getElementsByClassName('match-changing-img'));
-        }
-        return images;
-    }
-
-    mu.get_images_one_dimensional = function (table) {
+    mu.get_all_td_children_one_dimensional = function (table) {
         const tds = table.getElementsByTagName('td');
         let images = [];
         for (let td of tds) {
