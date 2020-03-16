@@ -52,7 +52,11 @@
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
         show_field_info: function (x, y) {
-
+            let new_text = "";
+            if (match_utils.is_in_arena_bounds(x, y, settings)) {
+                new_text = `${x}, ${y}`;
+            }
+            position_span.innerHTML = new_text;
         },
         //Temporary
         get_reader: function () {
@@ -74,6 +78,7 @@
     let switched = false;
     let current_fps = 12;
     let first_time = true;
+    const settings = match_utils.generate_settings(28);
 
     //Get match id from query
     let urlParams = new URLSearchParams(window.location.search);
@@ -102,6 +107,7 @@
     let play_button_images = document.getElementsByName('play_button_img');
     let turn_number = document.getElementById('turn_number');
     let frame_number = document.getElementById('frame_number');
+    let position_span = document.getElementById('position');
 
 
     //Set initial speed
