@@ -53,7 +53,7 @@
         },
         show_field_info: function (x, y) {
             let new_text = "";
-            if (match_utils.is_in_arena_bounds(x, y, settings)) {
+            if (match_utils.is_in_arena_bounds(x, y)) {
                 new_text = `${x}, ${y}`;
             }
             position_span.innerHTML = new_text;
@@ -78,7 +78,6 @@
     let switched = false;
     let current_fps = 12;
     let first_time = true;
-    const settings = match_utils.generate_settings(28);
 
     //Get match id from query
     let urlParams = new URLSearchParams(window.location.search);
