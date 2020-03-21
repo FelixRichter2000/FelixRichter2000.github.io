@@ -46,7 +46,7 @@
         for (var i = 0; i < src_options.length; i++) {
 
             //Add damage bar in-between
-            if (i === 3) 
+            if (i === 3)
                 content += config.damage_svg;
 
             content += `<img class="match-changing-img" src="${src_options[i]}">`;
@@ -96,11 +96,9 @@
         let images = [];
         for (let td of tds) {
             let ims = td.getElementsByClassName('match-changing-img');
-            if (ims.length > 0) {
-                let quantity_label = td.getElementsByClassName('quantity');
-                let damage_bar = td.getElementsByClassName('damage-bar');
-                images = [...images, ...ims, ...damage_bar, ...quantity_label];
-            }
+            let quantity_label = td.getElementsByClassName('quantity');
+            let damage_bar = td.getElementsByClassName('damage-bar');
+            images = [...images, ...ims, ...damage_bar, ...quantity_label];
         }
         return images;
     }
@@ -323,7 +321,7 @@
             //fixed ending
             const fixed_ending = (ending - switch_range_min + 3) % 6 + switch_range_min;
 
-            final_index = without_ending + fixed_ending; 
+            final_index = without_ending + fixed_ending;
         }
 
         return final_index;
@@ -341,7 +339,7 @@
     }
 
     mu.toggle_player_index = (player_index, switched) => {
-        if (switched) 
+        if (switched)
             return (player_index + 1) % 2;
         return player_index;
     }
@@ -355,4 +353,4 @@
 
 try {
     module.exports = window.match_utils;
-} catch(e){ }
+} catch (e) { }
