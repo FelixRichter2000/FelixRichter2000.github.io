@@ -7,6 +7,7 @@
     let proto = replay_reader.prototype;
 
     proto.init = function () {
+        this.full_frame_data = [];
         this.raw_frame_data = [];
         this.fast_frame_data = [];
         this.count = 0;
@@ -21,7 +22,8 @@
         this.load_data();
     }
     proto.process_match_data = function (file) {
-        this.raw_frame_data = match_utils.parse_file_to_raw_array(file);
+        this.full_frame_data = match_utils.parse_file_to_raw_array(file);
+        this.raw_frame_data = this.full_frame_data.slice(1, -1);
         this.fast_frame_data = match_utils.parse_complete_file(this.raw_frame_data);
         this.count = this.fast_frame_data.length;
     }

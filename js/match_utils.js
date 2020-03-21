@@ -220,9 +220,9 @@
 
     mu.parse_file_to_raw_array = (file) => {
         let data = [];
-        let rows = file.split("\n").slice(3, -1);
-        for (let row of rows)
-            data.push(JSON.parse(row));
+        for (let row of file.split("\n"))
+            if (row)
+                data.push(JSON.parse(row));
         return data;
     }
 
