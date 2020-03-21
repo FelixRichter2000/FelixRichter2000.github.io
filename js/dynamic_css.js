@@ -28,7 +28,7 @@ window.addEventListener('mousemove', (e) => {
     let x = round(e.clientX);
     let y = 27 - round(e.clientY);
 
-    if (viewer)
+    if (typeof viewer != 'undefined')
         viewer.show_field_info(x, y);
 });
 

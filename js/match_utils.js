@@ -1,5 +1,68 @@
 ﻿+function (global) {
-    const config = {
+
+    //General
+    const quantity_label = '<label class="quantity"></label>';
+    const empty_field_img = '<img class="match-default-img" src="images/EmptyField.svg">';
+    const damage_bar_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg >';
+    const remove_img = '<img class="match-changing-img" src="images/Remove.svg">';
+    const upgrade_img = '<img class="match-changing-img" src="images/Upgrade.svg">';
+
+    //P1
+    const filter1_img = '<img class="match-changing-img" src="images/Filter1.svg">';
+    const encryptor1_img = '<img class="match-changing-img" src="images/Encryptor1.svg">';
+    const destructor1_img = '<img class="match-changing-img" src="images/Destructor1.svg">';
+    const ping1_img = '<img class="match-changing-img" src="images/Ping1.svg">';
+    const emp1_img = '<img class="match-changing-img" src="images/Emp1.svg">';
+    const scrambler1_img = '<img class="match-changing-img" src="images/Scrambler1.svg">';
+
+    //P2
+    const filter2_img = '<img class="match-changing-img" src="images/Filter2.svg">';
+    const encryptor2_img = '<img class="match-changing-img" src="images/Encryptor2.svg">';
+    const destructor2_img = '<img class="match-changing-img" src="images/Destructor2.svg">';
+    const ping2_img = '<img class="match-changing-img" src="images/Ping2.svg">';
+    const emp2_img = '<img class="match-changing-img" src="images/Emp2.svg">';
+    const scrambler2_img = '<img class="match-changing-img" src="images/Scrambler2.svg">';
+
+    const default_config = {
+
+        field_contents: [
+            empty_field_img + 
+            filter1_img +
+            encryptor1_img +
+            destructor1_img +
+            damage_bar_svg +
+            ping1_img +
+            emp1_img +
+            scrambler1_img +
+            ping2_img +
+            emp2_img +
+            scrambler2_img +
+            remove_img + 
+            upgrade_img +
+            quantity_label,
+
+            empty_field_img +
+            filter2_img +
+            encryptor2_img +
+            destructor2_img +
+            damage_bar_svg +
+            ping1_img +
+            emp1_img +
+            scrambler1_img +
+            ping2_img +
+            emp2_img +
+            scrambler2_img +
+            remove_img +
+            upgrade_img +
+            quantity_label
+        ],
+
+        arena_settings: {
+            size: 28,
+            half: 14
+        },
+
+        ///Old Settings
 
         firewalls: [
             ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg"],
@@ -37,44 +100,32 @@
         },
     }
 
-    let mu = {};
-
-    mu.generate_default_td_contents = (default_src, src_options) => {
-        let content = '<label class="quantity"></label>';
-        content += `<img class="match-default-img" src="${default_src}">`;
-
-        for (var i = 0; i < src_options.length; i++) {
-
-            //Add damage bar in-between
-            if (i === 3)
-                content += config.damage_svg;
-
-            content += `<img class="match-changing-img" src="${src_options[i]}">`;
-        }
-
-        return content;
+    let match_utils = function (new_config, terminal_config) {
+        this.config = {};
+        Object.assign(this.config, JSON.parse(JSON.stringify(default_config)));
+        Object.assign(this.config, new_config || {});
+        this.terminal_config = terminal_config;
     };
 
-    mu.generate_settings = (size, image_count = config.group_size) => {
-        return {
-            size,
-            half_size: size / 2,
-            image_count: image_count,
-        };
+    let proto = match_utils.prototype;
+
+    proto.is_in_arena_bounds = function (x, y, settings) {
+        const half = this.config.arena_settings.half;
+
+        return Math.abs(x - half + .5) + Math.abs(y - half + .5) < (half + 1);
     };
 
-    mu.is_in_arena_bounds = (x, y, settings) => {
-        return Math.abs(x - settings.half_size + .5) + Math.abs(y - settings.half_size + .5) < (settings.half_size + 1);
-    };
+    proto.generate_terminal_trs = function () {
+        const settings = this.config.arena_settings;
+        const field_contents = this.config.field_contents;
 
-    mu.generate_terminal_trs = (settings, p1_td_content, p2_td_content) => {
         let trs = '';
         for (var y = 0; y < settings.size; y++) {
             trs += '<tr>';
             for (var x = 0; x < settings.size; x++) {
                 trs += '<td>';
-                if (mu.is_in_arena_bounds(x, y, settings)) {
-                    trs += y >= settings.half_size ? p1_td_content : p2_td_content;
+                if (this.is_in_arena_bounds(x, y)) {
+                    trs += field_contents[parseInt((settings.size - 1 - y) / settings.half)];
                 }
                 trs += '</td>';
             }
@@ -83,15 +134,7 @@
         return trs;
     };
 
-    mu.create_viewer = function () {
-        let td_content_p1 = mu.generate_default_td_contents(config.default_img, [...config.firewalls[0], ...config.information]);
-        let td_content_p2 = mu.generate_default_td_contents(config.default_img, [...config.firewalls[1], ...config.information]);
-        let settings = mu.generate_settings(config.arena_size);
-        let trs = mu.generate_terminal_trs(settings, td_content_p1, td_content_p2);
-        return trs;
-    }
-
-    mu.get_all_td_children_one_dimensional = function (table) {
+    proto.get_all_td_children_one_dimensional = function (table) {
         const tds = table.getElementsByTagName('td');
         let images = [];
         for (let td of tds) {
@@ -103,7 +146,7 @@
         return images;
     }
 
-    mu.put_value_in_range = function (value, range) {
+    proto.put_value_in_range = function (value, range) {
         if (value < range.min) {
             return range.min;
         }
@@ -114,17 +157,20 @@
     }
 
 
-    mu.spez = (x, y, settings) => {
+    proto.spez = function (x, y) {
+        const settings = this.config.arena_settings;
         return x + y * settings.size;
     };
 
-    mu.generate_location_to_index_map = (settings) => {
+    proto.generate_location_to_index_map = function () {
+        const settings = this.config.arena_settings;
+
         let counter = 0;
         let map = {};
         for (var y = settings.size - 1; y >= 0; y--) {
             for (var x = 0; x < settings.size; x++) {
-                if (mu.is_in_arena_bounds(x, y, settings)) {
-                    map[mu.spez(x, y, settings)] = counter;
+                if (this.is_in_arena_bounds(x, y, settings)) {
+                    map[this.spez(x, y)] = counter;
                     counter++;
                 }
             }
@@ -132,85 +178,83 @@
         return map;
     };
 
-    mu.location_to_index = (location, map, settings) => {
+    proto.location_to_index = function (location, map) {
         let x = location[0];
         let y = location[1];
-        let spez_location = mu.spez(x, y, settings);
-        return map[spez_location];
+        return map[this.spez(x, y)];
     };
 
-    mu.calculate_final_index = (index, group_index, settings) => {
-        return index * settings.image_count + group_index;
+    proto.calculate_final_index = function (index, group_index) {
+        return index * this.config.group_size + group_index;
     }
 
-    mu.is_upgraded = (array, index, settings) => {
-        let final_index = mu.calculate_final_index(index, config.upgrade_index, settings);
+    proto.is_upgraded = function (array, index) {
+        let final_index = this.calculate_final_index(index, default_config.upgrade_index);
         return array[final_index];
     }
 
-    mu.set_value = (array, index, group_index, value, settings) => {
-        let final_index = mu.calculate_final_index(index, group_index, settings);
+    proto.set_value = function (array, index, group_index, value) {
+        let final_index = this.calculate_final_index(index, group_index);
         array[final_index] = value;
     };
 
-    mu.add_one = (array, index, group_index, settings) => {
-        let final_index = mu.calculate_final_index(index, group_index, settings);
+    proto.add_one = function (array, index, group_index) {
+        let final_index = this.calculate_final_index(index, group_index);
         array[final_index]++;
     };
 
-    mu.calculate_array_size = (settings) => {
-        return (settings.size * settings.size / 2 + settings.size) * settings.image_count;
+    proto.calculate_array_size = function () {
+        const size = this.config.arena_settings.size;
+        return (size * size / 2 + size) * this.config.group_size;
     }
 
-    mu.create_new_array = (settings) => {
-        let size = mu.calculate_array_size(settings);
-        return new Int8Array(size);
+    proto.create_new_array = function () {
+        return new Int8Array(this.calculate_array_size());
     }
 
-    mu.combine_firewalls = (p1Units, p2Units) => {
+    proto.combine_firewalls = function (p1Units, p2Units) {
         return p1Units.slice(0, 3).map(function (p1U, i) {
             return [...p1U, ...p2Units[i]];
         });
     };
 
-    mu.combine_removals_and_upgrades = (p1Units, p2Units) => {
+    proto.combine_removals_and_upgrades = function (p1Units, p2Units) {
         return p1Units.slice(6, 8).map(function (p1U, i) {
             return [...p1U, ...p2Units[i + 6]];
         });
     };
 
-    mu.parse_row_to_single_array = (row) => {
+    proto.parse_row_to_single_array = function (row) {
         return [
-            ...mu.combine_firewalls(row.p1Units, row.p2Units),
+            ...this.combine_firewalls(row.p1Units, row.p2Units),
             ...row.p1Units.slice(3, 6),
             ...row.p2Units.slice(3, 6),
-            ...mu.combine_removals_and_upgrades(row.p1Units, row.p2Units),
+            ...this.combine_removals_and_upgrades(row.p1Units, row.p2Units),
         ];
     };
 
-    mu.parse_replay_row_to_array = (row, settings) => {
-        settings = settings || mu.generate_settings(config.arena_size);
-        let frame_data_array = mu.create_new_array(settings);
-        let map = mu.generate_location_to_index_map(settings);
+    proto.parse_replay_row_to_array = function (row) {
+        let frame_data_array = this.create_new_array();
+        let map = this.generate_location_to_index_map();
 
-        let all_data = mu.parse_row_to_single_array(row);
+        let all_data = this.parse_row_to_single_array(row);
 
         //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
         for (let group_index = all_data.length - 1; group_index >= 0; group_index--) {
             for (let location of all_data[group_index]) {
-                let index = mu.location_to_index(location, map, settings);
-                mu.set_value(frame_data_array, index, group_index, 1, settings);
+                let index = this.location_to_index(location, map);
+                this.set_value(frame_data_array, index, group_index, 1);
 
                 if (group_index >= 3 && group_index <= 8) {
-                    mu.add_one(frame_data_array, index, settings.image_count - 1, settings);
+                    this.add_one(frame_data_array, index, this.config.group_size - 1);
                 }
 
                 if (group_index < 3) {
                     let health = location[2];
-                    let is_upgraded = mu.is_upgraded(frame_data_array, index, settings);
-                    let total_health = config.full_health[group_index][is_upgraded];
+                    let is_upgraded = this.is_upgraded(frame_data_array, index);
+                    let total_health = default_config.full_health[group_index][is_upgraded];
                     let percental_health_left = health / total_health * 100;
-                    mu.set_value(frame_data_array, index, config.health_index, percental_health_left, settings);
+                    this.set_value(frame_data_array, index, default_config.health_index, percental_health_left);
                 }
             }
         }
@@ -218,16 +262,18 @@
         return frame_data_array;
     };
 
-    mu.parse_file_to_raw_array = file =>
-        file.split("\n")
+    proto.parse_file_to_raw_array = function (file) {
+        return file.split("\n")
             .filter(el => el)
             .map(el => JSON.parse(el));
+    }
 
     //Test this, when mu functions can be mocked
-    mu.parse_objects_to_arrays = objects =>
-        objects.map(o => mu.parse_replay_row_to_array(o));
+    proto.parse_objects_to_arrays = function (objects) {
+        return objects.map(o => this.parse_replay_row_to_array(o));
+    }
 
-    mu.update_changes = (i_previous, i_current, data, images, switched) => {
+    proto.update_changes = function (i_previous, i_current, data, images, switched) {
         const data_previous = data[i_previous];
         const data_current = data[i_current];
 
@@ -242,7 +288,7 @@
         for (let i = 0; i < data_length; i++) {
             if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
 
-                const switched_index = mu.calculate_switched_index(i, switched, images_length);
+                const switched_index = this.calculate_switched_index(i, switched, images_length);
                 let current_image = images[switched_index];
 
                 if (current_image.tagName === 'LABEL') {
@@ -256,7 +302,7 @@
         }
     }
 
-    mu.calculate_switched_index = (index, switched, total_length) => {
+    proto.calculate_switched_index = function (index, switched, total_length) {
         if (!switched) return index;
 
         const switch_range_min = 3;
@@ -294,10 +340,10 @@
 
 
         const switched_index = total_length - index - 1;
-        let final_index = switched_index - 2 * (switched_index % config.group_size) + config.group_size - 1;
+        let final_index = switched_index - 2 * (switched_index % default_config.group_size) + default_config.group_size - 1;
 
         //without ending
-        const ending = final_index % config.group_size;
+        const ending = final_index % default_config.group_size;
 
         if (ending >= switch_range_min && ending <= switch_range_max) {
             const without_ending = final_index - ending;
@@ -321,30 +367,25 @@
         return final_index;
     }
 
-    mu.toggle_hidden = (elements) => {
+    proto.toggle_hidden = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
         }
     }
 
-    mu.switch_view = (i_current, data, images, switched) => {
-        mu.update_changes(i_current, 0, data, images, switched);
-        mu.update_changes(0, i_current, data, images, !switched);
+    proto.switch_view = function (i_current, data, images, switched) {
+        this.update_changes(i_current, 0, data, images, switched);
+        this.update_changes(0, i_current, data, images, !switched);
     }
 
-    mu.toggle_player_index = (player_index, switched) => {
-        if (switched)
-            return (player_index + 1) % 2;
-        return player_index;
-    }
+    proto.toggle_player_index = (player_index, switched) =>
+        switched ? (player_index + 1) % 2 : player_index;
 
-
-
-    if (!global.match_utils) {
-        global.match_utils = mu;
+    if (typeof process !== 'undefined') {
+        module.exports = match_utils;
+    } else {
+        if (!global.match_utils) {
+            global.match_utils = new match_utils();
+        }
     }
 }(window);
-
-try {
-    module.exports = window.match_utils;
-} catch (e) { }

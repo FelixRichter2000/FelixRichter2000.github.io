@@ -1,139 +1,96 @@
-﻿const mu = require('./match_utils');
+﻿const match_utils = require('./match_utils');
+const mu_default = new match_utils();
 
-describe('Test generate_default_td_contents', function () {
-
-    test('single source', () => {
-        expect(mu.generate_default_td_contents('default', ['1']))
-            .toBe("<label class=\"quantity\"></label>" +
-                "<img class=\"match-default-img\" src=\"default\">" +
-                "<img class=\"match-changing-img\" src=\"1\">");
-    });
-
-    test('two sources (1, 2)', () => {
-        expect(mu.generate_default_td_contents('default', ['1', '2']))
-            .toBe("<label class=\"quantity\"></label>" +
-                "<img class=\"match-default-img\" src=\"default\">" +
-                "<img class=\"match-changing-img\" src=\"1\">" +
-                "<img class=\"match-changing-img\" src=\"2\">");
-    });
-
-    test('multiple ("filter", "destructor", "encryptor")', () => {
-        expect(mu.generate_default_td_contents('default', ["filter", "destructor", "encryptor"]))
-            .toBe("<label class=\"quantity\">" +
-                "</label><img class=\"match-default-img\" src=\"default\">" +
-                "<img class=\"match-changing-img\" src=\"filter\">" +
-                "<img class=\"match-changing-img\" src=\"destructor\">" +
-                "<img class=\"match-changing-img\" src=\"encryptor\">");
-    });
-
-    test('multiple ("filter", "destructor", "encryptor", "ping", "emp") also adds damage bar in between', () => {
-        expect(mu.generate_default_td_contents('default', ["filter", "destructor", "encryptor", "ping", "emp"]))
-            .toBe("<label class=\"quantity\"></label>" +
-                "<img class=\"match-default-img\" src=\"default\">" +
-                "<img class=\"match-changing-img\" src=\"filter\">" +
-                "<img class=\"match-changing-img\" src=\"destructor\">" +
-                "<img class=\"match-changing-img\" src=\"encryptor\">" +
-                "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
-                "<img class=\"match-changing-img\" src=\"ping\">" +
-                "<img class=\"match-changing-img\" src=\"emp\">");
-    });
-
+const mu_size4 = new match_utils({
+    field_contents: ['p1', 'p2'],
+    arena_settings: { size: 4, half: 2 },
 });
 
-describe('Test generate_settings', function () {
-
-    test('size 4', () => {
-        expect(mu.generate_settings(4))
-            .toEqual({ "half_size": 2, "size": 4, "image_count": 13 });
-    });
-
-    test('size 8', () => {
-        expect(mu.generate_settings(8))
-            .toEqual({ "half_size": 4, "size": 8, "image_count": 13 });
-    });
-
+const mu_size2 = new match_utils({
+    field_contents: ['p1', 'p2'],
+    arena_settings: { size: 2, half: 1 },
 });
 
 
 describe('Test is_in_arena_bounds', function () {
 
     test('expect false (1)', () => {
-        expect(mu.is_in_arena_bounds(0, 0, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(0, 0))
             .toBe(false);
     });
 
     test('expect false (2)', () => {
-        expect(mu.is_in_arena_bounds(0, 3, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(0, 3))
             .toBe(false);
     });
 
     test('expect false (3)', () => {
-        expect(mu.is_in_arena_bounds(3, 3, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(3, 3))
             .toBe(false);
     });
 
     test('expect false (4)', () => {
-        expect(mu.is_in_arena_bounds(3, 0, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(3, 0))
             .toBe(false);
     });
 
     test('expect true (1)', () => {
-        expect(mu.is_in_arena_bounds(0, 1, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(0, 1))
             .toBe(true);
     });
 
     test('expect true (2)', () => {
-        expect(mu.is_in_arena_bounds(0, 2, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(0, 2))
             .toBe(true);
     });
 
     test('expect true (3)', () => {
-        expect(mu.is_in_arena_bounds(1, 0, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(1, 0))
             .toBe(true);
     });
 
     test('expect true (4)', () => {
-        expect(mu.is_in_arena_bounds(1, 1, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(1, 1))
             .toBe(true);
     });
 
     test('expect true (5)', () => {
-        expect(mu.is_in_arena_bounds(1, 2, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(1, 2))
             .toBe(true);
     });
 
     test('expect true (6)', () => {
-        expect(mu.is_in_arena_bounds(1, 3, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(1, 3))
             .toBe(true);
     });
 
     test('expect true (7)', () => {
-        expect(mu.is_in_arena_bounds(2, 0, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(2, 0))
             .toBe(true);
     });
 
     test('expect true (8)', () => {
-        expect(mu.is_in_arena_bounds(2, 1, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(2, 1))
             .toBe(true);
     });
 
     test('expect true (9)', () => {
-        expect(mu.is_in_arena_bounds(2, 2, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(2, 2))
             .toBe(true);
     });
 
     test('expect true (10)', () => {
-        expect(mu.is_in_arena_bounds(2, 3, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(2, 3))
             .toBe(true);
     });
 
     test('expect true (11)', () => {
-        expect(mu.is_in_arena_bounds(3, 1, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(3, 1))
             .toBe(true);
     });
 
     test('expect true (12)', () => {
-        expect(mu.is_in_arena_bounds(3, 2, { size: 4, half_size: 2 }))
+        expect(mu_size4.is_in_arena_bounds(3, 2))
             .toBe(true);
     });
 
@@ -143,7 +100,8 @@ describe('Test is_in_arena_bounds', function () {
 describe('Test generate_terminal_trs', function () {
 
     test('Generate generate_terminal_trs size 4', () => {
-        expect(mu.generate_terminal_trs({ size: 4, half_size: 2 }, 'p1', 'p2'))
+
+        expect(mu_size4.generate_terminal_trs())
             .toBe("<tr><td></td><td>p2</td><td>p2</td><td></td></tr>" +
                 "<tr><td>p2</td><td>p2</td><td>p2</td><td>p2</td></tr>" +
                 "<tr><td>p1</td><td>p1</td><td>p1</td><td>p1</td></tr>" +
@@ -156,29 +114,18 @@ describe('Test generate_terminal_trs', function () {
 describe('Test put_value_in_range', function () {
 
     test('Generate put_value_in_range -1 range(0, 4)', () => {
-        expect(mu.put_value_in_range(-1, { min: 0, max: 4 }))
+        expect(mu_size4.put_value_in_range(-1, { min: 0, max: 4 }))
             .toBe(0);
     });
 
     test('Generate put_value_in_range 1 range(0, 4)', () => {
-        expect(mu.put_value_in_range(1, { min: 0, max: 4 }))
+        expect(mu_size4.put_value_in_range(1, { min: 0, max: 4 }))
             .toBe(1);
     });
 
     test('Generate put_value_in_range 10 range(0, 4)', () => {
-        expect(mu.put_value_in_range(10, { min: 0, max: 4 }))
+        expect(mu_size4.put_value_in_range(10, { min: 0, max: 4 }))
             .toBe(4);
-    });
-
-});
-
-
-describe('Test create_viewer', function () {
-
-    test('Generate create_viewer', () => {
-
-        expect(mu.create_viewer())
-            .toMatchSnapshot();
     });
 
 });
@@ -200,7 +147,7 @@ describe('Test get_all_td_children_one_dimensional', function () {
             "<img class='match-changing-img'/></td></tr></table>";
 
         let table = document.getElementById('test');
-        let children = mu.get_all_td_children_one_dimensional(table);
+        let children = mu_default.get_all_td_children_one_dimensional(table);
 
         expect(children.length)
             .toBe(10);
@@ -238,13 +185,20 @@ describe('Test get_all_td_children_one_dimensional', function () {
 
 });
 
-
-
 describe('Test spez', function () {
 
-    test('Generate spez []', () => {
-        let settings = mu.generate_settings(4);
-        expect(mu.spez(2, 2, settings))
+    test('Generate spez [1, 0] => 1', () => {
+        expect(mu_size4.spez(1, 0))
+            .toBe(1);
+    });
+
+    test('Generate spez [1, 2] => 9', () => {
+        expect(mu_size4.spez(1, 2))
+            .toBe(9);
+    });
+
+    test('Generate spez [2, 2] => 10', () => {
+        expect(mu_size4.spez(2, 2))
             .toBe(10);
     });
 
@@ -253,8 +207,7 @@ describe('Test spez', function () {
 describe('Test generate_location_to_index_map', function () {
 
     test('Generate generate_location_to_index_map []', () => {
-        let settings = mu.generate_settings(4);
-        expect(mu.generate_location_to_index_map(settings))
+        expect(mu_size4.generate_location_to_index_map())
             .toEqual({
                 1: 10,
                 2: 11,
@@ -276,41 +229,38 @@ describe('Test generate_location_to_index_map', function () {
 describe('Test location_to_index', function () {
 
     test('Find Index with location_to_index ', () => {
-        let settings = mu.generate_settings(4);
-        let map = mu.generate_location_to_index_map(settings);
+        let map = mu_size4.generate_location_to_index_map();
         let location = [1, 1];
         // . 0 0 .
         // 0 0 0 0
         // 0 X 0 0  => should be 7
         // . 0 0 .
 
-        expect(mu.location_to_index(location, map, settings))
+        expect(mu_size4.location_to_index(location, map))
             .toBe(7);
     });
 
     test('Find Index with location_to_index ', () => {
-        let settings = mu.generate_settings(4);
-        let map = mu.generate_location_to_index_map(settings);
+        let map = mu_size4.generate_location_to_index_map();
         let location = [2, 1];
         // . 0 0 .
         // 0 0 0 0
         // 0 0 X 0  => should be 8
         // . 0 0 .
 
-        expect(mu.location_to_index(location, map, settings))
+        expect(mu_size4.location_to_index(location, map))
             .toBe(8);
     });
 
     test('Find Index with location_to_index ', () => {
-        let settings = mu.generate_settings(4);
-        let map = mu.generate_location_to_index_map(settings);
+        let map = mu_size4.generate_location_to_index_map();
         let location = [2, 3];
         // . 0 X .  => should be 1
         // 0 0 0 0
         // 0 0 0 0
         // . 0 0 .
 
-        expect(mu.location_to_index(location, map, settings))
+        expect(mu_size4.location_to_index(location, map))
             .toBe(1);
     });
 
@@ -321,7 +271,7 @@ describe('Test parse_row_to_single_array', function () {
     test('parse_row_to_single_array ', () => {
         let row = '{"p1Units": [[1, 1], [2], [3], [4], [5], [6], [7, 77], [8, 88]], "p2Units": [[10], [20, 21], [30], [40], [50], [60], [70, 71], [80, 81]]}';
 
-        expect(mu.parse_row_to_single_array(JSON.parse(row)))
+        expect(mu_default.parse_row_to_single_array(JSON.parse(row)))
             .toEqual([[1, 1, 10], [2, 20, 21], [3, 30], [4], [5], [6], [40], [50], [60], [7, 77, 70, 71], [8, 88, 80, 81]]);
     });
 
@@ -331,9 +281,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with filters', () => {
         let row = '{"p1Units": [[[0, 0, 60, "32"]], [], [], [], [], [], [], []], "p2Units": [[[0, 1, 30, "33"]], [], [], [], [], [], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0,
@@ -346,9 +295,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with encryptors', () => {
         let row = '{"p1Units": [[], [[0, 0, 30, "32"]], [], [], [], [], [], []], "p2Units": [[], [[0, 1, 15, "33"]], [], [], [], [], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0,
@@ -361,9 +309,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with destructor', () => {
         let row = '{"p1Units": [[], [], [[0, 0, 75, "32"]], [], [], [], [], []], "p2Units": [[], [], [[0, 1, 45, "33"]], [], [], [], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0,
@@ -376,9 +323,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with ping', () => {
         let row = '{"p1Units": [[], [], [], [[0, 0, 60, "32"]], [], [], [], []], "p2Units": [[], [], [], [[0, 1, 60, "33"]], [], [], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
@@ -391,9 +337,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with emp', () => {
         let row = '{"p1Units": [[], [], [], [], [[0, 0, 60, "32"]], [], [], []], "p2Units": [[], [], [], [], [[0, 1, 60, "33"]], [], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -406,9 +351,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with scrambler', () => {
         let row = '{"p1Units": [[], [], [], [], [], [[0, 0, 60, "32"]], [], []], "p2Units": [[], [], [], [], [], [[0, 1, 60, "33"]], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -421,9 +365,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with removals', () => {
         let row = '{"p1Units": [[], [], [], [], [], [], [[0, 0, 60, "32"]], []], "p2Units": [[], [], [], [], [], [], [[0, 1, 60, "33"]], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -436,9 +379,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with upgrades', () => {
         let row = '{"p1Units": [[], [], [], [], [], [], [], [[0, 0, 60, "32"]]], "p2Units": [[], [], [], [], [], [], [], [[0, 1, 60, "33"]]]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -451,9 +393,8 @@ describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with multiple units on same location', () => {
         let row = '{"p1Units": [[], [], [], [[0, 0], [0, 0]], [], [], [], []], "p2Units": [[], [], [], [], [[0, 0]], [[0, 0]], [], []]}';
-        let settings = mu.generate_settings(2);
 
-        expect(mu.parse_replay_row_to_array(JSON.parse(row), settings))
+        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -471,7 +412,7 @@ describe('Test parse_file_to_raw_array', function () {
     test('Parse all lines with content to array ', () => {
         let file = '{"v1": 1}\n{"v2": 2}\n\n\n{"v3": 3}';
 
-        expect(mu.parse_file_to_raw_array(file))
+        expect(mu_size2.parse_file_to_raw_array(file))
             .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3}]);
     });
 

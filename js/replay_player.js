@@ -89,7 +89,7 @@
 
     //Init table
     const watch_table = document.getElementById('watch_table');
-    watch_table.innerHTML = match_utils.create_viewer();
+    watch_table.innerHTML = match_utils.generate_terminal_trs();
 
     //Init references to images
     const viewer_elements = match_utils.get_all_td_children_one_dimensional(watch_table);
