@@ -355,4 +355,4 @@
 
 try {
     module.exports = window.match_utils;
-} catch{ }
+} catch(e){ }
