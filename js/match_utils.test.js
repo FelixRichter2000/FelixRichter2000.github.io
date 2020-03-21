@@ -466,11 +466,9 @@ describe('Test parse_replay_row_to_array', function () {
 
 });
 
-
-
 describe('Test parse_file_to_raw_array', function () {
 
-    test('Parse test string to array ', () => {
+    test('Parse all lines with content to array ', () => {
         let file = '{"v1": 1}\n{"v2": 2}\n\n\n{"v3": 3}';
 
         expect(mu.parse_file_to_raw_array(file))

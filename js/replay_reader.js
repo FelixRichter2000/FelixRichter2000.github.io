@@ -24,7 +24,7 @@
     proto.process_match_data = function (file) {
         this.full_frame_data = match_utils.parse_file_to_raw_array(file);
         this.raw_frame_data = this.full_frame_data.slice(1, -1);
-        this.fast_frame_data = match_utils.parse_complete_file(this.raw_frame_data);
+        this.fast_frame_data = match_utils.parse_objects_to_arrays(this.raw_frame_data);
         this.count = this.fast_frame_data.length;
     }
     proto.load_data = function () {

@@ -218,20 +218,14 @@
         return frame_data_array;
     };
 
-    mu.parse_file_to_raw_array = (file) => {
-        let data = [];
-        for (let row of file.split("\n"))
-            if (row)
-                data.push(JSON.parse(row));
-        return data;
-    }
+    mu.parse_file_to_raw_array = file =>
+        file.split("\n")
+            .filter(el => el)
+            .map(el => JSON.parse(el));
 
-    mu.parse_complete_file = (rows) => {
-        let data = [];
-        for (let row of rows)
-            data.push(mu.parse_replay_row_to_array(row));
-        return data;
-    }
+    //Test this, when mu functions can be mocked
+    mu.parse_objects_to_arrays = objects =>
+        objects.map(o => mu.parse_replay_row_to_array(o));
 
     mu.update_changes = (i_previous, i_current, data, images, switched) => {
         const data_previous = data[i_previous];
