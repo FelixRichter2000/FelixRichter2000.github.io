@@ -23,6 +23,22 @@
     const emp2_img = '<img class="match-changing-img" src="images/Emp2.svg">';
     const scrambler2_img = '<img class="match-changing-img" src="images/Scrambler2.svg">';
 
+    //Group definitions:
+    //  0: Filter 
+    //  1: Encryptor
+    //  2: Destructor
+    //  3: Ping1
+    //  4: Emp1
+    //  5: Scrambler1
+    //  6: Ping2
+    //  7: Emp2
+    //  8: Scrambler2
+    //  9: Remove
+    // 10: Upgrade
+    // 11: Damage-Bar
+    // 12: Quantity
+    
+
     const functions_config = {
         td_to_elements_converter: function (td) {
             let ims = td.getElementsByClassName('match-changing-img');
@@ -30,6 +46,36 @@
             let damage_bar = td.getElementsByClassName('damage-bar');
             return [...ims, ...damage_bar, ...quantity_label];
         },
+        add_object_to_array: [
+            //Set flags
+            function (self, group, location, index, frame_data_array) {
+                //  Firewalls + Inforamtion + Removal + Upgrade
+                if (group >= 0 && group <= 10) {
+                    self.set_value(frame_data_array, index, group, 1);
+                }
+            },
+            //Set Health
+            function (self, group, location, index, frame_data_array) {
+                //  Firewalls
+                if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
+                    let health = location[2];
+                    let is_upgraded = self.is_upgraded(frame_data_array, index);
+                    let total_health = static_config.full_health[group][is_upgraded];
+                    let percental_health_left = health / total_health * 100;
+                    self.set_if_less(frame_data_array, index, static_config.health_index, percental_health_left);
+
+                    //let health = location[2];
+                    //self.set_if_less(frame_data_array, index, group, health);
+                }
+            },
+            //Add together for quantity
+            function (self, group, location, index, frame_data_array) {
+                //  Information
+                if (group >= 3 && group <= 8) {
+                    self.add_one(frame_data_array, index, 12);
+                }
+            },
+        ],
     };
 
     const static_config = {
@@ -115,6 +161,7 @@
         Object.assign(this.config, new_config || {});
         Object.assign(this.config, functions_config);
         Object.assign(this.config, new_functions || {});
+
         this.terminal_config = terminal_config;
 
         //Init
@@ -148,16 +195,14 @@
         let converter = this.config.td_to_elements_converter;
         return [...table.getElementsByTagName('td')]
             .reduce((a, v) => [...a, ...converter(v)], []);
-    }
+    };
     proto.put_value_in_range = function (value, range) {
-        if (value < range.min) {
+        if (value < range.min)
             return range.min;
-        }
-        if (value > range.max) {
+        if (value > range.max)
             return range.max;
-        }
         return value;
-    }
+    };
     proto.spez = function (x, y) {
         const settings = this.config.arena_settings;
         return x + y * settings.size;
@@ -177,21 +222,28 @@
         }
         return map;
     };
-    proto.location_to_index = function (location, map) {
+    proto.location_to_index = function (location) {
         let x = location[0];
         let y = location[1];
-        return map[this.spez(x, y)];
+        return this.location_to_index_map[this.spez(x, y)];
     };
+
+    //???? Add tests if it stays
     proto.calculate_final_index = function (index, group_index) {
         return index * this.config.group_size + group_index;
-    }
+    };
     proto.is_upgraded = function (array, index) {
         let final_index = this.calculate_final_index(index, static_config.upgrade_index);
         return array[final_index];
-    }
+    };
     proto.set_value = function (array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index] = value;
+    };
+    proto.set_if_less = function (array, index, group_index, value) {
+        let final_index = this.calculate_final_index(index, group_index);
+        let current_value = array[final_index];
+        array[final_index] = current_value ? Math.min(current_value, value) : value;
     };
     proto.add_one = function (array, index, group_index) {
         let final_index = this.calculate_final_index(index, group_index);
@@ -200,10 +252,10 @@
     proto.calculate_array_size = function () {
         const size = this.config.arena_settings.size;
         return (size * size / 2 + size) * this.config.group_size;
-    }
+    };
     proto.create_new_array = function () {
         return new Int8Array(this.calculate_array_size());
-    }
+    };
     proto.combine_firewalls = function (p1Units, p2Units) {
         return p1Units.slice(0, 3).map(function (p1U, i) {
             return [...p1U, ...p2Units[i]];
@@ -230,19 +282,9 @@
         //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
         for (let group_index = all_data.length - 1; group_index >= 0; group_index--) {
             for (let location of all_data[group_index]) {
-                let index = this.location_to_index(location, this.location_to_index_map);
-                this.set_value(frame_data_array, index, group_index, 1);
-
-                if (group_index >= 3 && group_index <= 8) {
-                    this.add_one(frame_data_array, index, this.config.group_size - 1);
-                }
-
-                if (group_index < 3) {
-                    let health = location[2];
-                    let is_upgraded = this.is_upgraded(frame_data_array, index);
-                    let total_health = static_config.full_health[group_index][is_upgraded];
-                    let percental_health_left = health / total_health * 100;
-                    this.set_value(frame_data_array, index, static_config.health_index, percental_health_left);
+                let index = this.location_to_index(location);
+                for (let converter of this.config.add_object_to_array) {
+                    converter(this, group_index, location, index, frame_data_array);
                 }
             }
         }
