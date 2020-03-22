@@ -133,7 +133,7 @@
         let algos = document.getElementsByName('algo');
         let data = reader.user_data;
         for (var i = 0; i < data.length; i++) {
-            let toggled_index = match_utils.toggle_player_index(i, switched);
+            let toggled_index = match_utils.flip_player_if_switched(i, switched);
             players[toggled_index].innerHTML = data[i].user;
             algos[toggled_index].innerHTML = data[i].name;
         }
@@ -147,7 +147,7 @@
         let data = reader.raw_frame_data[frame];
         let combined = [data.p1Stats, data.p2Stats];
         for (var i = 0; i < combined.length; i++) {
-            let toggled_index = match_utils.toggle_player_index(i, switched);
+            let toggled_index = match_utils.flip_player_if_switched(i, switched);
 
             healths[toggled_index].innerHTML = combined[i][0];
             cores[toggled_index].innerHTML = combined[i][1];

@@ -11,6 +11,17 @@ const mu_size2 = new match_utils({
     arena_settings: { size: 2, half: 1 },
 });
 
+
+describe('Test flip_player_if_switched', function () {
+    test('player_index: 1 switched: false => 1', () => {
+        expect(mu_default.flip_player_if_switched(1, false))
+            .toBe(1);
+    });
+    test('player_index: 1 switched: true => 0', () => {
+        expect(mu_default.flip_player_if_switched(1, true))
+            .toBe(0);
+    });
+});
 describe('Test is_in_arena_bounds', function () {
     test('field [0, 0] -> false', () => {
         expect(mu_size4.is_in_arena_bounds(0, 0))
@@ -201,14 +212,151 @@ describe('Test location_to_index', function () {
             .toBe(1);
     });
 });
-describe('Test parse_row_to_single_array', function () {
-    test('parse_row_to_single_array ', () => {
-        let row = '{"p1Units": [[1, 1], [2], [3], [4], [5], [6], [7, 77], [8, 88]], "p2Units": [[10], [20, 21], [30], [40], [50], [60], [70, 71], [80, 81]]}';
+describe('Test calculate_final_index', function () {
+    test('index: 5 group: 3 group_size: 10 => 53', () => {
+        const mu_spezial = new match_utils({
+            group_size: 10,
+        });
 
-        expect(mu_default.parse_row_to_single_array(JSON.parse(row)))
-            .toEqual([[1, 1, 10], [2, 20, 21], [3, 30], [4], [5], [6], [40], [50], [60], [7, 77, 70, 71], [8, 88, 80, 81]]);
+        expect(mu_spezial.calculate_final_index(5, 3))
+            .toBe(53);
+    });
+    test('index: 2 group: 3 group_size:  5 => 13', () => {
+        const mu_spezial = new match_utils({
+            group_size: 5,
+        });
+
+        expect(mu_spezial.calculate_final_index(2, 3))
+            .toBe(13);
     });
 });
+describe('Test set_value', function () {
+    test('index: 2 group: 0 value: 1', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 0, 0];
+        mu_spezial.set_value(array, 2, 0, 1)
+
+        expect(array).toEqual([0, 0, 0, 0, 1, 0]);
+    });
+    test('index: 0 group: 1 value: 1', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 0, 0];
+        mu_spezial.set_value(array, 0, 1, 1)
+
+        expect(array).toEqual([0, 1, 0, 0, 0, 0]);
+    });
+});
+describe('Test set_if_less', function () {
+    test('index: 2 group: 0 value: 1 -> expect set', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 0, 0];
+        mu_spezial.set_if_less(array, 2, 0, 1)
+
+        expect(array).toEqual([0, 0, 0, 0, 1, 0]);
+    });
+    test('index: 2 group: 0 value: 1 -> expect reduced', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 2, 0];
+        mu_spezial.set_if_less(array, 2, 0, 1)
+
+        expect(array).toEqual([0, 0, 0, 0, 1, 0]);
+    });
+    test('index: 2 group: 0 value: 6 -> expect stay same', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 2, 0];
+        mu_spezial.set_if_less(array, 2, 0, 6)
+
+        expect(array).toEqual([0, 0, 0, 0, 2, 0]);
+    });
+});
+describe('Test add_one', function () {
+    test('index: 2 group: 0', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 0, 0, 0, 0, 0];
+        mu_spezial.add_one(array, 2, 0, 1)
+
+        expect(array).toEqual([0, 0, 0, 0, 1, 0]);
+    });
+    test('index: 0 group: 1', () => {
+        const mu_spezial = new match_utils({
+            group_size: 2,
+        });
+
+        let array = [0, 2, 0, 0, 0, 0];
+        mu_spezial.add_one(array, 0, 1, 1)
+
+        expect(array).toEqual([0, 3, 0, 0, 0, 0]);
+    });
+});
+describe('Test calculate_array_size', function () {
+    test('arena_settings: { size: 2, half: 1 }, group_size: 2 => 8', () => {
+        const mu_spezial = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 2,
+        });
+
+        expect(mu_spezial.calculate_array_size())
+            .toBe(8);
+    });
+    test('arena_settings: { size: 4, half: 2 }, group_size: 8 => 96', () => {
+        const mu_spezial = new match_utils({
+            arena_settings: { size: 4, half: 2 },
+            group_size: 8,
+        });
+
+        expect(mu_spezial.calculate_array_size())
+            .toBe(96);
+    });
+});
+describe('Test create_new_array', function () {
+    test('arena_settings: { size: 2, half: 1 }, group_size: 2 => Int8Array(8)', () => {
+        const mu_spezial = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 2,
+        });
+
+        expect(mu_spezial.create_new_array())
+            .toEqual(new Int8Array(8));
+    });
+    test('arena_settings: { size: 4, half: 2 }, group_size: 8 => Int8Array(96)', () => {
+        const mu_spezial = new match_utils({
+            arena_settings: { size: 4, half: 2 },
+            group_size: 8,
+        });
+
+        expect(mu_spezial.create_new_array())
+            .toEqual(new Int8Array(96));
+    });
+});
+describe('Test parse_file_to_raw_array', function () {
+    test('Parse {"v1": 1}\\n{"v2": 2}\\n\\n\\n{"v3": 3} to [{ v1: 1 }, { v2: 2 }, { v3: 3 }]', () => {
+        let file = '{"v1": 1}\n{"v2": 2}\n\n\n{"v3": 3}';
+
+        expect(mu_size2.parse_file_to_raw_array(file))
+            .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3 }]);
+    });
+});
+
+
+
 describe('Test parse_replay_row_to_array', function () {
     test('parse_replay_row_to_array with filters', () => {
         let row = '{"p1Units": [[[0, 0, 60, "32"]], [], [], [], [], [], [], []], "p2Units": [[[0, 1, 30, "33"]], [], [], [], [], [], [], []]}';
@@ -328,14 +476,17 @@ describe('Test parse_replay_row_to_array', function () {
             ));
     });
 });
-describe('Test parse_file_to_raw_array', function () {
-    test('Parse all lines with content to array ', () => {
-        let file = '{"v1": 1}\n{"v2": 2}\n\n\n{"v3": 3}';
 
-        expect(mu_size2.parse_file_to_raw_array(file))
-            .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3 }]);
+
+describe('Test parse_row_to_single_array', function () {
+    test('parse_row_to_single_array ', () => {
+        let row = '{"p1Units": [[1, 1], [2], [3], [4], [5], [6], [7, 77], [8, 88]], "p2Units": [[10], [20, 21], [30], [40], [50], [60], [70, 71], [80, 81]]}';
+
+        expect(mu_default.config.parse_row_to_single_array(JSON.parse(row)))
+            .toEqual([[1, 1, 10], [2, 20, 21], [3, 30], [4], [5], [6], [40], [50], [60], [7, 77, 70, 71], [8, 88, 80, 81]]);
     });
 });
+
 
 
 

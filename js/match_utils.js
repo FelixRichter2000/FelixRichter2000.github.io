@@ -24,20 +24,19 @@
     const scrambler2_img = '<img class="match-changing-img" src="images/Scrambler2.svg">';
 
     //Group definitions:
-    //  0: Filter 
-    //  1: Encryptor
-    //  2: Destructor
-    //  3: Ping1
-    //  4: Emp1
-    //  5: Scrambler1
-    //  6: Ping2
-    //  7: Emp2
-    //  8: Scrambler2
-    //  9: Remove
-    // 10: Upgrade
-    // 11: Damage-Bar
-    // 12: Quantity
-    
+    const FILTER = 0;
+    const ENCRYPTOR = 1;
+    const DESTRUCTOR = 2;
+    const PING1 = 3;
+    const EMP1 = 4;
+    const SCRAMBLER1 = 5;
+    const PING2 = 6;
+    const EMP2 = 7;
+    const SCRAMBLER2 = 8;
+    const REMOVE = 9;
+    const UPGRADE = 10;
+    const DAMAGE_BAR = 11;
+    const QUANTITY = 12;
 
     const functions_config = {
         td_to_elements_converter: function (td) {
@@ -45,6 +44,14 @@
             let quantity_label = td.getElementsByClassName('quantity');
             let damage_bar = td.getElementsByClassName('damage-bar');
             return [...ims, ...damage_bar, ...quantity_label];
+        },
+        parse_row_to_single_array: function (row) {
+            return [
+                ...row.p1Units.slice(0, 3).map((p1U, i) => [...p1U, ...row.p2Units[i]]),
+                ...row.p1Units.slice(3, 6),
+                ...row.p2Units.slice(3, 6),
+                ...row.p1Units.slice(6, 8).map((p1U, i) => [...p1U, ...row.p2Units[i + 6]]),
+            ];
         },
         add_object_to_array: [
             //Set flags
@@ -62,7 +69,7 @@
                     let is_upgraded = self.is_upgraded(frame_data_array, index);
                     let total_health = static_config.full_health[group][is_upgraded];
                     let percental_health_left = health / total_health * 100;
-                    self.set_if_less(frame_data_array, index, static_config.health_index, percental_health_left);
+                    self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
 
                     //let health = location[2];
                     //self.set_if_less(frame_data_array, index, group, health);
@@ -72,7 +79,7 @@
             function (self, group, location, index, frame_data_array) {
                 //  Information
                 if (group >= 3 && group <= 8) {
-                    self.add_one(frame_data_array, index, 12);
+                    self.add_one(frame_data_array, index, QUANTITY);
                 }
             },
         ],
@@ -81,7 +88,7 @@
     const static_config = {
 
         field_contents: [
-            empty_field_img + 
+            empty_field_img +
             filter1_img +
             encryptor1_img +
             destructor1_img +
@@ -92,7 +99,7 @@
             ping2_img +
             emp2_img +
             scrambler2_img +
-            remove_img + 
+            remove_img +
             upgrade_img +
             quantity_label,
 
@@ -116,6 +123,8 @@
             size: 28,
             half: 14
         },
+
+        group_size: 13,
 
         ///Old Settings
 
@@ -146,7 +155,7 @@
 
         arena_size: 28,
 
-        group_size: 13,
+        //group_size: 13,
 
         full_health: {
             0: [60, 120],
@@ -169,6 +178,9 @@
     };
     let proto = match_utils.prototype;
 
+    proto.flip_player_if_switched = function (player_index, switched) {
+        return switched ? (player_index + 1) % 2 : player_index;
+    };
     proto.is_in_arena_bounds = function (x, y) {
         const half = this.config.arena_settings.half;
 
@@ -227,14 +239,8 @@
         let y = location[1];
         return this.location_to_index_map[this.spez(x, y)];
     };
-
-    //???? Add tests if it stays
     proto.calculate_final_index = function (index, group_index) {
         return index * this.config.group_size + group_index;
-    };
-    proto.is_upgraded = function (array, index) {
-        let final_index = this.calculate_final_index(index, static_config.upgrade_index);
-        return array[final_index];
     };
     proto.set_value = function (array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
@@ -256,51 +262,43 @@
     proto.create_new_array = function () {
         return new Int8Array(this.calculate_array_size());
     };
-    proto.combine_firewalls = function (p1Units, p2Units) {
-        return p1Units.slice(0, 3).map(function (p1U, i) {
-            return [...p1U, ...p2Units[i]];
-        });
+    proto.parse_file_to_raw_array = function (file) {
+        return file.split("\n")
+            .filter(el => el)
+            .map(el => JSON.parse(el));
     };
-    proto.combine_removals_and_upgrades = function (p1Units, p2Units) {
-        return p1Units.slice(6, 8).map(function (p1U, i) {
-            return [...p1U, ...p2Units[i + 6]];
-        });
+
+    //??? -> remove usage of static_config.upgrade_index
+    proto.is_upgraded = function (array, index) {
+        let final_index = this.calculate_final_index(index, static_config.upgrade_index);
+        return array[final_index];
     };
-    proto.parse_row_to_single_array = function (row) {
-        return [
-            ...this.combine_firewalls(row.p1Units, row.p2Units),
-            ...row.p1Units.slice(3, 6),
-            ...row.p2Units.slice(3, 6),
-            ...this.combine_removals_and_upgrades(row.p1Units, row.p2Units),
-        ];
-    };
+
+
+
     proto.parse_replay_row_to_array = function (row) {
         let frame_data_array = this.create_new_array();
 
-        let all_data = this.parse_row_to_single_array(row);
+        let all_data = this.config.parse_row_to_single_array(row);
 
         //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
-        for (let group_index = all_data.length - 1; group_index >= 0; group_index--) {
-            for (let location of all_data[group_index]) {
+        for (let group = all_data.length - 1; group >= 0; group--) {
+            for (let location of all_data[group]) {
                 let index = this.location_to_index(location);
                 for (let converter of this.config.add_object_to_array) {
-                    converter(this, group_index, location, index, frame_data_array);
+                    converter(this, group, location, index, frame_data_array);
                 }
             }
         }
 
         return frame_data_array;
     };
-    proto.parse_file_to_raw_array = function (file) {
-        return file.split("\n")
-            .filter(el => el)
-            .map(el => JSON.parse(el));
-    }
+
 
     //Test this, when mu functions can be mocked
     proto.parse_objects_to_arrays = function (objects) {
         return objects.map(o => this.parse_replay_row_to_array(o));
-    }
+    };
     proto.update_changes = function (i_previous, i_current, data, images, switched) {
         const data_previous = data[i_previous];
         const data_current = data[i_current];
@@ -328,7 +326,7 @@
                 current_image.hidden = data_current[i] == 0;
             }
         }
-    }
+    };
     proto.calculate_switched_index = function (index, switched, total_length) {
         if (!switched) return index;
 
@@ -392,19 +390,17 @@
         }
 
         return final_index;
-    }
+    };
     proto.toggle_hidden = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
         }
-    }
+    };
     proto.switch_view = function (i_current, data, images, switched) {
         this.update_changes(i_current, 0, data, images, switched);
         this.update_changes(0, i_current, data, images, !switched);
-    }
-    proto.toggle_player_index = function (player_index, switched) {
-        return switched ? (player_index + 1) % 2 : player_index;
-    }
+    };
+
 
     if (typeof process !== 'undefined') {
         module.exports = match_utils;
