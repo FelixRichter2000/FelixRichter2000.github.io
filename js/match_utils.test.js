@@ -11,7 +11,6 @@ const mu_size2 = new match_utils({
     arena_settings: { size: 2, half: 1 },
 });
 
-
 describe('Test is_in_arena_bounds', function () {
 
     test('expect false (1)', () => {
@@ -95,12 +94,9 @@ describe('Test is_in_arena_bounds', function () {
     });
 
 });
-
-
 describe('Test generate_terminal_trs', function () {
 
     test('Generate generate_terminal_trs size 4', () => {
-
         expect(mu_size4.generate_terminal_trs())
             .toBe("<tr><td></td><td>p2</td><td>p2</td><td></td></tr>" +
                 "<tr><td>p2</td><td>p2</td><td>p2</td><td>p2</td></tr>" +
@@ -109,8 +105,6 @@ describe('Test generate_terminal_trs', function () {
     });
 
 });
-
-
 describe('Test put_value_in_range', function () {
 
     test('Generate put_value_in_range -1 range(0, 4)', () => {
@@ -129,31 +123,34 @@ describe('Test put_value_in_range', function () {
     });
 
 });
+describe('Test get_all_changeable_elements_flat', function () {
 
-describe('Test get_all_td_children_one_dimensional', function () {
+    test('Call get_all_changeable_elements_flat', () => {
 
-    test('Call get_all_td_children_one_dimensional', () => {
+        const mu_spezial = new match_utils({}, {
+            td_to_elements_converter: function (td) {
+                return td.getElementsByClassName('t');
+            }
+        });
 
         document.body.innerHTML = "<table id='test'><tr><td>" +
-            "<label class=\"quantity\"></label>" +
-            "<img class='match-changing-img'/>" +
-            "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
-            "<img class='match-changing-img'/>" +
-            "<img class='match-changing-img'/></td><td>" +
-            "<label class=\"quantity\"></label>" +
-            "<img class='match-changing-img'/>" +
-            "<svg preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 30 30\"><circle class=\"damage-bar\" cx=\"15\" cy=\"15\" r=\"16\"></circle></svg >" +
-            "<img class='match-changing-img'/>" +
-            "<img class='match-changing-img'/></td></tr></table>";
+            "<label class=\"t\"></label>" +
+            "<img class='t'/>" +
+            "<img class='t'/>" +
+            "<img class='a'/></td><td>" +
+            "<label class='t'></label>" +
+            "<img class='t'/>" +
+            "<img class='t'/>" +
+            "<img class='a'/></td></tr></table>";
 
         let table = document.getElementById('test');
-        let children = mu_default.get_all_td_children_one_dimensional(table);
+        let children = mu_spezial.get_all_changeable_elements_flat(table);
 
         expect(children.length)
-            .toBe(10);
+            .toBe(6);
 
         expect(children[0].tagName)
-            .toBe('IMG');
+            .toBe('LABEL');
 
         expect(children[1].tagName)
             .toBe('IMG');
@@ -162,29 +159,16 @@ describe('Test get_all_td_children_one_dimensional', function () {
             .toBe('IMG');
 
         expect(children[3].tagName)
-            .toBe('circle');
+            .toBe('LABEL');
 
         expect(children[4].tagName)
-            .toBe('LABEL');
+            .toBe('IMG');
 
         expect(children[5].tagName)
             .toBe('IMG');
-
-        expect(children[6].tagName)
-            .toBe('IMG');
-
-        expect(children[7].tagName)
-            .toBe('IMG');
-
-        expect(children[8].tagName)
-            .toBe('circle');
-
-        expect(children[9].tagName)
-            .toBe('LABEL');
     });
 
 });
-
 describe('Test spez', function () {
 
     test('Generate spez [1, 0] => 1', () => {
@@ -203,7 +187,6 @@ describe('Test spez', function () {
     });
 
 });
-
 describe('Test generate_location_to_index_map', function () {
 
     test('Generate generate_location_to_index_map []', () => {
@@ -225,7 +208,6 @@ describe('Test generate_location_to_index_map', function () {
     });
 
 });
-
 describe('Test location_to_index', function () {
 
     test('Find Index with location_to_index ', () => {
@@ -265,7 +247,6 @@ describe('Test location_to_index', function () {
     });
 
 });
-
 describe('Test parse_row_to_single_array', function () {
 
     test('parse_row_to_single_array ', () => {
@@ -276,7 +257,6 @@ describe('Test parse_row_to_single_array', function () {
     });
 
 });
-
 describe('Test parse_replay_row_to_array', function () {
 
     test('parse_replay_row_to_array with filters', () => {
@@ -406,14 +386,13 @@ describe('Test parse_replay_row_to_array', function () {
     });
 
 });
-
 describe('Test parse_file_to_raw_array', function () {
 
     test('Parse all lines with content to array ', () => {
         let file = '{"v1": 1}\n{"v2": 2}\n\n\n{"v3": 3}';
 
         expect(mu_size2.parse_file_to_raw_array(file))
-            .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3}]);
+            .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3 }]);
     });
 
 });

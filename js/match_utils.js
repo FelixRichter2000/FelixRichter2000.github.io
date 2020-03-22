@@ -23,7 +23,16 @@
     const emp2_img = '<img class="match-changing-img" src="images/Emp2.svg">';
     const scrambler2_img = '<img class="match-changing-img" src="images/Scrambler2.svg">';
 
-    const default_config = {
+    const functions_config = {
+        td_to_elements_converter: function (td) {
+            let ims = td.getElementsByClassName('match-changing-img');
+            let quantity_label = td.getElementsByClassName('quantity');
+            let damage_bar = td.getElementsByClassName('damage-bar');
+            return [...ims, ...damage_bar, ...quantity_label];
+        },
+    };
+
+    const static_config = {
 
         field_contents: [
             empty_field_img + 
@@ -100,21 +109,24 @@
         },
     }
 
-    let match_utils = function (new_config, terminal_config) {
+    let match_utils = function (new_config, new_functions, terminal_config) {
         this.config = {};
-        Object.assign(this.config, JSON.parse(JSON.stringify(default_config)));
+        Object.assign(this.config, JSON.parse(JSON.stringify(static_config)));
         Object.assign(this.config, new_config || {});
+        Object.assign(this.config, functions_config);
+        Object.assign(this.config, new_functions || {});
         this.terminal_config = terminal_config;
-    };
 
+        //Init
+        this.location_to_index_map = this.generate_location_to_index_map();
+    };
     let proto = match_utils.prototype;
 
-    proto.is_in_arena_bounds = function (x, y, settings) {
+    proto.is_in_arena_bounds = function (x, y) {
         const half = this.config.arena_settings.half;
 
         return Math.abs(x - half + .5) + Math.abs(y - half + .5) < (half + 1);
     };
-
     proto.generate_terminal_trs = function () {
         const settings = this.config.arena_settings;
         const field_contents = this.config.field_contents;
@@ -124,28 +136,19 @@
             trs += '<tr>';
             for (var x = 0; x < settings.size; x++) {
                 trs += '<td>';
-                if (this.is_in_arena_bounds(x, y)) {
+                if (this.is_in_arena_bounds(x, y))
                     trs += field_contents[parseInt((settings.size - 1 - y) / settings.half)];
-                }
                 trs += '</td>';
             }
             trs += '</tr>';
         }
         return trs;
     };
-
-    proto.get_all_td_children_one_dimensional = function (table) {
-        const tds = table.getElementsByTagName('td');
-        let images = [];
-        for (let td of tds) {
-            let ims = td.getElementsByClassName('match-changing-img');
-            let quantity_label = td.getElementsByClassName('quantity');
-            let damage_bar = td.getElementsByClassName('damage-bar');
-            images = [...images, ...ims, ...damage_bar, ...quantity_label];
-        }
-        return images;
+    proto.get_all_changeable_elements_flat = function (table) {
+        let converter = this.config.td_to_elements_converter;
+        return [...table.getElementsByTagName('td')]
+            .reduce((a, v) => [...a, ...converter(v)], []);
     }
-
     proto.put_value_in_range = function (value, range) {
         if (value < range.min) {
             return range.min;
@@ -155,13 +158,10 @@
         }
         return value;
     }
-
-
     proto.spez = function (x, y) {
         const settings = this.config.arena_settings;
         return x + y * settings.size;
     };
-
     proto.generate_location_to_index_map = function () {
         const settings = this.config.arena_settings;
 
@@ -177,53 +177,43 @@
         }
         return map;
     };
-
     proto.location_to_index = function (location, map) {
         let x = location[0];
         let y = location[1];
         return map[this.spez(x, y)];
     };
-
     proto.calculate_final_index = function (index, group_index) {
         return index * this.config.group_size + group_index;
     }
-
     proto.is_upgraded = function (array, index) {
-        let final_index = this.calculate_final_index(index, default_config.upgrade_index);
+        let final_index = this.calculate_final_index(index, static_config.upgrade_index);
         return array[final_index];
     }
-
     proto.set_value = function (array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index] = value;
     };
-
     proto.add_one = function (array, index, group_index) {
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index]++;
     };
-
     proto.calculate_array_size = function () {
         const size = this.config.arena_settings.size;
         return (size * size / 2 + size) * this.config.group_size;
     }
-
     proto.create_new_array = function () {
         return new Int8Array(this.calculate_array_size());
     }
-
     proto.combine_firewalls = function (p1Units, p2Units) {
         return p1Units.slice(0, 3).map(function (p1U, i) {
             return [...p1U, ...p2Units[i]];
         });
     };
-
     proto.combine_removals_and_upgrades = function (p1Units, p2Units) {
         return p1Units.slice(6, 8).map(function (p1U, i) {
             return [...p1U, ...p2Units[i + 6]];
         });
     };
-
     proto.parse_row_to_single_array = function (row) {
         return [
             ...this.combine_firewalls(row.p1Units, row.p2Units),
@@ -232,17 +222,15 @@
             ...this.combine_removals_and_upgrades(row.p1Units, row.p2Units),
         ];
     };
-
     proto.parse_replay_row_to_array = function (row) {
         let frame_data_array = this.create_new_array();
-        let map = this.generate_location_to_index_map();
 
         let all_data = this.parse_row_to_single_array(row);
 
         //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
         for (let group_index = all_data.length - 1; group_index >= 0; group_index--) {
             for (let location of all_data[group_index]) {
-                let index = this.location_to_index(location, map);
+                let index = this.location_to_index(location, this.location_to_index_map);
                 this.set_value(frame_data_array, index, group_index, 1);
 
                 if (group_index >= 3 && group_index <= 8) {
@@ -252,16 +240,15 @@
                 if (group_index < 3) {
                     let health = location[2];
                     let is_upgraded = this.is_upgraded(frame_data_array, index);
-                    let total_health = default_config.full_health[group_index][is_upgraded];
+                    let total_health = static_config.full_health[group_index][is_upgraded];
                     let percental_health_left = health / total_health * 100;
-                    this.set_value(frame_data_array, index, default_config.health_index, percental_health_left);
+                    this.set_value(frame_data_array, index, static_config.health_index, percental_health_left);
                 }
             }
         }
 
         return frame_data_array;
     };
-
     proto.parse_file_to_raw_array = function (file) {
         return file.split("\n")
             .filter(el => el)
@@ -272,7 +259,6 @@
     proto.parse_objects_to_arrays = function (objects) {
         return objects.map(o => this.parse_replay_row_to_array(o));
     }
-
     proto.update_changes = function (i_previous, i_current, data, images, switched) {
         const data_previous = data[i_previous];
         const data_current = data[i_current];
@@ -301,7 +287,6 @@
             }
         }
     }
-
     proto.calculate_switched_index = function (index, switched, total_length) {
         if (!switched) return index;
 
@@ -340,10 +325,10 @@
 
 
         const switched_index = total_length - index - 1;
-        let final_index = switched_index - 2 * (switched_index % default_config.group_size) + default_config.group_size - 1;
+        let final_index = switched_index - 2 * (switched_index % static_config.group_size) + static_config.group_size - 1;
 
         //without ending
-        const ending = final_index % default_config.group_size;
+        const ending = final_index % static_config.group_size;
 
         if (ending >= switch_range_min && ending <= switch_range_max) {
             const without_ending = final_index - ending;
@@ -366,20 +351,18 @@
 
         return final_index;
     }
-
     proto.toggle_hidden = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
         }
     }
-
     proto.switch_view = function (i_current, data, images, switched) {
         this.update_changes(i_current, 0, data, images, switched);
         this.update_changes(0, i_current, data, images, !switched);
     }
-
-    proto.toggle_player_index = (player_index, switched) =>
-        switched ? (player_index + 1) % 2 : player_index;
+    proto.toggle_player_index = function (player_index, switched) {
+        return switched ? (player_index + 1) % 2 : player_index;
+    }
 
     if (typeof process !== 'undefined') {
         module.exports = match_utils;
