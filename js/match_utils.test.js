@@ -1,16 +1,15 @@
 ﻿const match_utils = require('./match_utils');
-const mu_default = new match_utils();
 
+//define all mu-objects right here and use them in testcases
+const mu_default = new match_utils();
 const mu_size4 = new match_utils({
     field_contents: ['p1', 'p2'],
     arena_settings: { size: 4, half: 2 },
 });
-
 const mu_size2 = new match_utils({
     field_contents: ['p1', 'p2'],
     arena_settings: { size: 2, half: 1 },
 });
-
 
 describe('Test flip_player_if_switched', function () {
     test('player_index: 1 switched: false => 1', () => {
@@ -385,7 +384,7 @@ describe('Test calculate_switched_index', function () {
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-                additional_flipping: function (self, index) {
+            additional_flipping: function (self, index) {
                 if (index === 1) return 99;
                 return index;
             }
@@ -421,10 +420,80 @@ describe('Test calculate_switched_index', function () {
             .toBe(0);
     });
 });
+describe('Test toggle_hidden', function () {
+    test('test false, true, false => true, false, true', () => {
+        let array = [{ hidden: false }, { hidden: true }, { hidden: false }];
+
+        mu_default.toggle_hidden(array);
+
+        expect(array)
+            .toEqual([{ hidden: true }, { hidden: false }, { hidden: true }]);
+    });
+});
+describe('Test update_changes', function () {
+    test('update_changes(0, 1, data, images, false)', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            update_function: function (group, switched_index, current_element, value) {
+                current_element.hidden = value == 0;
+            }
+        });
+
+        let images = [{ hidden: true }, { hidden: true }, { hidden: true }, { hidden: true }];
+        let data = [[0, 0, 0, 0], [0, 1, 1, 0]];
+
+        mu_special.update_changes(0, 1, data, images, false);
+
+        expect(images)
+            .toEqual([{ hidden: true }, { hidden: false }, { hidden: false }, { hidden: true }]);
+    });
+    test('update_changes(1, 0, data, images, false)', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            update_function: function (group, switched_index, current_element, value) {
+                current_element.hidden = value == 0;
+            }
+        });
+
+        let images = [{ hidden: true }, { hidden: false }, { hidden: true }, { hidden: true }];
+        let data = [[0, 0, 1, 0], [0, 5, 0, 0]];
+
+        mu_special.update_changes(1, 0, data, images, false);
+
+        expect(images)
+            .toEqual([{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: true }]);
+    });
+});
+describe('Test switch_view', function () {
+    test('switch_view(1, data, images, false)', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            update_function: function (group, switched_index, current_element, value) {
+                current_element.hidden = value == 0;
+            },
+            additional_flipping: function (self, index) {
+                return index;
+            }
+        });
+
+        let images = [{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: false }];
+        let data = [[0, 0, 0, 0], [0, 0, 1, 1]];
+
+        mu_special.switch_view(1, data, images, false);
+
+        expect(images)
+            .toEqual([{ hidden: false }, { hidden: false }, { hidden: true }, { hidden: true }]);
+    });
+});
 
 
-
-
+//Functions config tests, should be moved to another file
 describe('Test parse_frame_data_to_flat_array', function () {
     test('parse_frame_data_to_flat_array with filters', () => {
         let row = '{"p1Units": [[[0, 0, 60, "32"]], [], [], [], [], [], [], []], "p2Units": [[[0, 1, 30, "33"]], [], [], [], [], [], [], []]}';
@@ -544,8 +613,6 @@ describe('Test parse_frame_data_to_flat_array', function () {
             ));
     });
 });
-
-
 describe('Test parse_row_to_single_array', function () {
     test('parse_row_to_single_array ', () => {
         let row = '{"p1Units": [[1, 1], [2], [3], [4], [5], [6], [7, 77], [8, 88]], "p2Units": [[10], [20, 21], [30], [40], [50], [60], [70, 71], [80, 81]]}';

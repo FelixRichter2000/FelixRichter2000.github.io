@@ -44,6 +44,7 @@
         return array[final_index];
     };
 
+    //Functions config, should be moved to another file
     const functions_config = {
         td_to_elements_converter: function (td) {
             let ims = td.getElementsByClassName('match-changing-img');
@@ -179,37 +180,7 @@
 
         group_size: 13,
 
-        ///Old Settings
-
-        firewalls: [
-            ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg"],
-            ["images/Filter2.svg", "images/Encryptor2.svg", "images/Destructor2.svg"],
-        ],
-
-        damage_img: "images/damage.svg",
-
-        information: [
-            "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
-            "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove.svg", "images/Upgrade.svg",
-        ],
-
-        sources: ["images/Filter1.svg", "images/Encryptor1.svg", "images/Destructor1.svg",
-            "images/Ping1.svg", "images/Emp1.svg", "images/Scrambler1.svg",
-            "images/Ping2.svg", "images/Emp2.svg", "images/Scrambler2.svg",
-            "images/Remove.svg"],
-
-        default_img: "images/EmptyField.svg",
-
-        damage_svg: '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg >',
-
-        upgrade_index: 10,
-        health_index: 11,
-
-        arena_size: 28,
-
-        //group_size: 13,
-
+        //TO be replaced with terminal-config
         full_health: {
             0: [60, 120],
             1: [30, 30],
@@ -324,33 +295,6 @@
     proto.parse_objects_to_arrays = function (objects) {
         return objects.map(o => this.config.parse_frame_data_to_flat_array(this, o));
     };
-
-
-    proto.update_changes = function (i_previous, i_current, data, images, switched) {
-        const updater = this.config.update_function;
-
-        const data_previous = data[i_previous];
-        const data_current = data[i_current];
-
-        if (!data_previous) return;
-        if (!data_current) return;
-
-        const data_length = data_previous.length;
-        const images_length = images.length;
-
-        if (i_current >= data_length) return;
-
-        for (let i = 0; i < data_length; i++) {
-            if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
-                const switched_index = this.calculate_switched_index(i, switched, images_length);
-                let current_element = images[switched_index];
-                let value = data_current[i];
-                let group = i % this.config.group_size;
-
-                updater(group, switched_index, current_element, value);
-            }
-        }
-    };
     proto.calculate_switched_index = function (index, switched) {
         if (!switched) return index;
 
@@ -362,6 +306,25 @@
     proto.toggle_hidden = function (elements) {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
+        }
+    };
+    proto.update_changes = function (i_previous, i_current, data, images, switched) {
+        const updater = this.config.update_function;
+
+        const data_previous = data[i_previous];
+        const data_current = data[i_current];
+        const data_length = data_previous.length;
+        const images_length = images.length;
+
+        for (let i = 0; i < data_length; i++) {
+            if (data_previous[i] != data_current[i]) {
+                const switched_index = this.calculate_switched_index(i, switched, images_length);
+                let current_element = images[switched_index];
+                let value = data_current[i];
+                let group = i % this.config.group_size;
+
+                updater(group, switched_index, current_element, value);
+            }
         }
     };
     proto.switch_view = function (i_current, data, images, switched) {
