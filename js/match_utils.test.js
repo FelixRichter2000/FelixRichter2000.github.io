@@ -89,7 +89,7 @@ describe('Test generate_terminal_trs', function () {
 describe('Test get_all_changeable_elements_flat', function () {
     test('Call get_all_changeable_elements_flat', () => {
 
-        const mu_spezial = new match_utils({}, {
+        const mu_special = new match_utils({}, {
             td_to_elements_converter: function (td) {
                 return td.getElementsByClassName('t');
             }
@@ -106,7 +106,7 @@ describe('Test get_all_changeable_elements_flat', function () {
             "<img class='a'/></td></tr></table>";
 
         let table = document.getElementById('test');
-        let children = mu_spezial.get_all_changeable_elements_flat(table);
+        let children = mu_special.get_all_changeable_elements_flat(table);
 
         expect(children.length)
             .toBe(6);
@@ -214,135 +214,135 @@ describe('Test location_to_index', function () {
 });
 describe('Test calculate_final_index', function () {
     test('index: 5 group: 3 group_size: 10 => 53', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 10,
         });
 
-        expect(mu_spezial.calculate_final_index(5, 3))
+        expect(mu_special.calculate_final_index(5, 3))
             .toBe(53);
     });
     test('index: 2 group: 3 group_size:  5 => 13', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 5,
         });
 
-        expect(mu_spezial.calculate_final_index(2, 3))
+        expect(mu_special.calculate_final_index(2, 3))
             .toBe(13);
     });
 });
 describe('Test set_value', function () {
     test('index: 2 group: 0 value: 1', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 0, 0];
-        mu_spezial.set_value(array, 2, 0, 1)
+        mu_special.set_value(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 0 group: 1 value: 1', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 0, 0];
-        mu_spezial.set_value(array, 0, 1, 1)
+        mu_special.set_value(array, 0, 1, 1)
 
         expect(array).toEqual([0, 1, 0, 0, 0, 0]);
     });
 });
 describe('Test set_if_less', function () {
     test('index: 2 group: 0 value: 1 -> expect set', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 0, 0];
-        mu_spezial.set_if_less(array, 2, 0, 1)
+        mu_special.set_if_less(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 2 group: 0 value: 1 -> expect reduced', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 2, 0];
-        mu_spezial.set_if_less(array, 2, 0, 1)
+        mu_special.set_if_less(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 2 group: 0 value: 6 -> expect stay same', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 2, 0];
-        mu_spezial.set_if_less(array, 2, 0, 6)
+        mu_special.set_if_less(array, 2, 0, 6)
 
         expect(array).toEqual([0, 0, 0, 0, 2, 0]);
     });
 });
 describe('Test add_one', function () {
     test('index: 2 group: 0', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 0, 0, 0, 0, 0];
-        mu_spezial.add_one(array, 2, 0, 1)
+        mu_special.add_one(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 0 group: 1', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             group_size: 2,
         });
 
         let array = [0, 2, 0, 0, 0, 0];
-        mu_spezial.add_one(array, 0, 1, 1)
+        mu_special.add_one(array, 0, 1, 1)
 
         expect(array).toEqual([0, 3, 0, 0, 0, 0]);
     });
 });
 describe('Test calculate_array_size', function () {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => 8', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
             group_size: 2,
         });
 
-        expect(mu_spezial.calculate_array_size())
+        expect(mu_special.calculate_array_size())
             .toBe(8);
     });
     test('arena_settings: { size: 4, half: 2 }, group_size: 8 => 96', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             arena_settings: { size: 4, half: 2 },
             group_size: 8,
         });
 
-        expect(mu_spezial.calculate_array_size())
+        expect(mu_special.calculate_array_size())
             .toBe(96);
     });
 });
 describe('Test create_new_array', function () {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => Int8Array(8)', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
             group_size: 2,
         });
 
-        expect(mu_spezial.create_new_array())
+        expect(mu_special.create_new_array())
             .toEqual(new Int8Array(8));
     });
     test('arena_settings: { size: 4, half: 2 }, group_size: 8 => Int8Array(96)', () => {
-        const mu_spezial = new match_utils({
+        const mu_special = new match_utils({
             arena_settings: { size: 4, half: 2 },
             group_size: 8,
         });
 
-        expect(mu_spezial.create_new_array())
+        expect(mu_special.create_new_array())
             .toEqual(new Int8Array(96));
     });
 });
@@ -354,14 +354,82 @@ describe('Test parse_file_to_raw_array', function () {
             .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3 }]);
     });
 });
+describe('Test parse_objects_to_arrays', function () {
+    test('Parse [1, 2, 3] => [2, 4, 6]', () => {
+        const mu_special = new match_utils({}, {
+            parse_frame_data_to_flat_array: function (self, frame_data) {
+                return frame_data * 2;
+            },
+        });
+
+        expect(mu_special.parse_objects_to_arrays([1, 2, 3]))
+            .toEqual([2, 4, 6]);
+    });
+});
+describe('Test calculate_switched_index', function () {
+    test('index: 2, switched: true => 1', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            additional_flipping: function (self, index) {
+                return index;
+            }
+        });
+
+        expect(mu_special.calculate_switched_index(2, true))
+            .toBe(1);
+    });
+    test('index: 2, switched: true, additional if 1 then 99 => 99', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+                additional_flipping: function (self, index) {
+                if (index === 1) return 99;
+                return index;
+            }
+        });
+
+        expect(mu_special.calculate_switched_index(2, true))
+            .toBe(99);
+    });
+    test('index: 0, switched: true => 3', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            additional_flipping: function (self, index) {
+                return index;
+            }
+        });
+
+        expect(mu_special.calculate_switched_index(0, true))
+            .toBe(3);
+    });
+    test('index: 0, switched: false => 0', () => {
+        const mu_special = new match_utils({
+            arena_settings: { size: 2, half: 1 },
+            group_size: 1,
+        }, {
+            additional_flipping: function (self, index) {
+                return index;
+            }
+        });
+
+        expect(mu_special.calculate_switched_index(0, false))
+            .toBe(0);
+    });
+});
 
 
 
-describe('Test parse_replay_row_to_array', function () {
-    test('parse_replay_row_to_array with filters', () => {
+
+describe('Test parse_frame_data_to_flat_array', function () {
+    test('parse_frame_data_to_flat_array with filters', () => {
         let row = '{"p1Units": [[[0, 0, 60, "32"]], [], [], [], [], [], [], []], "p2Units": [[[0, 1, 30, "33"]], [], [], [], [], [], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0,
@@ -371,10 +439,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with encryptors', () => {
+    test('parse_frame_data_to_flat_array with encryptors', () => {
         let row = '{"p1Units": [[], [[0, 0, 30, "32"]], [], [], [], [], [], []], "p2Units": [[], [[0, 1, 15, "33"]], [], [], [], [], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0,
@@ -384,10 +452,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with destructor', () => {
+    test('parse_frame_data_to_flat_array with destructor', () => {
         let row = '{"p1Units": [[], [], [[0, 0, 75, "32"]], [], [], [], [], []], "p2Units": [[], [], [[0, 1, 45, "33"]], [], [], [], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0,
@@ -397,10 +465,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with ping', () => {
+    test('parse_frame_data_to_flat_array with ping', () => {
         let row = '{"p1Units": [[], [], [], [[0, 0, 60, "32"]], [], [], [], []], "p2Units": [[], [], [], [[0, 1, 60, "33"]], [], [], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
@@ -410,10 +478,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with emp', () => {
+    test('parse_frame_data_to_flat_array with emp', () => {
         let row = '{"p1Units": [[], [], [], [], [[0, 0, 60, "32"]], [], [], []], "p2Units": [[], [], [], [], [[0, 1, 60, "33"]], [], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -423,10 +491,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with scrambler', () => {
+    test('parse_frame_data_to_flat_array with scrambler', () => {
         let row = '{"p1Units": [[], [], [], [], [], [[0, 0, 60, "32"]], [], []], "p2Units": [[], [], [], [], [], [[0, 1, 60, "33"]], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -436,10 +504,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with removals', () => {
+    test('parse_frame_data_to_flat_array with removals', () => {
         let row = '{"p1Units": [[], [], [], [], [], [], [[0, 0, 60, "32"]], []], "p2Units": [[], [], [], [], [], [], [[0, 1, 60, "33"]], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -449,10 +517,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with upgrades', () => {
+    test('parse_frame_data_to_flat_array with upgrades', () => {
         let row = '{"p1Units": [[], [], [], [], [], [], [], [[0, 0, 60, "32"]]], "p2Units": [[], [], [], [], [], [], [], [[0, 1, 60, "33"]]]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -462,10 +530,10 @@ describe('Test parse_replay_row_to_array', function () {
                 ]
             ));
     });
-    test('parse_replay_row_to_array with multiple units on same location', () => {
+    test('parse_frame_data_to_flat_array with multiple units on same location', () => {
         let row = '{"p1Units": [[], [], [], [[0, 0], [0, 0]], [], [], [], []], "p2Units": [[], [], [], [], [[0, 0]], [[0, 0]], [], []]}';
 
-        expect(mu_size2.parse_replay_row_to_array(JSON.parse(row)))
+        expect(mu_size2.config.parse_frame_data_to_flat_array(mu_size2, JSON.parse(row)))
             .toEqual(new Int8Array(
                 [
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

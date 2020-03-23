@@ -35,8 +35,14 @@
     const SCRAMBLER2 = 8;
     const REMOVE = 9;
     const UPGRADE = 10;
+    //Calculated values
     const DAMAGE_BAR = 11;
     const QUANTITY = 12;
+
+    const is_upgraded = function (self, array, index) {
+        let final_index = self.calculate_final_index(index, UPGRADE);
+        return array[final_index];
+    };
 
     const functions_config = {
         td_to_elements_converter: function (td) {
@@ -54,35 +60,82 @@
             ];
         },
         add_object_to_array: [
-            //Set flags
             function (self, group, location, index, frame_data_array) {
+                ///Set flags
                 //  Firewalls + Inforamtion + Removal + Upgrade
                 if (group >= 0 && group <= 10) {
                     self.set_value(frame_data_array, index, group, 1);
                 }
-            },
-            //Set Health
-            function (self, group, location, index, frame_data_array) {
+
+                ///Set Health
                 //  Firewalls
                 if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
                     let health = location[2];
-                    let is_upgraded = self.is_upgraded(frame_data_array, index);
-                    let total_health = static_config.full_health[group][is_upgraded];
+                    let upgraded = is_upgraded(self, frame_data_array, index);
+                    let total_health = static_config.full_health[group][upgraded];
                     let percental_health_left = health / total_health * 100;
                     self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
 
                     //let health = location[2];
                     //self.set_if_less(frame_data_array, index, group, health);
                 }
-            },
-            //Add together for quantity
-            function (self, group, location, index, frame_data_array) {
-                //  Information
+
+                ///Add together for quantity
+                //Information
                 if (group >= 3 && group <= 8) {
                     self.add_one(frame_data_array, index, QUANTITY);
                 }
             },
         ],
+        parse_frame_data_to_flat_array: function (self, frame_data) {
+            let frame_data_array = self.create_new_array();
+
+            let all_data = self.config.parse_row_to_single_array(frame_data);
+
+            //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
+            for (let group = all_data.length - 1; group >= 0; group--) {
+                for (let location of all_data[group]) {
+                    let index = self.location_to_index(location);
+                    for (let converter of self.config.add_object_to_array) {
+                        converter(self, group, location, index, frame_data_array);
+                    }
+                }
+            }
+
+            return frame_data_array;
+        },
+        update_function: function (group, switched_index, current_element, value) {
+            //  Firewalls + Inforamtion + Removal + Upgrade + Quantity
+            if (group >= 0 && group <= 10 || group === 12) {
+                current_element.hidden = value == 0;
+            }
+
+            if (current_element.tagName === 'LABEL') {
+                current_element.innerHTML = value;
+            }
+            else if (current_element.tagName === 'circle') {
+                current_element.style.strokeDashoffset = 1.00530964915 * value;
+            }
+        },
+        additional_flipping: function (self, index) {
+
+            const switch_range_min = 3;
+            const switch_range_max = 8;
+
+            //without ending
+            const ending = index % self.config.group_size;
+
+            if (ending >= switch_range_min && ending <= switch_range_max) {
+                const without_ending = index - ending;
+
+                //fixed ending
+                const fixed_ending = (ending - switch_range_min + 3) % 6 + switch_range_min;
+
+                index = without_ending + fixed_ending;
+            }
+
+            return index;
+        }
     };
 
     const static_config = {
@@ -175,6 +228,7 @@
 
         //Init
         this.location_to_index_map = this.generate_location_to_index_map();
+        this.array_size = this.calculate_array_size();
     };
     let proto = match_utils.prototype;
 
@@ -260,46 +314,21 @@
         return (size * size / 2 + size) * this.config.group_size;
     };
     proto.create_new_array = function () {
-        return new Int8Array(this.calculate_array_size());
+        return new Int8Array(this.array_size);
     };
     proto.parse_file_to_raw_array = function (file) {
         return file.split("\n")
             .filter(el => el)
             .map(el => JSON.parse(el));
     };
-
-    //??? -> remove usage of static_config.upgrade_index
-    proto.is_upgraded = function (array, index) {
-        let final_index = this.calculate_final_index(index, static_config.upgrade_index);
-        return array[final_index];
-    };
-
-
-
-    proto.parse_replay_row_to_array = function (row) {
-        let frame_data_array = this.create_new_array();
-
-        let all_data = this.config.parse_row_to_single_array(row);
-
-        //Reverse order is there, to make sure, upgrades have been set before damage gets calculated
-        for (let group = all_data.length - 1; group >= 0; group--) {
-            for (let location of all_data[group]) {
-                let index = this.location_to_index(location);
-                for (let converter of this.config.add_object_to_array) {
-                    converter(this, group, location, index, frame_data_array);
-                }
-            }
-        }
-
-        return frame_data_array;
-    };
-
-
-    //Test this, when mu functions can be mocked
     proto.parse_objects_to_arrays = function (objects) {
-        return objects.map(o => this.parse_replay_row_to_array(o));
+        return objects.map(o => this.config.parse_frame_data_to_flat_array(this, o));
     };
+
+
     proto.update_changes = function (i_previous, i_current, data, images, switched) {
+        const updater = this.config.update_function;
+
         const data_previous = data[i_previous];
         const data_current = data[i_current];
 
@@ -313,83 +342,22 @@
 
         for (let i = 0; i < data_length; i++) {
             if (i_previous == -1 && data_current[i] > 0 || data_previous[i] != data_current[i]) {
-
                 const switched_index = this.calculate_switched_index(i, switched, images_length);
-                let current_image = images[switched_index];
+                let current_element = images[switched_index];
+                let value = data_current[i];
+                let group = i % this.config.group_size;
 
-                if (current_image.tagName === 'LABEL') {
-                    current_image.innerHTML = data_current[i];
-                }
-                else if (current_image.tagName === 'circle') {
-                    current_image.style.strokeDashoffset = 1.00530964915 * data_current[i];
-                }
-                current_image.hidden = data_current[i] == 0;
+                updater(group, switched_index, current_element, value);
             }
         }
     };
-    proto.calculate_switched_index = function (index, switched, total_length) {
+    proto.calculate_switched_index = function (index, switched) {
         if (!switched) return index;
 
-        const switch_range_min = 3;
-        const switch_range_max = 8;
+        const switched_index = this.array_size - index - 1;
+        let final_index = switched_index - 2 * (switched_index % this.config.group_size) + this.config.group_size - 1;
 
-        //Formular explanation with two examples
-
-        //index = 13
-        // -> field: 0, 1, 2, 3
-        // -> element: 0, 1 <-- 13 % 4
-
-        //index = 12
-        // -> element: 12 % 4 = 0
-
-        //group_size = 4
-
-        //total_length = 12 * 4 = 48
-
-        // 48 - 13 = 34 -> lets call it switched_index
-        // -> false element: 34 % 4 = 2
-        // -> corret element: 34 - 34 % 4 (= 32) + 4 - 2 - 1            ...    = 33
-        // -> general: switched_index - switched_index % group_size + group_size - switched_index % group_size - 1
-        // -> simplilfied: switched_index - 2 * (switched_index % group_size) + group_size - 1
-
-
-        // 48 - 12 - 1 = 35
-        // -> false element: 35 % 4 = 3
-        // -> correct element: 35 - 2 * (35 % 4) + 4 - 1 = 32
-        // ---> element: 32 % 4 = 0
-
-        // . 0 0 .
-        // 0 X 0 0
-        // 0 0 0 0
-        // . 0 0 .
-
-
-        const switched_index = total_length - index - 1;
-        let final_index = switched_index - 2 * (switched_index % static_config.group_size) + static_config.group_size - 1;
-
-        //without ending
-        const ending = final_index % static_config.group_size;
-
-        if (ending >= switch_range_min && ending <= switch_range_max) {
-            const without_ending = final_index - ending;
-
-            //Fix information unit indexes
-            // switch following indexes
-            // 4 - 6, 7 - 9
-
-            //4 -> 7
-            //7 -> 4
-            //6 -> 9
-
-            //(4 - 4 + 3 ) % 6 + 4 = 
-
-            //fixed ending
-            const fixed_ending = (ending - switch_range_min + 3) % 6 + switch_range_min;
-
-            final_index = without_ending + fixed_ending;
-        }
-
-        return final_index;
+        return this.config.additional_flipping(this, final_index);
     };
     proto.toggle_hidden = function (elements) {
         for (var i = 0; i < elements.length; i++) {
