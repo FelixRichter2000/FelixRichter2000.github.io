@@ -88,10 +88,13 @@
                 current_element.hidden = value == 0;
             }
 
-            if (current_element.tagName === 'LABEL') {
+            // Quantity
+            if (group === QUANTITY) {
                 current_element.innerHTML = value;
             }
-            else if (current_element.tagName === 'circle') {
+
+            // Damage-Bar
+            if (group === DAMAGE_BAR) {
                 current_element.style.strokeDashoffset = 1.00530964915 * value;
             }
         },
