@@ -52,11 +52,23 @@
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
         show_field_info: function (x, y) {
+            if (!reader.is_ready()) return;
+
             let new_text = "";
             if (match_utils.is_in_arena_bounds(x, y)) {
                 new_text = `${x}, ${y}`;
+
+                //create match_utils.getCustomeValueAtLocation(location, switched, group)
+                let index = match_utils.location_to_index([x, y]);
+                let final_index = match_utils.calculate_final_index(index, 13);
+                let switched_index = match_utils.calculate_switched_index(final_index, switched);
+                let health_left = reader.fast_frame_data[frame][switched_index];
+
+                console.log(health_left);
             }
             position_span.innerHTML = new_text;
+
+            
         },
         //Temporary
         get_reader: function () {

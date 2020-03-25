@@ -15,6 +15,7 @@
     //Calculated values
     const DAMAGE_BAR = 11;
     const QUANTITY = 12;
+    const HEALTH = 13;
 
     const is_upgraded = function (self, array, index) {
         let final_index = self.calculate_final_index(index, UPGRADE);
@@ -27,7 +28,8 @@
             let ims = td.getElementsByClassName('match-changing-img');
             let quantity_label = td.getElementsByClassName('quantity');
             let damage_bar = td.getElementsByClassName('damage-bar');
-            return [...ims, ...damage_bar, ...quantity_label];
+            let dummy_div = td.getElementsByClassName('dummy');
+            return [...ims, ...damage_bar, ...quantity_label, ...dummy_div];
         },
         parse_row_to_single_array: function (row) {
             return [
@@ -47,14 +49,16 @@
             ///Set Health
             //  Firewalls
             if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
+
+                //Set percental health for damage-bar
                 let health = location[2];
                 let upgraded = is_upgraded(self, frame_data_array, index);
                 let total_health = self.config.full_health[group][upgraded];
                 let percental_health_left = health / total_health * 100;
                 self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
 
-                //let health = location[2];
-                //self.set_if_less(frame_data_array, index, group, health);
+                //Set absolute health for hover details
+                self.set_if_less(frame_data_array, index, HEALTH, health);
             }
 
             ///Add together for quantity

@@ -22,6 +22,9 @@
     const emp2_img = '<img class="match-changing-img" src="images/Emp2.svg">';
     const scrambler2_img = '<img class="match-changing-img" src="images/Scrambler2.svg">';
 
+    //DummyItem
+    const dummy_div = '<div class="dummy"></div>';
+
     const match_utils_config = {
 
         field_contents: [
@@ -38,7 +41,9 @@
             scrambler2_img +
             remove_img +
             upgrade_img +
-            quantity_label,
+            quantity_label +
+            dummy_div
+            ,
 
             empty_field_img +
             filter2_img +
@@ -53,7 +58,8 @@
             scrambler2_img +
             remove_img +
             upgrade_img +
-            quantity_label
+            quantity_label +
+            dummy_div
         ],
 
         arena_settings: {
@@ -61,7 +67,7 @@
             half: 14
         },
 
-        group_size: 13,
+        group_size: 14,
 
         //TO be replaced with terminal-config
         full_health: {
