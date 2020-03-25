@@ -37,34 +37,32 @@
                 ...row.p1Units.slice(6, 8).map((p1U, i) => [...p1U, ...row.p2Units[i + 6]]),
             ];
         },
-        add_object_to_array: [
-            function (self, group, location, index, frame_data_array) {
-                ///Set flags
-                //  Firewalls + Inforamtion + Removal + Upgrade
-                if (group >= 0 && group <= 10) {
-                    self.set_value(frame_data_array, index, group, 1);
-                }
+        add_object_to_array: function (self, group, location, index, frame_data_array) {
+            ///Set flags
+            //  Firewalls + Inforamtion + Removal + Upgrade
+            if (group >= 0 && group <= 10) {
+                self.set_value(frame_data_array, index, group, 1);
+            }
 
-                ///Set Health
-                //  Firewalls
-                if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
-                    let health = location[2];
-                    let upgraded = is_upgraded(self, frame_data_array, index);
-                    let total_health = self.config.full_health[group][upgraded];
-                    let percental_health_left = health / total_health * 100;
-                    self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
+            ///Set Health
+            //  Firewalls
+            if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
+                let health = location[2];
+                let upgraded = is_upgraded(self, frame_data_array, index);
+                let total_health = self.config.full_health[group][upgraded];
+                let percental_health_left = health / total_health * 100;
+                self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
 
-                    //let health = location[2];
-                    //self.set_if_less(frame_data_array, index, group, health);
-                }
+                //let health = location[2];
+                //self.set_if_less(frame_data_array, index, group, health);
+            }
 
-                ///Add together for quantity
-                //Information
-                if (group >= 3 && group <= 8) {
-                    self.add_one(frame_data_array, index, QUANTITY);
-                }
-            },
-        ],
+            ///Add together for quantity
+            //Information
+            if (group >= 3 && group <= 8) {
+                self.add_one(frame_data_array, index, QUANTITY);
+            }
+        },
         parse_frame_data_to_flat_array: function (self, frame_data) {
             let frame_data_array = self.create_new_array();
 
@@ -74,9 +72,7 @@
             for (let group = all_data.length - 1; group >= 0; group--) {
                 for (let location of all_data[group]) {
                     let index = self.location_to_index(location);
-                    for (let converter of self.config.add_object_to_array) {
-                        converter(self, group, location, index, frame_data_array);
-                    }
+                    self.config.add_object_to_array(self, group, location, index, frame_data_array);
                 }
             }
 
