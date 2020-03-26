@@ -63,8 +63,13 @@
                 let final_index = match_utils.calculate_final_index(index, 13);
                 let switched_index = match_utils.calculate_switched_index(final_index, switched);
                 let health_left = reader.fast_frame_data[frame][switched_index];
+                let unit_type = reader.fast_frame_data[frame][switched_index + 1];
+                let upgraded = reader.fast_frame_data[frame][switched_index - 3];
 
-                console.log(health_left);
+                if (unit_type >= 100) {
+                    console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
+                }
+                
             }
             position_span.innerHTML = new_text;
 

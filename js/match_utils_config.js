@@ -32,16 +32,17 @@
             filter1_img +
             encryptor1_img +
             destructor1_img +
-            damage_bar_svg +
             ping1_img +
             emp1_img +
             scrambler1_img +
             ping2_img +
             emp2_img +
             scrambler2_img +
+            damage_bar_svg +
             remove_img +
             upgrade_img +
             quantity_label +
+            dummy_div +
             dummy_div
             ,
 
@@ -49,16 +50,17 @@
             filter2_img +
             encryptor2_img +
             destructor2_img +
-            damage_bar_svg +
             ping1_img +
             emp1_img +
             scrambler1_img +
             ping2_img +
             emp2_img +
             scrambler2_img +
+            damage_bar_svg +
             remove_img +
             upgrade_img +
             quantity_label +
+            dummy_div +
             dummy_div
         ],
 
@@ -67,13 +69,16 @@
             half: 14
         },
 
-        group_size: 14,
+        group_size: 15,
 
         //TO be replaced with terminal-config
         full_health: {
             0: [60, 120],
             1: [30, 30],
             2: [75, 75],
+            3: [15, 15],
+            4: [5, 5],
+            5: [40, 40],
         },
     }
 

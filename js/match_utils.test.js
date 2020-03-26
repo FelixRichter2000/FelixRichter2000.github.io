@@ -251,22 +251,22 @@ describe('Test set_value', function () {
         expect(array).toEqual([0, 1, 0, 0, 0, 0]);
     });
 });
-describe('Test set_if_less', function () {
+describe('Test set_min', function () {
     test('index: 2 group: 0 value: 1 -> expect set', () => {
         let array = [0, 0, 0, 0, 0, 0];
-        mu_size4.set_if_less(array, 2, 0, 1)
+        mu_size4.set_min(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 2 group: 0 value: 1 -> expect reduced', () => {
         let array = [0, 0, 0, 0, 2, 0];
-        mu_size4.set_if_less(array, 2, 0, 1)
+        mu_size4.set_min(array, 2, 0, 1)
 
         expect(array).toEqual([0, 0, 0, 0, 1, 0]);
     });
     test('index: 2 group: 0 value: 6 -> expect stay same', () => {
         let array = [0, 0, 0, 0, 2, 0];
-        mu_size4.set_if_less(array, 2, 0, 6)
+        mu_size4.set_min(array, 2, 0, 6)
 
         expect(array).toEqual([0, 0, 0, 0, 2, 0]);
     });

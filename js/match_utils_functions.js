@@ -16,6 +16,7 @@
     const DAMAGE_BAR = 11;
     const QUANTITY = 12;
     const HEALTH = 13;
+    const UNIT_TYPE = 14;
 
     const is_upgraded = function (self, array, index) {
         let final_index = self.calculate_final_index(index, UPGRADE);
@@ -48,17 +49,33 @@
 
             ///Set Health
             //  Firewalls
-            if (group >= 0 && group <= 2) { //TODO: Change 2 to 8 later
+            if (group >= 0 && group <= 8) { //TODO: Change 2 to 8 later
+
+                //Calculate Unittype: map types [6, 7, 8] also to [3, 4, 5]
+                let unit_type = group;
+                if (unit_type > 5)
+                    unit_type -= 3;
 
                 //Set percental health for damage-bar
                 let health = location[2];
                 let upgraded = is_upgraded(self, frame_data_array, index);
-                let total_health = self.config.full_health[group][upgraded];
+                let total_health = self.config.full_health[unit_type][upgraded];
                 let percental_health_left = health / total_health * 100;
-                self.set_if_less(frame_data_array, index, DAMAGE_BAR, percental_health_left);
+
+                //set max percental health cap to 100%
+                percental_health_left = Math.min(percental_health_left, 100);
+
+                //Set percental health for damage-bar
+                self.set_min(frame_data_array, index, DAMAGE_BAR, percental_health_left);
 
                 //Set absolute health for hover details
-                self.set_if_less(frame_data_array, index, HEALTH, health);
+                self.set_min(frame_data_array, index, HEALTH, health);
+
+                //Add 100, to distinguish between 0 meaning nothing and 0 + 100 being a Filter
+                unit_type += 100;
+
+                //Set unit type
+                self.set_value(frame_data_array, index, UNIT_TYPE, unit_type);
             }
 
             ///Add together for quantity

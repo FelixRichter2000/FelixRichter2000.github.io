@@ -83,7 +83,7 @@
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index] = value;
     };
-    proto.set_if_less = function (array, index, group_index, value) {
+    proto.set_min = function (array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
         let current_value = array[final_index];
         array[final_index] = current_value ? Math.min(current_value, value) : value;
