@@ -143,6 +143,12 @@
         this.update_changes(i_current, 0, data, images, switched);
         this.update_changes(0, i_current, data, images, !switched);
     };
+    proto.getCustomeValueAt = function (location, switched, group, current_frame_data) {
+        let index = this.location_to_index(location);
+        let final_index = this.calculate_final_index(index, group);
+        let switched_index = this.calculate_switched_index(final_index, switched);
+        return current_frame_data[switched_index];
+    }
 
 
     if (typeof process !== 'undefined') {

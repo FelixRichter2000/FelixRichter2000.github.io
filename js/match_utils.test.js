@@ -477,7 +477,24 @@ describe('Test switch_view', function () {
             .toEqual([{ hidden: false }, { hidden: false }, { hidden: true }, { hidden: true }]);
     });
 });
-
+describe('Test getCustomeValueAt', function () {
+    test('location: [0, 0], flipped: false, group: 0, data: [1, 2, 3, 4] =>  3', () => {
+        expect(mu_size2.getCustomeValueAt([0, 0], false, 0, [1, 2, 3, 4]))
+            .toBe(3);
+    });
+    test('location: [0, 0], flipped: true,  group: 0, data: [1, 2, 3, 4] =>  2', () => {
+        expect(mu_size2.getCustomeValueAt([0, 0], true, 0, [1, 2, 3, 4]))
+            .toBe(2);
+    });
+    test('location: [0, 1], flipped: false, group: 0, data: [1, 2, 3, 4] =>  1', () => {
+        expect(mu_size2.getCustomeValueAt([0, 1], false, 0, [1, 2, 3, 4]))
+            .toBe(1);
+    });
+    test('location: [0, 1], flipped: false, group: 1, data: [1, 2 ...24] => 14', () => {
+        expect(mu_size4.getCustomeValueAt([0, 1], false, 1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]))
+            .toBe(14);
+    });
+});
 
 //Functions config tests, should be moved to another file
 //describe('Test parse_frame_data_to_flat_array', function () {

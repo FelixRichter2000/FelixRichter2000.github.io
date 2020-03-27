@@ -170,13 +170,12 @@
         if (match_utils.is_in_arena_bounds(hover_x, hover_y)) {
             position_text = `${hover_x}, ${hover_y}`;
 
-            //create match_utils.getCustomeValueAtLocation(location, switched, group)
-            let index = match_utils.location_to_index([hover_x, hover_y]);
-            let final_index = match_utils.calculate_final_index(index, 13);
-            let switched_index = match_utils.calculate_switched_index(final_index, switched);
-            let health_left = reader.fast_frame_data[frame][switched_index];
-            let unit_type = reader.fast_frame_data[frame][switched_index + 1];
-            let upgraded = reader.fast_frame_data[frame][switched_index - 3];
+            let location = [hover_x, hover_y];
+            let current_frame_data = reader.fast_frame_data[frame];
+
+            let health_left = match_utils.getCustomeValueAt(location, switched, 13, current_frame_data);
+            let unit_type = match_utils.getCustomeValueAt(location, switched, 14, current_frame_data);
+            let upgraded = match_utils.getCustomeValueAt(location, switched, 10, current_frame_data);
 
             if (unit_type >= 100) {
                 console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
