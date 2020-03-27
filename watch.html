@@ -70,25 +70,25 @@
                     <!--<input type="range" name="name" value="" />-->
                 </section>
                 <section class="playback-section bottom-4 left-indented">
-                    <button onclick="viewer.switch_view();">
+                    <button onclick="viewer.switch_view();" title="Turn Board Around [ALT + x]">
                         <img class="playback-button" src="images/switch_view.svg" />
                     </button>
                 </section>
                 <section class="playback-section right bottom-1">
-                    <button onclick="viewer.previous_turn();">
+                    <button onclick="viewer.previous_turn();" title="Previous Turn [CTRL + ArrowLeft]">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button onclick="viewer.previous_frame();">
+                    <button onclick="viewer.previous_frame();" title="Previous Frame [ArrowLeft]">
                         <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button onclick="viewer.toggle_play();">
+                    <button onclick="viewer.toggle_play();" title="Toggle Play [Spacebar]">
                         <img name="play_button_img" class="playback-button" src="images/play.svg" hidden/>
                         <img name="play_button_img" class="playback-button" src="images/pause.svg" />
                     </button>
-                    <button onclick="viewer.next_frame();">
+                    <button onclick="viewer.next_frame();" title="Next Frame [ArrowRight]">
                         <img class="playback-button" src="images/next_frame.svg" />
                     </button>
-                    <button onclick="viewer.next_turn();">
+                    <button onclick="viewer.next_turn();" title="Next Turn [CTRL + ArrowRight]">
                         <img class="playback-button" src="images/next_turn.svg" />
                     </button>
                 </section>
