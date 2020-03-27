@@ -52,6 +52,7 @@
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
         show_field_info: function (x, y) {
+            if (x === hover_x && y === hover_y) return;
             hover_x = x;
             hover_y = y;
             update_hover_info();
