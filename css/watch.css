@@ -208,6 +208,11 @@ svg {
     position: absolute;
 }
 
+.bottom-8 {
+    bottom: 99%;
+    position: absolute;
+}
+
 .left-indented {
     right: 60%;
     position: absolute;

@@ -54,9 +54,10 @@
         show_field_info: function (x, y) {
             if (!reader.is_ready()) return;
 
-            let new_text = "";
+            let position_text = "";
+            let stability_text = "";
             if (match_utils.is_in_arena_bounds(x, y)) {
-                new_text = `${x}, ${y}`;
+                position_text = `${x}, ${y}`;
 
                 //create match_utils.getCustomeValueAtLocation(location, switched, group)
                 let index = match_utils.location_to_index([x, y]);
@@ -66,12 +67,14 @@
                 let unit_type = reader.fast_frame_data[frame][switched_index + 1];
                 let upgraded = reader.fast_frame_data[frame][switched_index - 3];
 
-                if (unit_type >= 100) {
+                if (unit_type >= 100) { 
                     console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
+                    stability_text = health_left;
                 }
                 
             }
-            position_span.innerHTML = new_text;
+            position_span.innerHTML = position_text; 
+            stability_span.innerHTML = stability_text; 
 
             
         },
@@ -124,6 +127,7 @@
     let turn_number = document.getElementById('turn_number');
     let frame_number = document.getElementById('frame_number');
     let position_span = document.getElementById('position');
+    let stability_span = document.getElementById('stability');
 
 
     //Set initial speed
