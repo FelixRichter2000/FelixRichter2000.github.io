@@ -52,31 +52,9 @@
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
         show_field_info: function (x, y) {
-            if (!reader.is_ready()) return;
-
-            let position_text = "";
-            let stability_text = "";
-            if (match_utils.is_in_arena_bounds(x, y)) {
-                position_text = `${x}, ${y}`;
-
-                //create match_utils.getCustomeValueAtLocation(location, switched, group)
-                let index = match_utils.location_to_index([x, y]);
-                let final_index = match_utils.calculate_final_index(index, 13);
-                let switched_index = match_utils.calculate_switched_index(final_index, switched);
-                let health_left = reader.fast_frame_data[frame][switched_index];
-                let unit_type = reader.fast_frame_data[frame][switched_index + 1];
-                let upgraded = reader.fast_frame_data[frame][switched_index - 3];
-
-                if (unit_type >= 100) { 
-                    console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
-                    stability_text = health_left;
-                }
-                
-            }
-            position_span.innerHTML = position_text; 
-            stability_span.innerHTML = stability_text; 
-
-            
+            hover_x = x;
+            hover_y = y;
+            update_hover_info();
         },
         //Temporary
         get_reader: function () {
@@ -98,6 +76,8 @@
     let switched = false;
     let current_fps = 12;
     let first_time = true;
+    let hover_x = -1;
+    let hover_y = -1;
 
     //Get match id from query
     let urlParams = new URLSearchParams(window.location.search);
@@ -182,6 +162,31 @@
         turn_number.innerHTML = data.turnInfo[1];
         frame_number.innerHTML = frame;
     }
+    function update_hover_info() {
+        if (!reader.is_ready()) return;
+
+        let position_text = "";
+        let stability_text = "";
+        if (match_utils.is_in_arena_bounds(hover_x, hover_y)) {
+            position_text = `${hover_x}, ${hover_y}`;
+
+            //create match_utils.getCustomeValueAtLocation(location, switched, group)
+            let index = match_utils.location_to_index([hover_x, hover_y]);
+            let final_index = match_utils.calculate_final_index(index, 13);
+            let switched_index = match_utils.calculate_switched_index(final_index, switched);
+            let health_left = reader.fast_frame_data[frame][switched_index];
+            let unit_type = reader.fast_frame_data[frame][switched_index + 1];
+            let upgraded = reader.fast_frame_data[frame][switched_index - 3];
+
+            if (unit_type >= 100) {
+                console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
+                stability_text = health_left;
+            }
+
+        }
+        position_span.innerHTML = position_text;
+        stability_span.innerHTML = stability_text; 
+    }
     function update_to_next_frame() {
         //Check if data is already there
         if (reader.raw_frame_data.length == 0) {
@@ -201,6 +206,7 @@
         frame = new_frame;
 
         update_turn_stats();
+        update_hover_info();
     }
 
 
