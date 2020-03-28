@@ -55,136 +55,17 @@
             <span>Coming soon...</span>
         </tab>
         <tab id="Match">
-            <!-- Player 1 Information -->
-            <div class="player-stats blue" style="position:absolute; transform: translateY(620px);">
-                <label>User:</label>
-                <label name="User">acshikh</label>
-                <br />
-                <label>Algo:</label>
-                <label name="Algo">Mazer</label>
-                <br />
-                <label>Health:</label>
-                <label name="Health">30</label>
-                <br />
-                <label>Cores:</label>
-                <label name="Cores">5</label>
-                <br />
-                <label>Bits:</label>
-                <label name="Bits">5</label>
-                <br />
-                <label>Milliseconds:</label>
-                <label name="Milliseconds">5</label>
-                <br />
-            </div>
 
-            <!-- Player 2 Information -->
-            <div class="player-stats red" style="position:absolute; transform: translateY(0px);">
-                <label>User:</label>
-                <label name="User">acshikh</label>
-                <br />
-                <label>Algo:</label>
-                <label name="Algo">Mazer</label>
-                <br />
-                <label>Health:</label>
-                <label name="Health">30</label>
-                <br />
-                <label>Cores:</label>
-                <label name="Cores">5</label>
-                <br />
-                <label>Bits:</label>
-                <label name="Bits">5</label>
-                <br />
-                <label>Milliseconds:</label>
-                <label name="Milliseconds">5</label>
-                <br />
-            </div>
-
-            <!-- Turn Number & Frame Number -->
-            <div class="player-stats grey" style="position:absolute; transform: translateX(620px);">
-                <label>Turn:</label>
-                <label name="Turn">0</label>
-                <label>Frame:</label>
-                <label name="Frame">0</label>
-            </div>
-
-            <!-- Change FPS input -->
-            <div style="position:absolute; transform: translate3d(620px, 770px, 0); display: flex; align-items: center; justify-content: center;">
-                <label class="replay-button noselect" style="margin-right: 10px;">FPS:</label>
-                <input id="FPS" value="12" class="replay-button noselect" style="width: 40px;">
-            </div>
-
-            <!-- Watch on Termianl Button -->
-            <div class="player-stats grey" style="position:absolute; transform: translate3d(620px, 38px, 0);">
-                <label>Match:&nbsp;</label>
-                <label id="match_id_label">&nbsp;</label>
-                <br />
-                <input type="button" id="watch_on_terminal" value="Watch on >_Terminal" />
-            </div>
-
-            <!-- Switch to new Watch option -->
-            <div class="player-stats grey" style="position:absolute; transform: translate3d(620px, 110px, 0);">
-                <a href="watch" target="_blank" rel="noreferrer noopener">Watch on NEW VERSION</a>
-                <!--<input type="button" id="watch_on_terminal" value="Watch on >_Terminal" />-->
-            </div>
-
-            <!-- Play and Skip Buttons -->
-            <div style="position: absolute; transform: translate3d(520px, 804px, 0); display: flex; justify-content: space-between; width: 300px;">
-                <button id="skip_backward" class="replay-button noselect">
-                    <img src="../images/skip_backward.png" />
-                </button>
-                <button id="one_backward" class="replay-button noselect">
-                    <img src="../images/one_backward.png" />
-                </button>
-                <div class="play-background">
-                    <button class='togglePlay' style="position:absolute; transform: translateY(-19px) scale(.4)"></button>
-                </div>
-                <button id="one_foreward" class="replay-button noselect">
-                    <img src="../images/one_forward.png" />
-                </button>
-                <button id="skip_foreward" class="replay-button noselect">
-                    <img src="../images/skip_forward.png" />
-                </button>
-            </div>
-
-            <!-- Main Flex Container -->
-            <div style="display: flex;">
-
-                <!-- Replay Table -->
-                <table id="match_table">
-                </table>
-
-                <!-- Replay Slider -->
-                <div style="width:40px; height:840px;">
-                    <div style="width:840px; transform: translate3d(-400px, 408px, 0) rotate(90deg); position:absolute;">
-                        <input id="match_range" type="range" value="0" min="0" max="0" />
-                    </div>
-                </div>
-
-                <!--<div id="analytics_chart"></div>-->
-            </div>
         </tab>
     </content>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
-    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
-    <!--<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>-->
     <script src="js/globals.js"></script>
-
-    <script src="js/match_utils.js"></script>
     <script src="js/keyboard_control.js"></script>
-
-    <script src="js/managers/UnitStack.js"></script>
-    <script src="js/managers/TurnInformation.js"></script>
-    <script src="js/managers/ReplayManager.js"></script>
-    <script src="js/managers/ReplayPlayer.js"></script>
-
-
     <script src="js/settings.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/leaderboard.js"></script>
     <script src="js/player.js"></script>
-    <script src="js/match.js"></script>
 </body>
 </html>
 
