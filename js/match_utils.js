@@ -143,19 +143,38 @@
         this.update_changes(i_current, 0, data, images, switched);
         this.update_changes(0, i_current, data, images, !switched);
     };
-    proto.getCustomeValueAt = function (location, switched, group, current_frame_data) {
+    proto.get_custome_value_at = function (location, switched, group, current_frame_data) {
         let index = this.location_to_index(location);
         let final_index = this.calculate_final_index(index, group);
         let switched_index = this.calculate_switched_index(final_index, switched);
         return current_frame_data[switched_index];
-    }
+    };
+    proto.get_locations_in_range = function (location, range) {
+        let array = this.create_new_array();
 
+        const center_x = location[0];
+        const center_y = location[1];
+
+        const int_range = parseInt(range);
+
+        for (var y = center_y - int_range; y <= center_y + int_range; y++) {
+            for (var x = center_x - int_range; x <= center_x + int_range; x++) {
+                if (this.is_in_arena_bounds(x, y)) {
+                    if (Math.sqrt((y - center_y) ** 2 + (x - center_x) ** 2) <= range ) {
+                        this.set_value(array, this.location_to_index([x, y]), 0, 1);
+                    }
+                }
+            }
+        }
+
+        return array;
+    }
 
     if (typeof process !== 'undefined') {
         module.exports = match_utils;
     } else {
-        if (!global.match_utils) {
-            global.match_utils = new match_utils(match_utils_config, match_utils_functions);
+        if (!global.match_utils_ctor) {
+            global.match_utils_ctor = match_utils;
         }
     }
 }(window);

@@ -60,6 +60,22 @@
         }
         return frame;
     }
+    proto.get_range = function (unit_type, upgraded) {
+        let range = 0;
+
+        const correct_unit_information = JSON.parse(JSON.stringify(this.full_frame_data[0].unitInformation[unit_type - 100]));
+
+        if (upgraded)
+            Object.assign(correct_unit_information, correct_unit_information.upgrade);
+
+        let propertyNames = Object.getOwnPropertyNames(correct_unit_information);
+        let range_names = propertyNames.filter(el => el.includes("Range"))
+
+        for (let rangeName of range_names) 
+            range = Math.max(correct_unit_information[rangeName], range);
+
+        return range;
+    }
 
 
     if (!window.ReplayReader) {

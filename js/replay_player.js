@@ -67,6 +67,19 @@
         }
     };
 
+    //Match_Utils
+    match_utils = new match_utils_ctor(match_utils_config, match_utils_functions);
+    match_utils_flat = new match_utils_ctor({
+        arena_settings: {
+            size: 28,
+            half: 14
+        },
+        group_size: 1,
+    }, {
+        update_function: function (group, switched_index, current_element, value) {
+            current_element.hidden = value == 0;
+        },
+    });
 
     //Variables
     let turn = 0;
@@ -79,6 +92,9 @@
     let first_time = true;
     let hover_x = -1;
     let hover_y = -1;
+
+    //Setup hover array
+    let hover_range_data = match_utils_flat.create_new_array();
 
     //Get match id from query
     let urlParams = new URLSearchParams(window.location.search);
@@ -101,7 +117,7 @@
     }
 
     //Get Highlight elements
-    const highlight_elements = document.getElementsByClassName('highlight'); 
+    const highlight_elements = document.getElementsByClassName('highlight');
 
     //Set all to hidden
     for (var i = 0; i < highlight_elements.length; i++) {
@@ -117,7 +133,6 @@
     let frame_number = document.getElementById('frame_number');
     let position_span = document.getElementById('position');
     let stability_span = document.getElementById('stability');
-
 
     //Set initial speed
     viewer.set_match_speed(12); // TODO: replace 12 with settings default value
@@ -170,26 +185,42 @@
     function update_hover_info() {
         if (!reader.is_ready()) return;
 
+        //Setup empty
         let position_text = "";
         let stability_text = "";
+        let new_hover_range_data = match_utils_flat.create_new_array();
+
         if (match_utils.is_in_arena_bounds(hover_x, hover_y)) {
             position_text = `${hover_x}, ${hover_y}`;
 
             let location = [hover_x, hover_y];
             let current_frame_data = reader.fast_frame_data[frame];
 
-            let health_left = match_utils.getCustomeValueAt(location, switched, 13, current_frame_data);
-            let unit_type = match_utils.getCustomeValueAt(location, switched, 14, current_frame_data);
-            let upgraded = match_utils.getCustomeValueAt(location, switched, 10, current_frame_data);
+            let health_left = match_utils.get_custome_value_at(location, switched, 13, current_frame_data);
+            let unit_type = match_utils.get_custome_value_at(location, switched, 14, current_frame_data);
+            let upgraded = match_utils.get_custome_value_at(location, switched, 10, current_frame_data);
 
             if (unit_type >= 100) {
                 console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
-                stability_text = health_left;
-            }
 
+                //Set stability text
+                stability_text = health_left;
+
+                //Get range
+                let range = reader.get_range(unit_type, upgraded);
+
+                //Generate flat array of locations in range
+                new_hover_range_data = match_utils_flat.get_locations_in_range(location, range);
+            }
         }
+
+        //Update 
         position_span.innerHTML = position_text;
-        stability_span.innerHTML = stability_text; 
+        stability_span.innerHTML = stability_text;
+        match_utils_flat.update_changes(0, 1, [hover_range_data, new_hover_range_data], highlight_elements, false);
+
+        //Update hover_range_data
+        hover_range_data = new_hover_range_data;
     }
     function update_to_next_frame() {
         //Check if data is already there
