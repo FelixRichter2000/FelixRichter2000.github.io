@@ -202,8 +202,6 @@
             let upgraded = match_utils.get_custome_value_at(location, switched, 10, current_frame_data);
 
             if (unit_type >= 100) {
-                console.log(`health_left: ${health_left}, unit_type:${unit_type - 100}, upgraded: ${upgraded === 1}`);
-
                 //Set stability text
                 stability_text = health_left;
 
@@ -243,6 +241,8 @@
 
         update_turn_stats();
         update_hover_info();
+
+        console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
     }
 
 
