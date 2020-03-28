@@ -71,8 +71,8 @@
         let propertyNames = Object.getOwnPropertyNames(correct_unit_information);
         let range_names = propertyNames.filter(el => el.includes("Range"))
 
-        for (let rangeName of range_names) 
-            range = Math.max(correct_unit_information[rangeName], range);
+        for (let range_name of range_names) 
+            range = Math.max(correct_unit_information[range_name], range);
 
         return range;
     }
