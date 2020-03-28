@@ -1,6 +1,7 @@
 ﻿+function (global) {
     //General
     const quantity_label = '<label class="quantity"></label>';
+    const highlight_svg = '<img class="highlight" src="images/Highlight.svg"></img>';
     const empty_field_img = '<img class="match-default-img" src="images/EmptyField.svg">';
     const damage_bar_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg >';
     const remove_img = '<img class="match-changing-img" src="images/Remove.svg">';
@@ -39,6 +40,7 @@
             emp2_img +
             scrambler2_img +
             damage_bar_svg +
+            highlight_svg +
             remove_img +
             upgrade_img +
             quantity_label +
@@ -57,6 +59,7 @@
             emp2_img +
             scrambler2_img +
             damage_bar_svg +
+            highlight_svg +
             remove_img +
             upgrade_img +
             quantity_label +

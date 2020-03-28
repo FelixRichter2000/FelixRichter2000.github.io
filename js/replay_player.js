@@ -100,6 +100,14 @@
         viewer_elements[i].hidden = true;
     }
 
+    //Get Highlight elements
+    const highlight_elements = document.getElementsByClassName('highlight'); 
+
+    //Set all to hidden
+    for (var i = 0; i < highlight_elements.length; i++) {
+        highlight_elements[i].hidden = true;
+    }
+
     //Reusable references to html elements
     let healths = document.getElementsByName('health');
     let cores = document.getElementsByName('core');
@@ -142,10 +150,6 @@
         document.getElementById('grid_overlay').hidden = false;
     }
     function update_turn_stats() {
-        let healths = document.getElementsByName('health');
-        let cores = document.getElementsByName('core');
-        let bits = document.getElementsByName('bit');
-
         let data = reader.raw_frame_data[frame];
         let combined = [data.p1Stats, data.p2Stats];
         for (var i = 0; i < combined.length; i++) {
