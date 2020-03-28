@@ -58,6 +58,9 @@
             hover_y = y;
             update_hover_info();
         },
+        download: function () {
+            download_current_file();
+        },
         //Temporary
         get_reader: function () {
             return reader;
@@ -243,6 +246,18 @@
         update_hover_info();
 
         console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
+    }
+    function download_current_file() {
+        let filename = `${reader.user_data[switched ? 1 : 0].name}_${reader.user_data[switched ? 0 : 1].name}_${match_id}.replay`;
+        let text = reader.get_replay_text(switched);
+
+        var el = document.createElement('a');
+        el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        el.setAttribute('download', filename);
+        el.style.display = 'none';
+        document.body.appendChild(el);
+        el.click();
+        document.body.removeChild(el);
     }
 
 

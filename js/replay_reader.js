@@ -76,6 +76,11 @@
 
         return range;
     }
+    proto.get_replay_text = function (switched) {
+        return this.full_frame_data
+            .map(e => JSON.stringify(e))
+            .join("\n");
+    }
 
 
     if (!window.ReplayReader) {

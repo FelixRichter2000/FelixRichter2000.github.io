@@ -45,11 +45,17 @@
                 <span name="bit" class="right bits very-small-text" style="position: absolute;">5</span>
             </div>
             <div class="bottom-left">
+                <section class="playback-section right-indented bottom-1">
+                    <button onclick="viewer.download();" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
+                        <img class="playback-button" src="images/download.svg" />
+                    </button>
+                </section>
                 <button onclick="viewer.watch_on_terminal();" class="very-small-text bottom-1" style="background-color:gray;">
-                    Watch on Terminal
+                    >_ Terminal
                 </button>
+
                 <!--<label class="left bottom-5 very-small-text" style="position: absolute;">MATCH:</label>
-    <span id="match_id" class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>-->
+                <span id="match_id" class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>-->
             </div>
             <div class="bottom-right">
 
@@ -82,7 +88,7 @@
                         <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
                     </button>
                     <button onclick="viewer.toggle_play();" title="Toggle Play [Spacebar]">
-                        <img name="play_button_img" class="playback-button" src="images/play.svg" hidden/>
+                        <img name="play_button_img" class="playback-button" src="images/play.svg" hidden />
                         <img name="play_button_img" class="playback-button" src="images/pause.svg" />
                     </button>
                     <button onclick="viewer.next_frame();" title="Next Frame [ArrowRight]">
