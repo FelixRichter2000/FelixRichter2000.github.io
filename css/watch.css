@@ -139,7 +139,7 @@ svg {
 .bar {
     width: 100%;
     height: var(--bar-size);
-    transition-duration: .3s;
+    transition: .3s width;
 }
 
 .p1-bar {
@@ -256,6 +256,11 @@ svg {
     fill: transparent;
     stroke-dasharray: 100.530964915, 100.530964915; 
     stroke-dashoffset: 0;
+}
+
+.shield-bar {
+    fill: #B3E3FF;
+    fill-opacity: .5;
 }
 
 

@@ -2,8 +2,9 @@
     //General
     const quantity_label = '<label class="quantity"></label>';
     const highlight_svg = '<img class="highlight" src="images/Highlight.svg"></img>';
+    const shield_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="shield-bar" cx="15" cy="15" r="0"></circle></svg>';
     const empty_field_img = '<img class="match-default-img" src="images/EmptyField.svg">';
-    const damage_bar_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg >';
+    const damage_bar_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg>';
     const remove_img = '<img class="match-changing-img" src="images/Remove.svg">';
     const upgrade_img = '<img class="match-changing-img" src="images/Upgrade.svg">';
 
@@ -33,6 +34,7 @@
             filter1_img +
             encryptor1_img +
             destructor1_img +
+            shield_svg +
             ping1_img +
             emp1_img +
             scrambler1_img +
@@ -52,6 +54,7 @@
             filter2_img +
             encryptor2_img +
             destructor2_img +
+            shield_svg +
             ping1_img +
             emp1_img +
             scrambler1_img +
@@ -72,7 +75,7 @@
             half: 14
         },
 
-        group_size: 15,
+        group_size: 16,
 
         //TO be replaced with terminal-config
         full_health: {

@@ -17,6 +17,7 @@
     const QUANTITY = 12;
     const HEALTH = 13;
     const UNIT_TYPE = 14;
+    const SHIELD = 15;
 
     const is_upgraded = function (self, array, index) {
         let final_index = self.calculate_final_index(index, UPGRADE);
@@ -30,7 +31,8 @@
             let quantity_label = td.getElementsByClassName('quantity');
             let damage_bar = td.getElementsByClassName('damage-bar');
             let dummy_div = td.getElementsByClassName('dummy');
-            return [...ims, ...damage_bar, ...quantity_label, ...dummy_div];
+            let shield_svg = td.getElementsByClassName('shield-bar');
+            return [...ims, ...damage_bar, ...quantity_label, ...dummy_div, ...shield_svg];
         },
         parse_row_to_single_array: function (row) {
             return [
@@ -61,6 +63,7 @@
                 let upgraded = is_upgraded(self, frame_data_array, index);
                 let total_health = self.config.full_health[unit_type][upgraded];
                 let percental_health_left = health / total_health * 100;
+                let shield_amount = Math.max(0, health - total_health);
 
                 //set max percental health cap to 100%
                 percental_health_left = Math.min(percental_health_left, 100);
@@ -75,7 +78,10 @@
                 unit_type += 100;
 
                 //Set unit type
-                self.set_value(frame_data_array, index, UNIT_TYPE, unit_type);
+                self.set_min(frame_data_array, index, UNIT_TYPE, unit_type);
+
+                //Set shield amount
+                self.set_min(frame_data_array, index, SHIELD, shield_amount);
             }
 
             ///Add together for quantity
@@ -113,6 +119,13 @@
             // Damage-Bar
             if (group === DAMAGE_BAR) {
                 current_element.style.strokeDashoffset = 1.00530964915 * value;
+            }
+
+            // TODO: SHIELD!
+            if (group === SHIELD) {
+                // PI * r(=1)  ** 2 = 3.14
+                // 2 = 
+                current_element.setAttribute('r', Math.sqrt(value * 3.14 * 2));
             }
         },
         additional_flipping: function (self, index) {
