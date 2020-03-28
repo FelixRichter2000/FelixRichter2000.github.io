@@ -505,7 +505,7 @@ describe('Test get_locations_in_range', function () {
             group_size: 1,
         });
         expect(mu_special.get_locations_in_range([0, 0], 1))
-            .toBe([1, 0, 1, 1]);
+            .toEqual(new Int8Array([1, 0, 1, 1]));
     });
 });
 
