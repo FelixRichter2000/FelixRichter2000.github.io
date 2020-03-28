@@ -24,6 +24,7 @@
 
             update_static_stats();
             update_turn_stats();
+            update_hover_info();
         },
         toggle_play: function () {
             match_utils.toggle_hidden(play_button_images);
