@@ -2,6 +2,10 @@
 
     //public viewer methods
     let viewer = {
+        show_frame: function (frame) {
+            load_frame(frame);
+            viewer.stop_play();
+        },
         next_frame: function () {
             load_frame(frame + 1);
             viewer.stop_play();
@@ -59,7 +63,9 @@
             update_hover_info();
         },
         download: function () {
-            download_current_file();
+            let filename = `${reader.user_data[switched ? 1 : 0].name}_${reader.user_data[switched ? 0 : 1].name}_${match_id}.replay`;
+            let text = reader.get_replay_text(switched);
+            download_current_file(filename, text);
         },
         //Temporary
         get_reader: function () {
@@ -138,6 +144,20 @@
     let position_span = document.getElementById('position');
     let stability_span = document.getElementById('stability');
 
+    //Init Slider
+    var $slider = $('.slider');
+    $slider.slider({
+        range: "min",
+        animate: true,
+        value: 0,
+        min: 0,
+        max: 0,
+        step: 1,
+        slide: function (event, ui) {
+            viewer.show_frame(ui.value);
+        },
+    });
+
     //Set initial speed
     viewer.set_match_speed(12); // TODO: replace 12 with settings default value
 
@@ -167,6 +187,7 @@
             algos[toggled_index].innerHTML = data[i].name;
         }
         document.getElementById('grid_overlay').hidden = false;
+        $slider.slider('option', { min: 0, max: reader.fast_frame_data.length - 1 });
     }
     function update_turn_stats() {
         let data = reader.raw_frame_data[frame];
@@ -185,6 +206,7 @@
         //Turn & Frame
         turn_number.innerHTML = data.turnInfo[1];
         frame_number.innerHTML = frame;
+        $slider.slider('value', frame);
     }
     function update_hover_info() {
         if (!reader.is_ready()) return;
@@ -247,10 +269,7 @@
 
         console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
     }
-    function download_current_file() {
-        let filename = `${reader.user_data[switched ? 1 : 0].name}_${reader.user_data[switched ? 0 : 1].name}_${match_id}.replay`;
-        let text = reader.get_replay_text(switched);
-
+    function download_current_file(filename, text) {
         var el = document.createElement('a');
         el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         el.setAttribute('download', filename);

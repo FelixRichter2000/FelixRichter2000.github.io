@@ -64,7 +64,7 @@ svg {
     position: relative;
 }
 
-    #grid_overlay div {
+    #grid_overlay overlay {
         position: absolute;
         color: var(--white);
         /*background-color: blue;*/
@@ -263,4 +263,25 @@ svg {
     fill-opacity: .5;
 }
 
+.slider {
+    height: 100%;
+    background-color: #777777;
+    border-color: gray;
+}
+
+.ui-slider-range {
+    background-color: #ABABAB;
+}
+
+.ui-slider .ui-slider-handle {
+    background-color: white;
+    width: .5em;
+    height: .5em;
+    top: -.2em;
+    transform: translateX(50%);
+    text-decoration: none;
+    text-align: center;
+    border-radius: .25em;
+    border: none;
+}
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Match Viewer</title>
     <link rel="shortcut icon" href="images/Destructor1.svg">
-    <link rel="stylesheet" href="css/slider.css" />
+    <link rel="stylesheet" href="lib/jquery_ui.css" />
     <link rel="stylesheet" href="css/watch.css" />
 </head>
 <body>
@@ -16,7 +16,7 @@
 
         <!-- Inside table elements -->
         <div id="grid_overlay" class="full_size" hidden>
-            <div class="top-left">
+            <overlay class="top-left">
                 <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
                 <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
                 <span name="health" class="left smaller-text top-fix" style="position: absolute; left: 80%;">30</span>
@@ -29,8 +29,8 @@
 
                 <label class="left bits very-small-text" style="position: absolute;">BITS:</label>
                 <span name="bit" class="left-indented bits very-small-text" style="position: absolute;">5</span>
-            </div>
-            <div class="top-right">
+            </overlay>
+            <overlay class="top-right">
                 <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
                 <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
                 <span name="health" class="right smaller-text top-fix" style="position: absolute; right: 80%;">30</span>
@@ -43,8 +43,8 @@
 
                 <label class="right-indented bits very-small-text" style="position: absolute;">BITS:</label>
                 <span name="bit" class="right bits very-small-text" style="position: absolute;">5</span>
-            </div>
-            <div class="bottom-left">
+            </overlay>
+            <overlay class="bottom-left">
                 <section class="playback-section right-indented bottom-1">
                     <button onclick="viewer.download();" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
                         <img class="playback-button" src="images/download.svg" />
@@ -53,11 +53,8 @@
                 <button onclick="viewer.watch_on_terminal();" class="very-small-text bottom-1" style="background-color:gray;">
                     >_ Terminal
                 </button>
-
-                <!--<label class="left bottom-5 very-small-text" style="position: absolute;">MATCH:</label>
-                <span id="match_id" class="left-indented-deep bottom-5 very-small-text" style="position: absolute;">60000001</span>-->
-            </div>
-            <div class="bottom-right">
+            </overlay>
+            <overlay class="bottom-right">
 
                 <label class="right-indented bottom-8 very-small-text" style="position: absolute;">Health:</label>
                 <span id="stability" class="right bottom-8 very-small-text" style="position: absolute;"></span>
@@ -71,10 +68,10 @@
                 <label class="right-indented bottom-4 very-small-text" style="position: absolute;">FRAME:</label>
                 <span id="frame_number" class="right bottom-4 very-small-text" style="position: absolute;">0</span>
 
+                <div class="right bottom-3" style="width: 73%; height: 3%;">
+                    <div class="slider"></div>
+                </div>
 
-                <section class="right bottom-2" style="width: 74%;">
-                    <!--<input type="range" name="name" value="" />-->
-                </section>
                 <section class="playback-section bottom-4 left-indented">
                     <button onclick="viewer.switch_view();" title="Turn Board Around [ALT + x]">
                         <img class="playback-button" src="images/switch_view.svg" />
@@ -98,12 +95,12 @@
                         <img class="playback-button" src="images/next_turn.svg" />
                     </button>
                 </section>
-            </div>
+            </overlay>
         </div>
-
     </div>
 
     <script src="lib/jquery.js"></script>
+    <script src="lib/jquery_ui.js"></script>
     <script src="js/dynamic_css.js"></script>
     <script src="js/keyboard_control.js"></script>
     <script src="js/match_utils_config.js"></script>
