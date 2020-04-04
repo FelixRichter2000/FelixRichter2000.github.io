@@ -51,14 +51,14 @@
         while (frame < this.count && this.raw_frame_data[frame].turnInfo[0] !== 0) {
             frame++;
         }
-        return frame;
+        return frame + 1;
     }
     proto.get_previous_turn = function (frame) {
-        frame--;
+        frame -= 2;
         while (frame > 0 && this.raw_frame_data[frame].turnInfo[0] !== 0) {
             frame--;
         }
-        return frame;
+        return frame + 1;
     }
     proto.get_range = function (unit_type, upgraded) {
         let range = 0;
@@ -71,7 +71,7 @@
         let propertyNames = Object.getOwnPropertyNames(correct_unit_information);
         let range_names = propertyNames.filter(el => el.includes("Range"))
 
-        for (let range_name of range_names) 
+        for (let range_name of range_names)
             range = Math.max(correct_unit_information[range_name], range);
 
         return range;
