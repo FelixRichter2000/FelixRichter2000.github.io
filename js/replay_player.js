@@ -141,6 +141,7 @@
     let play_button_images = document.getElementsByName('play_button_img');
     let turn_number = document.getElementById('turn_number');
     let frame_number = document.getElementById('frame_number');
+    let turn_frame_number = document.getElementById('turn_frame_number');
     let position_span = document.getElementById('position');
     let stability_span = document.getElementById('stability');
 
@@ -206,6 +207,7 @@
         //Turn & Frame
         turn_number.innerHTML = data.turnInfo[1];
         frame_number.innerHTML = frame;
+        turn_frame_number.innerHTML = reader.get_turn_frame_number(frame);
         $slider.slider('value', frame);
     }
     function update_hover_info() {

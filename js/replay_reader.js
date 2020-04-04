@@ -81,6 +81,9 @@
             .map(e => JSON.stringify(e))
             .join("\n");
     }
+    proto.get_turn_frame_number = function (frame) {
+        return this.raw_frame_data[frame].turnInfo[2];
+    }
 
 
     if (!window.ReplayReader) {

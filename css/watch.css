@@ -213,8 +213,13 @@ svg {
     position: absolute;
 }
 
+.bottom-9 {
+    bottom: 113%;
+    position: absolute;
+}
+
 .left-indented {
-    right: 60%;
+    right: 55%;
     position: absolute;
 }
 
@@ -224,7 +229,7 @@ svg {
 }
 
 .right-indented {
-    left: 60%;
+    left: 55%;
     position: absolute;
 }
 
