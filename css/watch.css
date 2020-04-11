@@ -163,13 +163,48 @@ svg {
     position: absolute;
 }
 
-.cores {
-    top: 46%;
+.top-1 {
+    top: 1%;
     position: absolute;
 }
 
-.bits {
-    top: 60%;
+.top-2 {
+    top: 15%;
+    position: absolute;
+}
+
+.top-3 {
+    top: 29%;
+    position: absolute;
+}
+
+.top-4 {
+    top: 43%;
+    position: absolute;
+}
+
+.top-5 {
+    top: 57%;
+    position: absolute;
+}
+
+.top-6 {
+    top: 71%;
+    position: absolute;
+}
+
+.top-7 {
+    top: 85%;
+    position: absolute;
+}
+
+.top-8 {
+    top: 99%;
+    position: absolute;
+}
+
+.top-9 {
+    top: 113%;
     position: absolute;
 }
 

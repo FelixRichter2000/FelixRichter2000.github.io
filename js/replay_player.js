@@ -138,6 +138,7 @@
     let healths = document.getElementsByName('health');
     let cores = document.getElementsByName('core');
     let bits = document.getElementsByName('bit');
+    let ms = document.getElementsByName('ms');
     let play_button_images = document.getElementsByName('play_button_img');
     let turn_number = document.getElementById('turn_number');
     let frame_number = document.getElementById('frame_number');
@@ -199,6 +200,7 @@
             healths[toggled_index].innerHTML = combined[i][0];
             cores[toggled_index].innerHTML = combined[i][1];
             bits[toggled_index].innerHTML = combined[i][2];
+            ms[toggled_index].innerHTML = combined[i][3];
 
             //For the health bars
             document.documentElement.style.setProperty(`--p${toggled_index + 1}-health`, `${Math.max(combined[i][0] / .3, 0)}%`);
