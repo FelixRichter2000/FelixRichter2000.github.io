@@ -1,24 +1,15 @@
-﻿window.onload = () => {
-    main();
-}
+﻿window.onload = () => main();
 
 async function main() {
     const leaderboard_data = await get_leaderboard_data();
-    console.log(leaderboard_data);
-
     const top_ten_user_ids = await get_top_ten_user_ids(leaderboard_data);
     const top_algo_ids = await get_top_ten_algo_ids(top_ten_user_ids);
-    console.log(top_algo_ids);
-
     const set_algo_ids = new Set(top_algo_ids.map(e => e[1]));
 
     //Create empty table
     createTable(leaderboard_data, top_algo_ids);
 
     const matches_between_top_algos = await get_matches_between_top_algos(top_algo_ids);
-    console.log(matches_between_top_algos);
-    window.test = matches_between_top_algos;
-
     matches_between_top_algos.forEach(e => e.then(result => update_matches_in_table(result, top_algo_ids, set_algo_ids)));
 }
 
@@ -112,6 +103,3 @@ function make_losing_link(td, match_id) {
     td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">L</a>`;
     td.classList.add("result-l");
 }
-
-
-
