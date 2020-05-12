@@ -46,10 +46,10 @@ async function fetch_json(request) {
 
 function createTable(leaderboard_data, top_algo_ids) {
     var table = document.getElementById("visualize_table");
-    var header = table.createTHead();
 
     //Row algo
-    var current_row = header.insertRow();
+    var current_row = table.insertRow();
+    current_row.insertCell();
     current_row.insertCell();
     top_algo_ids.forEach((algo, i) => {
         let th = document.createElement('th');
@@ -58,16 +58,25 @@ function createTable(leaderboard_data, top_algo_ids) {
     });
 
     //Row avatar img
-    var current_row = header.insertRow();
+    var current_row = table.insertRow();
+    current_row.insertCell();
     current_row.insertCell();
     top_algo_ids.forEach((algo, i) => {
-        let th = document.createElement('td');
-        th.innerHTML = `<img src=${leaderboard_data[algo[0]].user.avatarUrl}/>`;
-        current_row.appendChild(th);
+        let td = current_row.insertCell();
+        td.innerHTML = `<img src=${leaderboard_data[algo[0]].user.avatarUrl}/>`;
     });
 
     //Data rows
-
+    top_algo_ids.forEach((algo, row_index) => {
+        var current_row = table.insertRow();
+        let userName = current_row.insertCell();
+        userName.innerHTML = algo[2];
+        let avatarImage = current_row.insertCell();
+        avatarImage.innerHTML = `<img src=${leaderboard_data[algo[0]].user.avatarUrl}/>`;
+        top_algo_ids.forEach(() => {
+            current_row.insertCell();
+        });
+    });
 
     var header_height = 0;
     $('table th span').each(function () {
