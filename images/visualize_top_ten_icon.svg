@@ -5,4 +5,10 @@
   <rect x="11" y="21" width="10" height="10"  fill="#00ABA8"  />
   <rect x="21" y="1" width="10" height="10"  fill="#f9502a" />
   <rect x="21" y="11" width="10" height="10"  fill="#f9502a" />
+  <rect x="31" y="11" width="10" height="10"  fill="#f9502a" />
+  <rect x="31" y="21" width="10" height="10"  fill="#f9502a" />
+  <rect x="21" y="31" width="10" height="10"  fill="#00ABA8" />
+  <rect x="11" y="31" width="10" height="10"  fill="#00ABA8" />
+  <rect x="31" y="1" width="10" height="10"  fill="#00ABA8" />
+  <rect x="1" y="31" width="10" height="10"  fill="#f9502a" />
 </svg>

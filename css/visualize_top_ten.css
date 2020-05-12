@@ -3,7 +3,6 @@
     color: #ddd;
     font-family: Calibri;
     font-weight: normal !important;
-    font-size: 12px;
 }
 
 table {
@@ -32,3 +31,37 @@ table, tr, td, th {
         border-radius: 50%;
         width: 15px;
     }
+
+
+a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+    a:visited {
+        color: #444;
+    }
+
+td.result-w a {
+    color: #53b3a0;
+}
+
+td.result-w {
+    background-color: #002113;
+}
+
+td.result-l a {
+    color: #f9502a;
+}
+
+td.result-l {
+    background-color: #3D0003;
+}
+
+td.result-w a:visited {
+    color: #2a574e;
+}
+
+td.result-l a:visited {
+    color: #780000;
+}

@@ -10,19 +10,21 @@ async function main() {
     const top_algo_ids = await get_top_ten_algo_ids(top_ten_user_ids);
     console.log(top_algo_ids);
 
+    const set_algo_ids = new Set(top_algo_ids.map(e => e[1]));
+
     //Create empty table
     createTable(leaderboard_data, top_algo_ids);
 
-    //const matches_between_top_algos = await get_matches_between_top_algos(top_algo_ids);
-    //console.log(matches_between_top_algos);
-    //window.test = matches_between_top_algos;
+    const matches_between_top_algos = await get_matches_between_top_algos(top_algo_ids);
+    console.log(matches_between_top_algos);
+    window.test = matches_between_top_algos;
 
-    //matches_between_top_algos.forEach(e => e.then(data => console.log(data)));
+    matches_between_top_algos.forEach(e => e.then(result => update_matches_in_table(result, top_algo_ids, set_algo_ids)));
 }
 
 async function get_leaderboard_data() {
     const leaderboard = await fetch_json('https://terminal.c1games.com/api/game/leaderboard')
-    return leaderboard.data.algos.slice(0, 10);
+    return leaderboard.data.algos.slice(0, 11);//11
 }
 
 async function get_top_ten_user_ids(leaderboard_data) {
@@ -78,12 +80,37 @@ function createTable(leaderboard_data, top_algo_ids) {
         });
     });
 
-    var header_height = 0;
-    $('table th span').each(function () {
-        if ($(this).outerWidth() > header_height) header_height = $(this).outerWidth();
-    });
-    $('table th').height(header_height);
+    //Set header hights correctly
+    $('table th').height(Math.max(...$('table th span').map(function () { return $(this).width() })));
+}
 
+function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
+    var table = document.getElementById("visualize_table");
+
+    let matches = result.data.matches;
+    matches.forEach(m => {
+        let winning = m.winning_algo.id;
+        let loosing = m.losing_algo.id;
+
+        if (set_algo_ids.has(winning) && set_algo_ids.has(loosing)) {
+
+            let winning_index = top_algo_ids.findIndex(e => e[1] === winning) + 2;
+            let loosing_index = top_algo_ids.findIndex(e => e[1] === loosing) + 2;
+
+            make_winning_link(table.rows[winning_index].cells[loosing_index], m.id);
+            make_losing_link(table.rows[loosing_index].cells[winning_index], m.id);
+        }
+    });
+}
+
+function make_winning_link(td, match_id) {
+    td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">W</a>`;
+    td.classList.add("result-w");
+}
+
+function make_losing_link(td, match_id) {
+    td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">L</a>`;
+    td.classList.add("result-l");
 }
 
 
