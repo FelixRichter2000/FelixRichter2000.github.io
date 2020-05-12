@@ -1,7 +1,13 @@
-﻿table, tr, td, th {
+﻿* {
+    padding: 0;
+    margin: 0;
+    font-family: Calibri;
+}
+
+table, tr, td, th {
     border: 1px solid #000;
     position: relative;
-    padding: 10px;
+    padding: 2px;
 }
 
     th span {
@@ -12,4 +18,9 @@
         position: absolute;
         bottom: 0;
         left: 50%;
+    }
+
+    td img {
+        border-radius: 50%;
+        width: 15px;
     }
