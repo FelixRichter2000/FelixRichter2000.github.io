@@ -1,0 +1,15 @@
+﻿table, tr, td, th {
+    border: 1px solid #000;
+    position: relative;
+    padding: 10px;
+}
+
+    th span {
+        transform-origin: 0 50%;
+        transform: rotate(-90deg);
+        white-space: nowrap;
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+    }
