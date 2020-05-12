@@ -97,9 +97,19 @@ function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
 function make_winning_link(td, match_id) {
     td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">W</a>`;
     td.classList.add("result-w");
+    if (td.classList.length != 1) {
+        td.classList.remove(...td.classList);
+        td.classList.add("result-u");
+        td.firstChild.innerHTML = "U";
+    }
 }
 
 function make_losing_link(td, match_id) {
     td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">L</a>`;
     td.classList.add("result-l");
+    if (td.classList.length != 1) {
+        td.classList.remove(...td.classList);
+        td.classList.add("result-u");
+        td.firstChild.innerHTML = "U";
+    }
 }

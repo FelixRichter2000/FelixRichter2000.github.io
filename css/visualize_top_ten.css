@@ -57,6 +57,14 @@ td.result-l {
     background-color: #3D0003;
 }
 
+td.result-u a {
+    color: #FFDA49;
+}
+
+td.result-u {
+    background-color: #6B5800;
+}
+
 td.result-w a:visited {
     color: #2a574e;
 }
