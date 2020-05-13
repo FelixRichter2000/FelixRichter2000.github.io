@@ -2,8 +2,11 @@
 
 async function main() {
     const leaderboard_data = await get_leaderboard_data();
+    console.log(leaderboard_data)
     const top_ten_user_ids = await get_top_ten_user_ids(leaderboard_data);
+    console.log(top_ten_user_ids)
     const top_algo_ids = await get_top_ten_algo_ids(top_ten_user_ids);
+    console.log(top_algo_ids)
     const set_algo_ids = new Set(top_algo_ids.map(e => e[1]));
 
     //Create empty table
@@ -15,15 +18,15 @@ async function main() {
 
 async function get_leaderboard_data() {
     const leaderboard = await fetch_json('https://terminal.c1games.com/api/game/leaderboard')
-    return leaderboard.data.algos.slice(0, 11);//11
+    return leaderboard.data.algos.slice(0, 10);
 }
 
 async function get_top_ten_user_ids(leaderboard_data) {
-    return await leaderboard_data.map(v => v.user.id);
+    return await leaderboard_data.map(v => [v.user.id, v.team != null]);
 }
 
 async function get_top_ten_algo_ids(top_ten_user_ids) {
-    let all_algos = await Promise.all(top_ten_user_ids.map(e => fetch_json(`https://terminal.c1games.com/api/game/user/${e}/algos?team=false`)))
+    let all_algos = await Promise.all(top_ten_user_ids.map(e => fetch_json(`https://terminal.c1games.com/api/game/user/${e[0]}/algos?team=${e[1]}`)))
     return [...all_algos.reduce((a, user_data, user_rank) => [...a, ...user_data.data.algos.map(algo => [user_rank, algo.id, algo.name])], [])]
 }
 
@@ -33,7 +36,13 @@ async function get_matches_between_top_algos(top_algo_ids) {
 
 async function fetch_json(request) {
     const response = await fetch(request)
-    if (response.status != 200) return alert(`failed to retrieve data: {request}`)
+    if (response.status != 200) {
+        console.log(`failed to retrieve data: ${request}`)
+        console.log(response);
+        return {
+            data: { matches: [] }
+        }
+    }
     return await response.json()
 }
 
