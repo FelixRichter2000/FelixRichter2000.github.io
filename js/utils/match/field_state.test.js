@@ -114,3 +114,12 @@ describe('Test set state', function () {
     }); 
 });
 
+describe('Test get state', function () {
+    test('set 5 at 0,1,0 and get multiple times', () => {
+        const field_state = new field_state_ctor(2,2,2);
+        field_state.set(0, 1, 0, 5);
+        expect(field_state.get(0,1,0)).toBe(5);
+        expect(field_state.get(1,1,0)).toBe(0);
+    });
+});
+
