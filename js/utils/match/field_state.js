@@ -20,6 +20,12 @@
         this.data[x+y*this.x+z*this.x*this.y] = value;
     }
 
+    proto.plus_one = function(x, y, z){
+        this.check_parameters(x, y, z);
+
+        this.data[x+y*this.x+z*this.x*this.y] += 1;
+    }
+
     proto.get = function(x, y, z){
         this.check_parameters(x, y, z);
 

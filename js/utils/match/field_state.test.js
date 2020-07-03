@@ -123,3 +123,13 @@ describe('Test get state', function () {
     });
 });
 
+describe('Test plus_one', function () {
+    test('plus_one at 0,1,0 and multiple times', () => {
+        const field_state = new field_state_ctor(2,2,2);
+        field_state.plus_one(0, 1, 0);
+        expect(field_state.get(0,1,0)).toBe(1);
+        field_state.plus_one(0, 1, 0);
+        expect(field_state.get(0,1,0)).toBe(2);
+    });
+});
+
