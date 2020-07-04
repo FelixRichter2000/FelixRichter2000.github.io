@@ -1,7 +1,7 @@
 ﻿(function() {
 
     //public viewer methods
-    window.viewer = {
+    let viewer = {
         show_frame: function(frame) {
             load_frame(frame);
             viewer.stop_play();
@@ -282,22 +282,6 @@
 
         console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
     }
-
-    //mouse move listener
-    window.addEventListener('mousemove', (e) => {
-        let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
-
-        const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);
-
-        let x = round(e.clientX);
-        let y = 27 - round(e.clientY);
-
-        if (typeof viewer != 'undefined')
-            viewer.show_field_info(x, y);
-    });
-
-
-
 
     if (!window.viewer) {
         window.viewer = viewer;
