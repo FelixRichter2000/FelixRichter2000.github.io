@@ -173,13 +173,11 @@
             first_time = false;
 
             update_static_stats();
-
-            viewer.toggle_play();
         }
 
         if (!play) return;
 
-        update_to_next_frame();
+        load_frame(frame + 1);
     }
 
     ////visual stat updater
@@ -254,16 +252,6 @@
 
         //Update hover_range_data
         hover_range_data = new_hover_range_data;
-    }
-
-    function update_to_next_frame() {
-        //Check if data is already there
-        if (reader.raw_frame_data.length == 0) {
-            viewer.stop_play();
-            return;
-        }
-
-        load_frame(frame + 1);
     }
 
     function load_frame(new_frame) {
