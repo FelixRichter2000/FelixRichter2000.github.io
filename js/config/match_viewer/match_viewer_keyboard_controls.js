@@ -1,4 +1,4 @@
-+ function() {
+(function() {
 
     // Keyboard Control Config
     let keybord_controls = [{
@@ -60,4 +60,4 @@
     ];
 
     register_key_controls(keybord_controls);
-}
+})()
