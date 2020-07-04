@@ -1,12 +1,18 @@
 ﻿class MatchUtils {
-    constructor(new_config, new_functions, terminal_config) {
-        this.config = {};
-        Object.assign(this.config, new_config || {});
-        Object.assign(this.config, new_functions || {});
-
+    constructor(json_config, functions, terminal_config) {
+        this.set_configs(json_config, functions, terminal_config);
+        this.init();
+    }
+    set_configs(json_config, functions, terminal_config) {
+        this.set_config(json_config, functions);
         this.terminal_config = terminal_config;
-
-        //Init
+    }
+    set_config(json_config, functions) {
+        this.config = {};
+        Object.assign(this.config, json_config || {});
+        Object.assign(this.config, functions || {});
+    }
+    init() {
         if (typeof(this.config.arena_settings) != "undefined") {
             this.location_to_index_map = this.generate_location_to_index_map();
             this.array_size = this.calculate_array_size();
