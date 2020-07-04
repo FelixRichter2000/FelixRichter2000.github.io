@@ -1,4 +1,4 @@
-﻿+function (global) {
+﻿+ function(global) {
     //General
     const quantity_label = '<label class="quantity"></label>';
     const highlight_svg = '<img class="highlight" src="images/Highlight.svg"></img>';
@@ -47,8 +47,7 @@
             upgrade_img +
             quantity_label +
             dummy_div +
-            dummy_div
-            ,
+            dummy_div,
 
             empty_field_img +
             filter2_img +

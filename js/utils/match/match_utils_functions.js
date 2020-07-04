@@ -1,4 +1,4 @@
-﻿+function (global) {
+﻿+ function(global) {
 
     //Group definitions:
     const FILTER = 0;
@@ -19,14 +19,14 @@
     const UNIT_TYPE = 14;
     const SHIELD = 15;
 
-    const is_upgraded = function (self, array, index) {
+    const is_upgraded = function(self, array, index) {
         let final_index = self.calculate_final_index(index, UPGRADE);
         return array[final_index];
     };
 
     //Functions config, should be moved to another file
     const match_utils_functions = {
-        td_to_elements_converter: function (td) {
+        td_to_elements_converter: function(td) {
             let ims = td.getElementsByClassName('match-changing-img');
             let quantity_label = td.getElementsByClassName('quantity');
             let damage_bar = td.getElementsByClassName('damage-bar');
@@ -34,7 +34,7 @@
             let shield_svg = td.getElementsByClassName('shield-bar');
             return [...ims, ...damage_bar, ...quantity_label, ...dummy_div, ...shield_svg];
         },
-        parse_row_to_single_array: function (row) {
+        parse_row_to_single_array: function(row) {
             return [
                 ...row.p1Units.slice(0, 3).map((p1U, i) => [...p1U, ...row.p2Units[i]]),
                 ...row.p1Units.slice(3, 6),
@@ -42,7 +42,7 @@
                 ...row.p1Units.slice(6, 8).map((p1U, i) => [...p1U, ...row.p2Units[i + 6]]),
             ];
         },
-        add_object_to_array: function (self, group, location, index, frame_data_array) {
+        add_object_to_array: function(self, group, location, index, frame_data_array) {
             ///Set flags
             //  Firewalls + Inforamtion + Removal + Upgrade
             if (group >= 0 && group <= 10) {
@@ -90,7 +90,7 @@
                 self.add_one(frame_data_array, index, QUANTITY);
             }
         },
-        parse_frame_data_to_flat_array: function (self, frame_data) {
+        parse_frame_data_to_flat_array: function(self, frame_data) {
             let frame_data_array = self.create_new_array();
 
             let all_data = self.config.parse_row_to_single_array(frame_data);
@@ -105,7 +105,7 @@
 
             return frame_data_array;
         },
-        update_function: function (group, switched_index, current_element, value) {
+        update_function: function(group, switched_index, current_element, value) {
             //  Firewalls + Inforamtion + Removal + Upgrade + Quantity
             if (group >= 0 && group <= 10 || group === 12) {
                 current_element.hidden = value == 0;
@@ -128,7 +128,7 @@
                 current_element.setAttribute('r', Math.sqrt(value * 3.14 * 2));
             }
         },
-        additional_flipping: function (self, index) {
+        additional_flipping: function(self, index) {
 
             const switch_range_min = 3;
             const switch_range_max = 8;
