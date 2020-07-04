@@ -1,4 +1,4 @@
-﻿const match_utils = require('./match_utils');
+﻿const MatchUtils = require('./match_utils');
 
 const functions_config = {
     td_to_elements_converter: function(td) {
@@ -18,12 +18,12 @@ const functions_config = {
         return index;
     }
 };
-const mu_size4 = new match_utils({
+const mu_size4 = new MatchUtils({
     field_contents: ['p1', 'p2'],
     arena_settings: { size: 4, half: 2 },
     group_size: 2,
 }, functions_config);
-const mu_size2 = new match_utils({
+const mu_size2 = new MatchUtils({
     field_contents: ['p1', 'p2'],
     arena_settings: { size: 2, half: 1 },
     group_size: 1,
@@ -31,7 +31,7 @@ const mu_size2 = new match_utils({
 
 describe('Test match_utils no params', function() {
     test('new match_utils() no error', () => {
-        const mu_special = new match_utils();
+        const mu_special = new MatchUtils();
     });
 });
 describe('Test flip_player_if_switched', function() {
@@ -221,7 +221,7 @@ describe('Test location_to_index', function() {
 });
 describe('Test calculate_final_index', function() {
     test('index: 5 group: 3 group_size: 10 => 53', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             group_size: 10,
         });
 
@@ -229,7 +229,7 @@ describe('Test calculate_final_index', function() {
             .toBe(53);
     });
     test('index: 2 group: 3 group_size:  5 => 13', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             group_size: 5,
         });
 
@@ -287,7 +287,7 @@ describe('Test add_one', function() {
 });
 describe('Test calculate_array_size', function() {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => 8', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 2,
         });
@@ -296,7 +296,7 @@ describe('Test calculate_array_size', function() {
             .toBe(8);
     });
     test('arena_settings: { size: 4, half: 2 }, group_size: 8 => 96', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 4, half: 2 },
             group_size: 8,
         });
@@ -307,7 +307,7 @@ describe('Test calculate_array_size', function() {
 });
 describe('Test create_new_array', function() {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => Int8Array(8)', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 2,
         });
@@ -316,7 +316,7 @@ describe('Test create_new_array', function() {
             .toEqual(new Int8Array(8));
     });
     test('arena_settings: { size: 4, half: 2 }, group_size: 8 => Int8Array(96)', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 4, half: 2 },
             group_size: 8,
         });
@@ -327,7 +327,7 @@ describe('Test create_new_array', function() {
 });
 describe('Test parse_file_to_raw_array', function() {
     test('Parse {"v1": 1}\\n{"v2": 2}\\n\\n\\n{"v3": 3} to [{ v1: 1 }, { v2: 2 }, { v3: 3 }]', () => {
-        const mu_special = new match_utils({}, {
+        const mu_special = new MatchUtils({}, {
             parse_frame_data_to_flat_array: function(self, frame_data) {
                 return frame_data * 2;
             },
@@ -341,7 +341,7 @@ describe('Test parse_file_to_raw_array', function() {
 });
 describe('Test parse_objects_to_arrays', function() {
     test('Parse [1, 2, 3] => [2, 4, 6]', () => {
-        const mu_special = new match_utils({}, {
+        const mu_special = new MatchUtils({}, {
             parse_frame_data_to_flat_array: function(self, frame_data) {
                 return frame_data * 2;
             },
@@ -353,7 +353,7 @@ describe('Test parse_objects_to_arrays', function() {
 });
 describe('Test calculate_switched_index', function() {
     test('index: 2, switched: true => 1', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -366,7 +366,7 @@ describe('Test calculate_switched_index', function() {
             .toBe(1);
     });
     test('index: 2, switched: true, additional if 1 then 99 => 99', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -380,7 +380,7 @@ describe('Test calculate_switched_index', function() {
             .toBe(99);
     });
     test('index: 0, switched: true => 3', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -393,7 +393,7 @@ describe('Test calculate_switched_index', function() {
             .toBe(3);
     });
     test('index: 0, switched: false => 0', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -418,7 +418,7 @@ describe('Test toggle_hidden', function() {
 });
 describe('Test update_changes', function() {
     test('update_changes(0, 1, data, images, false)', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -439,7 +439,7 @@ describe('Test update_changes', function() {
             .toEqual([{ hidden: true }, { hidden: false }, { hidden: false }, { hidden: true }]);
     });
     test('update_changes(1, 0, data, images, false)', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -462,7 +462,7 @@ describe('Test update_changes', function() {
 });
 describe('Test switch_view', function() {
     test('switch_view(1, data, images, false)', () => {
-        const mu_special = new match_utils({
+        const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
@@ -506,7 +506,7 @@ describe('Test get_custome_value_at', function() {
 });
 describe('Test get_locations_in_range', function() {
     test('size: 2, location: [0, 0], range: 1 => [1, 0, 1, 1]', () => {
-        mu_special = new match_utils({
+        mu_special = new MatchUtils({
             arena_settings: {
                 size: 2,
                 half: 1
