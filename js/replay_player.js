@@ -1,47 +1,48 @@
-﻿(function () {
+﻿(function() {
 
     //public viewer methods
     let viewer = {
-        show_frame: function (frame) {
+        show_frame: function(frame) {
             load_frame(frame);
             viewer.stop_play();
         },
-        next_frame: function () {
+        next_frame: function() {
             load_frame(frame + 1);
             viewer.stop_play();
         },
-        previous_frame: function () {
+        previous_frame: function() {
             load_frame(frame - 1);
             viewer.stop_play();
         },
-        next_turn: function () {
+        next_turn: function() {
             load_frame(reader.get_next_turn(frame));
         },
-        previous_turn: function () {
+        previous_turn: function() {
             load_frame(reader.get_previous_turn(frame));
             viewer.stop_play();
         },
-        switch_view: function () {
+        switch_view: function() {
             if (!reader.is_ready()) return;
-            match_utils.switch_view(frame, reader.fast_frame_data, viewer_elements, switched);
+
+            match_viewer.switch();
             switched = !switched;
 
             update_static_stats();
             update_turn_stats();
             update_hover_info();
         },
-        toggle_play: function () {
+        toggle_play: function() {
             match_utils.toggle_hidden(play_button_images);
             play = !play;
         },
-        start_play: function () {
+        start_play: function() {
             play = true;
         },
-        stop_play: function () {
+        stop_play: function() {
             if (play)
                 viewer.toggle_play();
         },
-        set_match_speed: function (fps) {
+        set_match_speed: function(fps) {
             current_fps = match_utils.put_value_in_range(fps, { min: 4, max: 60 });
 
             //$fps_input.val(current_fps);
@@ -50,28 +51,28 @@
                 clearInterval(timer);
             timer = setInterval(tick, 1000 / current_fps);
         },
-        faster_playback: function () {
+        faster_playback: function() {
             viewer.set_match_speed(current_fps + 4 - current_fps % 4);
         },
-        slower_playback: function () {
+        slower_playback: function() {
             viewer.set_match_speed(current_fps - 4 - current_fps % 4);
         },
-        show_field_info: function (x, y) {
+        show_field_info: function(x, y) {
             if (x === hover_x && y === hover_y) return;
             hover_x = x;
             hover_y = y;
             update_hover_info();
         },
-        download: function () {
+        download: function() {
             let filename = `${reader.user_data[switched ? 1 : 0].name}_${reader.user_data[switched ? 0 : 1].name}_${match_id}.replay`;
             let text = reader.get_replay_text(switched);
             download_current_file(filename, text);
         },
         //Temporary
-        get_reader: function () {
+        get_reader: function() {
             return reader;
         },
-        watch_on_terminal: function () {
+        watch_on_terminal: function() {
             var win = window.open(`https://terminal.c1games.com/watch/${match_id}`, '_blank');
             win.focus();
         }
@@ -86,7 +87,7 @@
         },
         group_size: 1,
     }, {
-        update_function: function (group, switched_index, current_element, value) {
+        update_function: function(group, switched_index, current_element, value) {
             current_element.hidden = value == 0;
         },
     });
@@ -120,6 +121,9 @@
     //Init references to images
     const viewer_elements = match_utils.get_all_changeable_elements_flat(watch_table);
     const viewer_elements_length = viewer_elements.length;
+
+    //Create MatchViewer
+    let match_viewer = new MatchViewer(match_utils, viewer_elements)
 
     //Set all to hidden
     for (var i = 0; i < viewer_elements_length; i++) {
@@ -155,7 +159,7 @@
         min: 0,
         max: 0,
         step: 1,
-        slide: function (event, ui) {
+        slide: function(event, ui) {
             viewer.show_frame(ui.value);
         },
     });
@@ -189,8 +193,9 @@
             algos[toggled_index].innerHTML = data[i].name;
         }
         document.getElementById('grid_overlay').hidden = false;
-        $slider.slider('option', { min: 0, max: reader.fast_frame_data.length - 1 });
+        $slider.slider('option', { min: 0, max: reader.raw_frame_data.length - 1 });
     }
+
     function update_turn_stats() {
         let data = reader.raw_frame_data[frame];
         let combined = [data.p1Stats, data.p2Stats];
@@ -212,6 +217,7 @@
         turn_frame_number.innerHTML = reader.get_turn_frame_number(frame);
         $slider.slider('value', frame);
     }
+
     function update_hover_info() {
         if (!reader.is_ready()) return;
 
@@ -224,11 +230,10 @@
             position_text = `${hover_x}, ${hover_y}`;
 
             let location = [hover_x, hover_y];
-            let current_frame_data = reader.fast_frame_data[frame];
 
-            let health_left = match_utils.get_custome_value_at(location, switched, 13, current_frame_data);
-            let unit_type = match_utils.get_custome_value_at(location, switched, 14, current_frame_data);
-            let upgraded = match_utils.get_custome_value_at(location, switched, 10, current_frame_data);
+            let health_left = match_viewer.get_value_at(location, 13);
+            let unit_type = match_viewer.get_value_at(location, 14);
+            let upgraded = match_viewer.get_value_at(location, 10);
 
             if (unit_type >= 100) {
                 //Set stability text
@@ -250,6 +255,7 @@
         //Update hover_range_data
         hover_range_data = new_hover_range_data;
     }
+
     function update_to_next_frame() {
         //Check if data is already there
         if (reader.raw_frame_data.length == 0) {
@@ -259,13 +265,16 @@
 
         load_frame(frame + 1);
     }
+
     function load_frame(new_frame) {
         if (!reader.is_ready()) return;
 
         new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: reader.count - 1 });
         if (frame == new_frame) return;
 
-        match_utils.update_changes(frame, new_frame, reader.fast_frame_data, viewer_elements, switched);
+        let new_state = reader.raw_frame_data[new_frame];
+        match_viewer.show_data(new_state);
+
         frame = new_frame;
 
         update_turn_stats();
@@ -273,6 +282,7 @@
 
         console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
     }
+
     function download_current_file(filename, text) {
         var el = document.createElement('a');
         el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -297,8 +307,7 @@
     });
 
     // Keyboard Control Config
-    let keybord_controls = [
-        {
+    let keybord_controls = [{
             code: "ArrowRight",
             ctrlKey: false,
             shiftKey: false,

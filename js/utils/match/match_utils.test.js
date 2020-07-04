@@ -1,20 +1,20 @@
 ﻿const match_utils = require('./match_utils');
 
 const functions_config = {
-    td_to_elements_converter: function (td) {
+    td_to_elements_converter: function(td) {
         return td.getElementsByClassName('t');
     },
-    parse_row_to_single_array: function (row) {
+    parse_row_to_single_array: function(row) {
         return [];
     },
     add_object_to_array: [],
-    parse_frame_data_to_flat_array: function (self, frame_data) {
+    parse_frame_data_to_flat_array: function(self, frame_data) {
         return 0;
     },
-    update_function: function (group, switched_index, current_element, value) {
+    update_function: function(group, switched_index, current_element, value) {
         current_element.hidden = value == 0;
     },
-    additional_flipping: function (self, index) {
+    additional_flipping: function(self, index) {
         return index;
     }
 };
@@ -29,12 +29,12 @@ const mu_size2 = new match_utils({
     group_size: 1,
 }, functions_config);
 
-describe('Test match_utils no params', function () {
+describe('Test match_utils no params', function() {
     test('new match_utils() no error', () => {
         const mu_special = new match_utils();
     });
 });
-describe('Test flip_player_if_switched', function () {
+describe('Test flip_player_if_switched', function() {
     test('player_index: 1 switched: false => 1', () => {
         expect(mu_size2.flip_player_if_switched(1, false))
             .toBe(1);
@@ -44,7 +44,7 @@ describe('Test flip_player_if_switched', function () {
             .toBe(0);
     });
 });
-describe('Test is_in_arena_bounds', function () {
+describe('Test is_in_arena_bounds', function() {
     test('field [0, 0] -> false', () => {
         expect(mu_size4.is_in_arena_bounds(0, 0))
             .toBe(false);
@@ -99,7 +99,7 @@ describe('Test is_in_arena_bounds', function () {
             .toBe(true);
     });
 });
-describe('Test generate_terminal_trs', function () {
+describe('Test generate_terminal_trs', function() {
     test('Generate generate_terminal_trs size 4', () => {
         expect(mu_size4.generate_terminal_trs())
             .toBe("<tr><td></td><td>p2</td><td>p2</td><td></td></tr>" +
@@ -108,7 +108,7 @@ describe('Test generate_terminal_trs', function () {
                 "<tr><td></td><td>p1</td><td>p1</td><td></td></tr>");
     });
 });
-describe('Test get_all_changeable_elements_flat', function () {
+describe('Test get_all_changeable_elements_flat', function() {
     test('Call get_all_changeable_elements_flat', () => {
         document.body.innerHTML = "<table id='test'><tr><td>" +
             "<label class=\"t\"></label>" +
@@ -137,7 +137,7 @@ describe('Test get_all_changeable_elements_flat', function () {
             .toBe('IMG');
     });
 });
-describe('Test put_value_in_range', function () {
+describe('Test put_value_in_range', function() {
     test('Generate put_value_in_range -1 range(0, 4)', () => {
         expect(mu_size4.put_value_in_range(-1, { min: 0, max: 4 }))
             .toBe(0);
@@ -151,7 +151,7 @@ describe('Test put_value_in_range', function () {
             .toBe(4);
     });
 });
-describe('Test spez', function () {
+describe('Test spez', function() {
     test('Generate spez [1, 0] => 1', () => {
         expect(mu_size4.spez(1, 0))
             .toBe(1);
@@ -165,7 +165,7 @@ describe('Test spez', function () {
             .toBe(10);
     });
 });
-describe('Test generate_location_to_index_map', function () {
+describe('Test generate_location_to_index_map', function() {
     test('Generate generate_location_to_index_map []', () => {
         expect(mu_size4.generate_location_to_index_map())
             .toEqual({
@@ -184,7 +184,7 @@ describe('Test generate_location_to_index_map', function () {
             });
     });
 });
-describe('Test location_to_index', function () {
+describe('Test location_to_index', function() {
     test('Find Index with location_to_index ', () => {
         let map = mu_size4.generate_location_to_index_map();
         let location = [1, 1];
@@ -219,7 +219,7 @@ describe('Test location_to_index', function () {
             .toBe(1);
     });
 });
-describe('Test calculate_final_index', function () {
+describe('Test calculate_final_index', function() {
     test('index: 5 group: 3 group_size: 10 => 53', () => {
         const mu_special = new match_utils({
             group_size: 10,
@@ -237,7 +237,7 @@ describe('Test calculate_final_index', function () {
             .toBe(13);
     });
 });
-describe('Test set_value', function () {
+describe('Test set_value', function() {
     test('index: 2 group: 0 value: 1', () => {
         let array = [0, 0, 0, 0, 0, 0];
         mu_size4.set_value(array, 2, 0, 1)
@@ -251,7 +251,7 @@ describe('Test set_value', function () {
         expect(array).toEqual([0, 1, 0, 0, 0, 0]);
     });
 });
-describe('Test set_min', function () {
+describe('Test set_min', function() {
     test('index: 2 group: 0 value: 1 -> expect set', () => {
         let array = [0, 0, 0, 0, 0, 0];
         mu_size4.set_min(array, 2, 0, 1)
@@ -271,7 +271,7 @@ describe('Test set_min', function () {
         expect(array).toEqual([0, 0, 0, 0, 2, 0]);
     });
 });
-describe('Test add_one', function () {
+describe('Test add_one', function() {
     test('index: 2 group: 0', () => {
         let array = [0, 0, 0, 0, 0, 0];
         mu_size4.add_one(array, 2, 0, 1)
@@ -285,7 +285,7 @@ describe('Test add_one', function () {
         expect(array).toEqual([0, 3, 0, 0, 0, 0]);
     });
 });
-describe('Test calculate_array_size', function () {
+describe('Test calculate_array_size', function() {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => 8', () => {
         const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
@@ -305,7 +305,7 @@ describe('Test calculate_array_size', function () {
             .toBe(96);
     });
 });
-describe('Test create_new_array', function () {
+describe('Test create_new_array', function() {
     test('arena_settings: { size: 2, half: 1 }, group_size: 2 => Int8Array(8)', () => {
         const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
@@ -325,10 +325,10 @@ describe('Test create_new_array', function () {
             .toEqual(new Int8Array(96));
     });
 });
-describe('Test parse_file_to_raw_array', function () {
+describe('Test parse_file_to_raw_array', function() {
     test('Parse {"v1": 1}\\n{"v2": 2}\\n\\n\\n{"v3": 3} to [{ v1: 1 }, { v2: 2 }, { v3: 3 }]', () => {
         const mu_special = new match_utils({}, {
-            parse_frame_data_to_flat_array: function (self, frame_data) {
+            parse_frame_data_to_flat_array: function(self, frame_data) {
                 return frame_data * 2;
             },
         });
@@ -339,10 +339,10 @@ describe('Test parse_file_to_raw_array', function () {
             .toEqual([{ v1: 1 }, { v2: 2 }, { v3: 3 }]);
     });
 });
-describe('Test parse_objects_to_arrays', function () {
+describe('Test parse_objects_to_arrays', function() {
     test('Parse [1, 2, 3] => [2, 4, 6]', () => {
         const mu_special = new match_utils({}, {
-            parse_frame_data_to_flat_array: function (self, frame_data) {
+            parse_frame_data_to_flat_array: function(self, frame_data) {
                 return frame_data * 2;
             },
         });
@@ -351,13 +351,13 @@ describe('Test parse_objects_to_arrays', function () {
             .toEqual([2, 4, 6]);
     });
 });
-describe('Test calculate_switched_index', function () {
+describe('Test calculate_switched_index', function() {
     test('index: 2, switched: true => 1', () => {
         const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            additional_flipping: function (self, index) {
+            additional_flipping: function(self, index) {
                 return index;
             }
         });
@@ -370,7 +370,7 @@ describe('Test calculate_switched_index', function () {
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            additional_flipping: function (self, index) {
+            additional_flipping: function(self, index) {
                 if (index === 1) return 99;
                 return index;
             }
@@ -384,7 +384,7 @@ describe('Test calculate_switched_index', function () {
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            additional_flipping: function (self, index) {
+            additional_flipping: function(self, index) {
                 return index;
             }
         });
@@ -397,7 +397,7 @@ describe('Test calculate_switched_index', function () {
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            additional_flipping: function (self, index) {
+            additional_flipping: function(self, index) {
                 return index;
             }
         });
@@ -406,7 +406,7 @@ describe('Test calculate_switched_index', function () {
             .toBe(0);
     });
 });
-describe('Test toggle_hidden', function () {
+describe('Test toggle_hidden', function() {
     test('test false, true, false => true, false, true', () => {
         let array = [{ hidden: false }, { hidden: true }, { hidden: false }];
 
@@ -416,19 +416,22 @@ describe('Test toggle_hidden', function () {
             .toEqual([{ hidden: true }, { hidden: false }, { hidden: true }]);
     });
 });
-describe('Test update_changes', function () {
+describe('Test update_changes', function() {
     test('update_changes(0, 1, data, images, false)', () => {
         const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            update_function: function (group, switched_index, current_element, value) {
+            update_function: function(group, switched_index, current_element, value) {
                 current_element.hidden = value == 0;
             }
         });
 
         let images = [{ hidden: true }, { hidden: true }, { hidden: true }, { hidden: true }];
-        let data = [[0, 0, 0, 0], [0, 1, 1, 0]];
+        let data = [
+            [0, 0, 0, 0],
+            [0, 1, 1, 0]
+        ];
 
         mu_special.update_changes(0, 1, data, images, false);
 
@@ -440,13 +443,16 @@ describe('Test update_changes', function () {
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            update_function: function (group, switched_index, current_element, value) {
+            update_function: function(group, switched_index, current_element, value) {
                 current_element.hidden = value == 0;
             }
         });
 
         let images = [{ hidden: true }, { hidden: false }, { hidden: true }, { hidden: true }];
-        let data = [[0, 0, 1, 0], [0, 5, 0, 0]];
+        let data = [
+            [0, 0, 1, 0],
+            [0, 5, 0, 0]
+        ];
 
         mu_special.update_changes(1, 0, data, images, false);
 
@@ -454,22 +460,25 @@ describe('Test update_changes', function () {
             .toEqual([{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: true }]);
     });
 });
-describe('Test switch_view', function () {
+describe('Test switch_view', function() {
     test('switch_view(1, data, images, false)', () => {
         const mu_special = new match_utils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
         }, {
-            update_function: function (group, switched_index, current_element, value) {
+            update_function: function(group, switched_index, current_element, value) {
                 current_element.hidden = value == 0;
             },
-            additional_flipping: function (self, index) {
+            additional_flipping: function(self, index) {
                 return index;
             }
         });
 
         let images = [{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: false }];
-        let data = [[0, 0, 0, 0], [0, 0, 1, 1]];
+        let data = [
+            [0, 0, 0, 0],
+            [0, 0, 1, 1]
+        ];
 
         mu_special.switch_view(1, data, images, false);
 
@@ -477,7 +486,7 @@ describe('Test switch_view', function () {
             .toEqual([{ hidden: false }, { hidden: false }, { hidden: true }, { hidden: true }]);
     });
 });
-describe('Test get_custome_value_at', function () {
+describe('Test get_custome_value_at', function() {
     test('location: [0, 0], flipped: false, group: 0, data: [1, 2, 3, 4] =>  3', () => {
         expect(mu_size2.get_custome_value_at([0, 0], false, 0, [1, 2, 3, 4]))
             .toBe(3);
@@ -495,7 +504,7 @@ describe('Test get_custome_value_at', function () {
             .toBe(14);
     });
 });
-describe('Test get_locations_in_range', function () {
+describe('Test get_locations_in_range', function() {
     test('size: 2, location: [0, 0], range: 1 => [1, 0, 1, 1]', () => {
         mu_special = new match_utils({
             arena_settings: {
@@ -637,7 +646,3 @@ describe('Test get_locations_in_range', function () {
 //            .toEqual([[1, 1, 10], [2, 20, 21], [3, 30], [4], [5], [6], [40], [50], [60], [7, 77, 70, 71], [8, 88, 80, 81]]);
 //    });
 //});
-
-
-
-
