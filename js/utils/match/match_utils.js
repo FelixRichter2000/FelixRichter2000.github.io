@@ -1,6 +1,5 @@
-﻿+ function(global) {
-
-    let match_utils = function(new_config, new_functions, terminal_config) {
+﻿class MatchUtils {
+    constructor(new_config, new_functions, terminal_config) {
         this.config = {};
         Object.assign(this.config, new_config || {});
         Object.assign(this.config, new_functions || {});
@@ -12,18 +11,16 @@
             this.location_to_index_map = this.generate_location_to_index_map();
             this.array_size = this.calculate_array_size();
         }
-    };
-    let proto = match_utils.prototype;
-
-    proto.flip_player_if_switched = function(player_index, switched) {
+    }
+    flip_player_if_switched(player_index, switched) {
         return switched ? (player_index + 1) % 2 : player_index;
-    };
-    proto.is_in_arena_bounds = function(x, y) {
+    }
+    is_in_arena_bounds(x, y) {
         const half = this.config.arena_settings.half;
 
         return Math.abs(x - half + .5) + Math.abs(y - half + .5) < (half + 1);
-    };
-    proto.generate_terminal_trs = function() {
+    }
+    generate_terminal_trs() {
         const settings = this.config.arena_settings;
         const field_contents = this.config.field_contents;
 
@@ -39,24 +36,24 @@
             trs += '</tr>';
         }
         return trs;
-    };
-    proto.get_all_changeable_elements_flat = function(table) {
+    }
+    get_all_changeable_elements_flat(table) {
         let converter = this.config.td_to_elements_converter;
         return [...table.getElementsByTagName('td')]
             .reduce((a, v) => [...a, ...converter(v)], []);
-    };
-    proto.put_value_in_range = function(value, range) {
+    }
+    put_value_in_range(value, range) {
         if (value < range.min)
             return range.min;
         if (value > range.max)
             return range.max;
         return value;
-    };
-    proto.spez = function(x, y) {
+    }
+    spez(x, y) {
         const settings = this.config.arena_settings;
         return x + y * settings.size;
-    };
-    proto.generate_location_to_index_map = function() {
+    }
+    generate_location_to_index_map() {
         const settings = this.config.arena_settings;
 
         let counter = 0;
@@ -70,60 +67,61 @@
             }
         }
         return map;
-    };
-    proto.location_to_index = function(location) {
+    }
+    location_to_index(location) {
         let x = location[0];
         let y = location[1];
         return this.location_to_index_map[this.spez(x, y)];
-    };
-    proto.calculate_final_index = function(index, group_index) {
+    }
+    calculate_final_index(index, group_index) {
         return index * this.config.group_size + group_index;
-    };
-    proto.set_value = function(array, index, group_index, value) {
+    }
+    set_value(array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index] = value;
-    };
-    proto.set_min = function(array, index, group_index, value) {
+    }
+    set_min(array, index, group_index, value) {
         let final_index = this.calculate_final_index(index, group_index);
         let current_value = array[final_index];
         array[final_index] = current_value ? Math.min(current_value, value) : value;
-    };
-    proto.add_one = function(array, index, group_index) {
+    }
+    add_one(array, index, group_index) {
         let final_index = this.calculate_final_index(index, group_index);
         array[final_index]++;
-    };
-    proto.calculate_array_size = function() {
+    }
+    calculate_array_size() {
         const size = this.config.arena_settings.size;
         return (size * size / 2 + size) * this.config.group_size;
-    };
-    proto.create_new_array = function() {
+    }
+    create_new_array() {
         return new Int8Array(this.array_size);
-    };
-    proto.parse_file_to_raw_array = function(file) {
+    }
+    parse_file_to_raw_array(file) {
         return file.split("\n")
             .filter(el => el)
             .map(el => JSON.parse(el));
-    };
-    proto.parse_objects_to_arrays = function(objects) {
+    }
+    parse_objects_to_arrays(objects) {
         return objects.map(o => this.parse_single_object_to_array(o));
-    };
-    proto.parse_single_object_to_array = function(object) {
+    }
+    parse_single_object_to_array(object) {
         return this.config.parse_frame_data_to_flat_array(this, object);
     }
-    proto.calculate_switched_index = function(index, switched) {
-        if (!switched) return index;
+    calculate_switched_index(index, switched) {
+        if (!switched)
+            return index;
 
         const switched_index = this.array_size - index - 1;
         let final_index = switched_index - 2 * (switched_index % this.config.group_size) + this.config.group_size - 1;
 
         return this.config.additional_flipping(this, final_index);
-    };
-    proto.toggle_hidden = function(elements) {
+    }
+    toggle_hidden(elements) {
         for (var i = 0; i < elements.length; i++) {
             elements[i].hidden = !elements[i].hidden;
         }
-    };
-    proto.update_changes = function(i_previous, i_current, data, images, switched) {
+    }
+    update_changes(i_previous, i_current, data, images, switched) {
         const updater = this.config.update_function;
 
         const data_previous = data[i_previous];
@@ -141,8 +139,8 @@
                 updater(group, switched_index, current_element, value);
             }
         }
-    };
-    proto.update_changes_better = function(data_previous, data_current, images, switched) {
+    }
+    update_changes_better(data_previous, data_current, images, switched) {
         const updater = this.config.update_function;
 
         const data_length = data_previous.length;
@@ -158,18 +156,18 @@
                 updater(group, switched_index, current_element, value);
             }
         }
-    };
-    proto.switch_view = function(i_current, data, images, switched) {
+    }
+    switch_view(i_current, data, images, switched) {
         this.update_changes(i_current, 0, data, images, switched);
         this.update_changes(0, i_current, data, images, !switched);
-    };
-    proto.get_custome_value_at = function(location, switched, group, current_frame_data) {
+    }
+    get_custome_value_at(location, switched, group, current_frame_data) {
         let index = this.location_to_index(location);
         let final_index = this.calculate_final_index(index, group);
         let switched_index = this.calculate_switched_index(final_index, switched);
         return current_frame_data[switched_index];
-    };
-    proto.get_locations_in_range = function(location, range) {
+    }
+    get_locations_in_range(location, range) {
         let array = this.create_new_array();
 
         const center_x = location[0];
@@ -189,12 +187,9 @@
 
         return array;
     }
+}
 
-    if (typeof process !== 'undefined') {
-        module.exports = match_utils;
-    } else {
-        if (!global.match_utils_ctor) {
-            global.match_utils_ctor = match_utils;
-        }
-    }
-}(window);
+
+if (typeof process !== 'undefined') {
+    module.exports = MatchUtils;
+}

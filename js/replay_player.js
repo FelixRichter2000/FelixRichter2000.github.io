@@ -79,8 +79,8 @@
     };
 
     //Match_Utils
-    match_utils = new match_utils_ctor(match_utils_config, match_utils_functions);
-    match_utils_flat = new match_utils_ctor({
+    match_utils = new MatchUtils(match_utils_config, match_utils_functions);
+    match_utils_flat = new MatchUtils({
         arena_settings: {
             size: 28,
             half: 14
