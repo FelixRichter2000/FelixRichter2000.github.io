@@ -1,18 +1,19 @@
 class TerminalWsHandler {
-    constructor() {
-
-    }
+    startString = 'n[{"game_to_client":0,"player_1_err":1,"player_2_err":2,"game_over":3,"notification":4},{"algo_zip":0},"';
+    endString = '"]';
 
     get_replay_turn_actions(current_state, input_actions) {
         console.log(new Date());
         return this.socket(this.build_init_string(game_state))
-
     }
 
     build_init_string(game_state) {
-        let start = 'n[{"game_to_client":0,"player_1_err":1,"player_2_err":2,"game_over":3,"notification":4},{"algo_zip":0},"';
+        let gameStateString = this.createGameStateString(game_state);
+        return this.startString + gameStateString + this.endString;
+    }
 
-        let middle = encodeURIComponent(JSON.stringify({
+    createGameStateString(game_state) {
+        return encodeURIComponent(JSON.stringify({
             "player_1": "manual",
             "player_2": "manual",
             "p1_use_old_config": false,
@@ -22,17 +23,9 @@ class TerminalWsHandler {
             "config_id": null,
             "config_type": null
         }));
-
-        let end = '"]';
-
-        return start + middle + end;
     }
 
-    socket_user(game_state) {
-
-    }
-
-    socket(init_string, timeout = 20000) {
+    socket(init_string, timeout = 10000) {
         return new Promise((resolve, reject) => {
             let timer;
 
