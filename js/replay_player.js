@@ -64,8 +64,8 @@
             update_hover_info();
         },
         download: function() {
-            let filename = `${reader.user_data[switched ? 1 : 0].name}_${reader.user_data[switched ? 0 : 1].name}_${match_id}.replay`;
-            let text = reader.get_replay_text(switched);
+            let filename = `${reader.user_data[0].name}_${reader.user_data[1].name}_${match_id}.replay`;
+            let text = reader.get_replay_text();
             download_text(filename, text);
         },
         //Temporary

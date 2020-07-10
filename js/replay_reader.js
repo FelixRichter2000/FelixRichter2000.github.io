@@ -74,7 +74,7 @@
 
         return range;
     }
-    proto.get_replay_text = function(switched) {
+    proto.get_replay_text = function() {
         return this.full_frame_data
             .map(e => JSON.stringify(e))
             .join("\n");
