@@ -187,8 +187,10 @@
         let data = reader.user_data;
         for (var i = 0; i < data.length; i++) {
             let toggled_index = match_utils.flip_player_if_switched(i, switched);
-            players[toggled_index].innerHTML = data[i].user;
-            algos[toggled_index].innerHTML = data[i].name;
+            if (players.length == 2)
+                players[toggled_index].innerHTML = data[i].user;
+            if (algos.length == 2)
+                algos[toggled_index].innerHTML = data[i].name;
         }
         document.getElementById('grid_overlay').hidden = false;
         $slider.slider('option', { min: 0, max: reader.raw_frame_data.length - 1 });
@@ -268,7 +270,7 @@
         update_turn_stats();
         update_hover_info();
 
-        console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
+        //console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
     }
 
     if (!window.viewer) {
