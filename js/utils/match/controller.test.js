@@ -21,7 +21,7 @@ describe('mockMatchViewer tests', function() {
 describe('Controller tests', function() {
     test('set replayData is possible', () => {
         const controller = new Controller();
-        controller.setReplayData([1, 2, 3]);
+        controller.set_replay_data([1, 2, 3]);
     });
 
     test('set MatchViewer in constructor is possible', () => {
@@ -30,37 +30,37 @@ describe('Controller tests', function() {
 
     test('don`t throw exception when MatchViewer.show_data is called and replayData is not set', () => {
         const controller = new Controller(mockMatchViewer);
-        controller.showFrame(0);
+        controller.show_frame(0);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalled();
     });
 
-    test('don`t call MatchViewer.show_data when showFrame (-1) is called', () => {
+    test('don`t call MatchViewer.show_data when show_frame (-1) is called', () => {
         const controller = new Controller(mockMatchViewer);
-        controller.setReplayData([10, 11, 12]);
-        controller.showFrame(-1);
+        controller.set_replay_data([10, 11, 12]);
+        controller.show_frame(-1);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalled();
     });
 
-    test('don`t call MatchViewer.show_data when showFrame with bigger than highest index is called', () => {
+    test('don`t call MatchViewer.show_data when show_frame with bigger than highest index is called', () => {
         const controller = new Controller(mockMatchViewer);
-        controller.setReplayData([10, 11, 12]);
-        controller.showFrame(3);
+        controller.set_replay_data([10, 11, 12]);
+        controller.show_frame(3);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalled();
     });
 
-    test('call MatchViewer.show_data with correct data when showFrame (0) is called', () => {
+    test('call MatchViewer.show_data with correct data when show_frame (0) is called', () => {
         const controller = new Controller(mockMatchViewer);
-        controller.setReplayData([10, 11, 12]);
-        controller.showFrame(0);
+        controller.set_replay_data([10, 11, 12]);
+        controller.show_frame(0);
         expect(mockMatchViewer.show_data).toHaveBeenCalledWith(10);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalledWith(11);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalledWith(12);
     });
 
-    test('call MatchViewer.show_data with correct data when showFrame (1) is called', () => {
+    test('call MatchViewer.show_data with correct data when show_frame (1) is called', () => {
         const controller = new Controller(mockMatchViewer);
-        controller.setReplayData([10, 11, 12]);
-        controller.showFrame(1);
+        controller.set_replay_data([10, 11, 12]);
+        controller.show_frame(1);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalledWith(10);
         expect(mockMatchViewer.show_data).toHaveBeenCalledWith(11);
         expect(mockMatchViewer.show_data).not.toHaveBeenCalledWith(12);
