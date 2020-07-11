@@ -4,20 +4,20 @@ class Controller {
         this.replayData = [];
     }
 
-    setReplayData(replayData) {
+    set_replay_data(replayData) {
         this.replayData = replayData;
     }
 
-    showFrame(frame) {
-        if (this._isFrameValid(frame))
-            return this._showFrameUsingMatchViewer(frame);
+    show_frame(frame) {
+        if (this._is_frame_valid(frame))
+            return this._show_frame_using_matchViewer(frame);
     }
 
-    _showFrameUsingMatchViewer(frame) {
+    _show_frame_using_matchViewer(frame) {
         return this.matchViewer.show_data(this.replayData[frame]);
     }
 
-    _isFrameValid(frame) {
+    _is_frame_valid(frame) {
         return frame >= 0 && frame < this.replayData.length;
     }
 }
