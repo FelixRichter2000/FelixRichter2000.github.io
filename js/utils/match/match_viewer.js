@@ -20,7 +20,7 @@ class MatchViewer {
     }
 
     get_value_at(location, group) {
-        return match_utils.get_custome_value_at(location, this.switched, group, this.previous_state);
+        return this.match_utils.get_custome_value_at(location, this.switched, group, this.previous_state);
     }
 }
 
