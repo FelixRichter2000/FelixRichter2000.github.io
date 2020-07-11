@@ -9,15 +9,15 @@ class Controller {
     }
 
     showFrame(frame) {
-        if (this.isFrameValid(frame))
-            return this.showFrameUsingMatchViewer(frame);
+        if (this._isFrameValid(frame))
+            return this._showFrameUsingMatchViewer(frame);
     }
 
-    showFrameUsingMatchViewer(frame) {
+    _showFrameUsingMatchViewer(frame) {
         return this.matchViewer.show_data(this.replayData[frame]);
     }
 
-    isFrameValid(frame) {
+    _isFrameValid(frame) {
         return frame >= 0 && frame < this.replayData.length;
     }
 }
