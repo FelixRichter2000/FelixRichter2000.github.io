@@ -81,7 +81,7 @@ function createTable(leaderboard_data, top_algo_ids) {
     });
 
     //Set header hights correctly
-    $('table th').height(Math.max(...$('table th span').map(function () { return $(this).width() })));
+    $('table th').height(Math.max(...$('table th span').map(function() { return $(this).width() })));
 }
 
 function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
