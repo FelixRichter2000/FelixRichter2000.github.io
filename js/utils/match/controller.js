@@ -22,6 +22,5 @@ class Controller {
     }
 }
 
-if (typeof process !== 'undefined') {
+if (typeof process !== 'undefined')
     module.exports = Controller;
-}

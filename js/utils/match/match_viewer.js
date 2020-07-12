@@ -24,6 +24,5 @@ class MatchViewer {
     }
 }
 
-if (typeof process !== 'undefined') {
+if (typeof process !== 'undefined')
     module.exports = MatchViewer;
-}
