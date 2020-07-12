@@ -10,7 +10,7 @@ class UserDataDownloader {
     }
 
     handle_result(result) {
-        this.algos = JSON.parse(result).data.algos;
+        this.algos = result.data.algos;
     }
 }
 

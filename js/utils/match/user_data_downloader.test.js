@@ -1,6 +1,6 @@
 const UserDataDownloader = require('./user_data_downloader');
 let mock_fetch_json = jest.fn();
-mock_fetch_json.mockImplementation(() => new Promise(resolve => resolve('{"data": {"algos": [1, 2]}}')));
+mock_fetch_json.mockImplementation(() => new Promise(resolve => resolve({ "data": { "algos": [1, 2] } })));
 
 afterEach(() => {
     jest.clearAllMocks();
