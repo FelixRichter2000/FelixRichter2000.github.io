@@ -8,6 +8,13 @@ async function fetch_json(request) {
     return await response.json()
 }
 
+async function fetch_string(request) {
+    return fetch(request)
+        .then(response => response.text())
+        .then((response) => response)
+        .catch(err => console.log(err))
+}
+
 if (typeof process !== 'undefined') {
     module.exports = fetch_json;
 }

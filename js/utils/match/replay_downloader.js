@@ -1,11 +1,11 @@
 class ReplayDownloader {
-    constructor(fetch_json = window.fetch_json) {
-        this.fetch_json = fetch_json;
+    constructor(fetch = window.fetch_string) {
+        this._fetch = fetch;
     }
 
     async download(match_id) {
         let request = 'https://terminal.c1games.com/api/game/replayexpanded/' + match_id;
-        await this.fetch_json(request).then(result => this.handle_result(result));
+        await this._fetch(request).then(result => this.handle_result(result));
         return this;
     }
 
