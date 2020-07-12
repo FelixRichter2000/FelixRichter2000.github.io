@@ -88,9 +88,7 @@
     });
 
     //Variables
-    let turn = 0;
     let frame = 0;
-    let max_frame = 0;
     let play = true;
     let timer = null;
     let switched = false;
@@ -132,7 +130,6 @@
     fieldGenerator.generate(watch_table);
     const viewer_elements = fieldGenerator.get_viewer_elements();
     const highlight_elements = fieldGenerator.get_hover_elements();
-
 
     //Create MatchViewer
     let match_viewer = new MatchViewer(match_utils, viewer_elements)
