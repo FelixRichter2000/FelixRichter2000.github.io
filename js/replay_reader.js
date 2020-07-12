@@ -45,37 +45,7 @@
         this.user_data = response.data.algos;
     }
 
-    proto.get_previous_turn = function(frame) {
-        frame -= 2;
-        while (frame > 0 && this.raw_frame_data[frame].turnInfo[0] !== 0) {
-            frame--;
-        }
-        return frame + 1;
-    }
-    proto.get_range = function(unit_type, upgraded) {
-        let range = 0;
 
-        const correct_unit_information = JSON.parse(JSON.stringify(this.full_frame_data[0].unitInformation[unit_type - 100]));
-
-        if (upgraded)
-            Object.assign(correct_unit_information, correct_unit_information.upgrade);
-
-        let propertyNames = Object.getOwnPropertyNames(correct_unit_information);
-        let range_names = propertyNames.filter(el => el.includes("Range"))
-
-        for (let range_name of range_names)
-            range = Math.max(correct_unit_information[range_name], range);
-
-        return range;
-    }
-    proto.get_replay_text = function() {
-        return this.full_frame_data
-            .map(e => JSON.stringify(e))
-            .join("\n");
-    }
-    proto.get_turn_frame_number = function(frame) {
-        return this.raw_frame_data[frame].turnInfo[2];
-    }
 
 
     if (!window.ReplayReader) {

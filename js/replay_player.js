@@ -18,7 +18,7 @@
             load_frame(get_next_turn(frame));
         },
         previous_turn: function() {
-            load_frame(reader.get_previous_turn(frame));
+            load_frame(get_previous_turn(frame));
             viewer.stop_play();
         },
         switch_view: function() {
@@ -65,8 +65,7 @@
         },
         download: function() {
             let filename = `${reader.user_data[0].name}_${reader.user_data[1].name}_${match_id}.replay`;
-            let text = reader.get_replay_text();
-            download_text(filename, text);
+            download_text(filename, raw_replay);
         },
         //Temporary
         get_reader: function() {
@@ -115,7 +114,7 @@
     let reader = new ReplayReader(match_id);
 
     //ReplayReaderVariables
-    let config = {};
+    let config = null;
     let replay = [];
     let raw_replay = '';
 
@@ -229,7 +228,7 @@
         //Turn & Frame
         turn_number.innerHTML = data.turnInfo[1];
         frame_number.innerHTML = frame;
-        turn_frame_number.innerHTML = reader.get_turn_frame_number(frame);
+        turn_frame_number.innerHTML = get_turn_frame_number(frame);
         $slider.slider('value', frame);
     }
 
@@ -255,7 +254,7 @@
                 stability_text = health_left;
 
                 //Get range
-                let range = reader.get_range(unit_type, upgraded);
+                let range = get_range(unit_type, upgraded);
 
                 //Generate flat array of locations in range
                 new_hover_range_data = match_utils_flat.get_locations_in_range(location, range);
@@ -294,6 +293,37 @@
             frame++;
         }
         return frame + 1;
+    }
+
+    function get_previous_turn(frame) {
+        frame -= 2;
+        while (frame > 0 && replay[frame].turnInfo[0] !== 0) {
+            frame--;
+        }
+        return frame + 1;
+    }
+
+    function get_range(unit_type, upgraded) {
+        let range = 0;
+
+        if (config) {
+            const correct_unit_information = JSON.parse(JSON.stringify(config.unitInformation[unit_type - 100]));
+
+            if (upgraded)
+                Object.assign(correct_unit_information, correct_unit_information.upgrade);
+
+            let propertyNames = Object.getOwnPropertyNames(correct_unit_information);
+            let range_names = propertyNames.filter(el => el.includes("Range"))
+
+            for (let range_name of range_names)
+                range = Math.max(correct_unit_information[range_name], range);
+        }
+
+        return range;
+    }
+
+    function get_turn_frame_number(frame) {
+        return replay[frame].turnInfo[2];
     }
 
     if (!window.viewer) {
