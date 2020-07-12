@@ -126,30 +126,16 @@
             user_data_algos = result.algos;
         });
 
-
-    //Init table
+    //FieldGenerator
     const watch_table = document.getElementById('watch_table');
-    watch_table.innerHTML = match_utils.generate_terminal_trs();
+    let fieldGenerator = new FieldGenerator(match_utils);
+    fieldGenerator.generate(watch_table);
+    const viewer_elements = fieldGenerator.get_viewer_elements();
+    const highlight_elements = fieldGenerator.get_hover_elements();
 
-    //Init references to images
-    const viewer_elements = match_utils.get_all_changeable_elements_flat(watch_table);
-    const viewer_elements_length = viewer_elements.length;
 
     //Create MatchViewer
     let match_viewer = new MatchViewer(match_utils, viewer_elements)
-
-    //Set all to hidden
-    for (var i = 0; i < viewer_elements_length; i++) {
-        viewer_elements[i].hidden = true;
-    }
-
-    //Get Highlight elements
-    const highlight_elements = document.getElementsByClassName('highlight');
-
-    //Set all to hidden
-    for (var i = 0; i < highlight_elements.length; i++) {
-        highlight_elements[i].hidden = true;
-    }
 
     //Reusable references to html elements
     let healths = document.getElementsByName('health');
