@@ -117,9 +117,9 @@
     let config = null;
     let replay = [];
     let raw_replay = '';
+    let algos = null;
 
-    //TODO: Move this outside of this file and set the Variables using Methods
-    //Create ReplayDownloader to replace ReplayReader
+    //TODO: Move ReplayDownloader and UserDataDownloader outside of this file and set the Variables using Methods
     new ReplayDownloader()
         .download(match_id)
         .then((result) => {
@@ -127,6 +127,12 @@
             replay = result.replay;
             raw_replay = result.raw;
         });
+    new UserDataDownloader()
+        .download(match_id)
+        .then((result) => {
+            algos = result.algos;
+        });
+
 
     //Init table
     const watch_table = document.getElementById('watch_table');
@@ -327,7 +333,7 @@
     }
 
     function is_ready() {
-        return replay.length > 0;
+        return replay.length > 0 && algos;
     }
 
     if (!window.viewer) {
