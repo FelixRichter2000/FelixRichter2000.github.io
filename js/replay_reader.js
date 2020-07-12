@@ -44,13 +44,7 @@
     proto.process_user_data = function(response) {
         this.user_data = response.data.algos;
     }
-    proto.get_next_turn = function(frame) {
-        frame++;
-        while (frame < this.count && this.raw_frame_data[frame].turnInfo[0] !== 0) {
-            frame++;
-        }
-        return frame + 1;
-    }
+
     proto.get_previous_turn = function(frame) {
         frame -= 2;
         while (frame > 0 && this.raw_frame_data[frame].turnInfo[0] !== 0) {

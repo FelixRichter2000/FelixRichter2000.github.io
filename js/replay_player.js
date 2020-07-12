@@ -15,7 +15,7 @@
             viewer.stop_play();
         },
         next_turn: function() {
-            load_frame(reader.get_next_turn(frame));
+            load_frame(get_next_turn(frame));
         },
         previous_turn: function() {
             load_frame(reader.get_previous_turn(frame));
@@ -113,6 +113,21 @@
 
     //Create replay reader
     let reader = new ReplayReader(match_id);
+
+    //ReplayReaderVariables
+    let config = {};
+    let replay = [];
+    let raw_replay = '';
+
+    //TODO: Move this outside of this file and set the Variables using Methods
+    //Create ReplayDownloader to replace ReplayReader
+    new ReplayDownloader()
+        .download(match_id)
+        .then((result) => {
+            config = result.config;
+            replay = result.replay;
+            raw_replay = result.raw;
+        });
 
     //Init table
     const watch_table = document.getElementById('watch_table');
@@ -271,6 +286,14 @@
         update_hover_info();
 
         //console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
+    }
+
+    function get_next_turn(frame) {
+        frame++;
+        while (frame < replay.length && replay[frame].turnInfo[0] !== 0) {
+            frame++;
+        }
+        return frame + 1;
     }
 
     if (!window.viewer) {
