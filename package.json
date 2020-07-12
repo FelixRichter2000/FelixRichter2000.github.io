@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/FelixRichter2000/FelixRichter2000.github.io/issues"
   },
-  "homepage": "https://github.com/FelixRichter2000/FelixRichter2000.github.io#readme"
+  "homepage": "https://github.com/FelixRichter2000/FelixRichter2000.github.io#readme",
+  "devDependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "dependencies": {
+    "jest": "^26.1.0"
+  }
 }
