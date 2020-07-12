@@ -64,12 +64,8 @@
             update_hover_info();
         },
         download: function() {
-            let filename = `${reader.user_data[0].name}_${reader.user_data[1].name}_${match_id}.replay`;
+            let filename = `${user_data_algos[0].name}_${user_data_algos[1].name}_${match_id}.replay`;
             download_text(filename, raw_replay);
-        },
-        //Temporary
-        get_reader: function() {
-            return reader;
         },
         watch_on_terminal: function() {
             var win = window.open(`https://terminal.c1games.com/watch/${match_id}`, '_blank');
@@ -110,14 +106,11 @@
     let urlParams = new URLSearchParams(window.location.search);
     let match_id = urlParams.get('id') || 5979377;
 
-    //Create replay reader
-    let reader = new ReplayReader(match_id);
-
     //ReplayReaderVariables
     let config = null;
     let replay = [];
     let raw_replay = '';
-    let algos = null;
+    let user_data_algos = null;
 
     //TODO: Move ReplayDownloader and UserDataDownloader outside of this file and set the Variables using Methods
     new ReplayDownloader()
@@ -130,7 +123,7 @@
     new UserDataDownloader()
         .download(match_id)
         .then((result) => {
-            algos = result.algos;
+            user_data_algos = result.algos;
         });
 
 
@@ -204,7 +197,7 @@
     function update_static_stats() {
         let players = document.getElementsByName('player');
         let algos = document.getElementsByName('algo');
-        let data = reader.user_data;
+        let data = algos;
         for (var i = 0; i < data.length; i++) {
             let toggled_index = match_utils.flip_player_if_switched(i, switched);
             if (players.length == 2)
@@ -213,11 +206,11 @@
                 algos[toggled_index].innerHTML = data[i].name;
         }
         document.getElementById('grid_overlay').hidden = false;
-        $slider.slider('option', { min: 0, max: reader.raw_frame_data.length - 1 });
+        $slider.slider('option', { min: 0, max: replay.length - 1 });
     }
 
     function update_turn_stats() {
-        let data = reader.raw_frame_data[frame];
+        let data = replay[frame];
         let combined = [data.p1Stats, data.p2Stats];
         for (var i = 0; i < combined.length; i++) {
             let toggled_index = match_utils.flip_player_if_switched(i, switched);
@@ -279,10 +272,10 @@
     function load_frame(new_frame) {
         if (!is_ready()) return;
 
-        new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: reader.count - 1 });
+        new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: replay.length - 1 });
         if (frame == new_frame) return;
 
-        let new_state = reader.raw_frame_data[new_frame];
+        let new_state = replay[new_frame];
         match_viewer.show_data(new_state);
 
         frame = new_frame;
@@ -290,7 +283,7 @@
         update_turn_stats();
         update_hover_info();
 
-        //console.log(`Frame: ${frame}`, reader.raw_frame_data[frame]);
+        //console.log(`Frame: ${frame}`, replay[frame]);
     }
 
     function get_next_turn(frame) {
@@ -333,7 +326,7 @@
     }
 
     function is_ready() {
-        return replay.length > 0 && algos;
+        return replay.length > 0 && user_data_algos;
     }
 
     if (!window.viewer) {
