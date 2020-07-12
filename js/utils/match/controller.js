@@ -41,18 +41,28 @@ class Controller {
 
     _get_next_turn(frame = this.frame) {
         frame++;
-        while (frame < this.replayData.length && this.replayData[frame].turnInfo[0] !== 0) {
+        while (this._should_keep_moving(frame))
             frame++;
-        }
         return frame + 1;
     }
 
     _get_previous_turn(frame = this.frame) {
         frame -= 2;
-        while (frame > 0 && this.replayData[frame].turnInfo[0] !== 0) {
+        while (this._should_keep_moving(frame))
             frame--;
-        }
         return frame + 1;
+    }
+
+    _should_keep_moving(frame) {
+        return this._isFrameInRange(frame) && this._isFrameDuringTurn(frame);
+    }
+
+    _isFrameInRange(frame) {
+        return frame > 0 && frame < this.replayData.length - 1;
+    }
+
+    _isFrameDuringTurn(frame) {
+        return this.replayData[frame].turnInfo[0] !== 0;
     }
 }
 

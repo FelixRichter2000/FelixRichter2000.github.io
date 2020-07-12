@@ -15,10 +15,14 @@ class Player {
     }
 
     set_playback_speed(fps = this.current_fps) {
+        this._updateInterval(fps);
+        this.current_fps = fps;
+    }
+
+    _updateInterval(fps) {
         if (this.timer)
             clearInterval(this.timer);
         this.timer = setInterval(this._tick.bind(this), 1000 / fps);
-        this.current_fps = fps;
     }
 
     _tick() {
