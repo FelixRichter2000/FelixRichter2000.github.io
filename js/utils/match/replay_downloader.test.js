@@ -18,6 +18,7 @@ describe('ReplayDownloader tests', function() {
                 expect(mock_fetch_json).toHaveBeenCalledWith('https://terminal.c1games.com/api/game/replayexpanded/123456');
                 expect(result.config).toEqual({ config: 123 });
                 expect(result.replay).toEqual([{ line: 1 }, { line: 2 }]);
+                expect(result.raw).toEqual('{"config":123}\n{"line":1}\n\n{"line":2}\n{"end":99}');
             });
     });
 });

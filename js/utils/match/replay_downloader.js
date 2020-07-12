@@ -10,6 +10,7 @@ class ReplayDownloader {
     }
 
     handle_result(result) {
+        this.raw = result;
         let allLines = this.parse_file(result);
         this.config = allLines[0];
         this.replay = allLines.slice(1, -1);
