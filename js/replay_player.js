@@ -197,7 +197,7 @@
     function update_static_stats() {
         let players = document.getElementsByName('player');
         let algos = document.getElementsByName('algo');
-        let data = algos;
+        let data = user_data_algos;
         for (var i = 0; i < data.length; i++) {
             let toggled_index = match_utils.flip_player_if_switched(i, switched);
             if (players.length == 2)
