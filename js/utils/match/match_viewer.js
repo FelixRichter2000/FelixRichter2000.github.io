@@ -9,14 +9,14 @@ class MatchViewer {
 
     show_data(data) {
         let new_state = this.match_utils.parse_single_object_to_array(data);
-        this.match_utils.update_changes_better(this.previous_state, new_state, this.viewer_elements, this.switched);
+        this.match_utils.update_changes(this.previous_state, new_state, this.viewer_elements, this.switched);
         this.previous_state = new_state;
     }
 
     switch () {
-        this.match_utils.update_changes_better(this.previous_state, this.empty_state, this.viewer_elements, this.switched);
+        this.match_utils.update_changes(this.previous_state, this.empty_state, this.viewer_elements, this.switched);
         this.switched = !this.switched;
-        this.match_utils.update_changes_better(this.empty_state, this.previous_state, this.viewer_elements, this.switched);
+        this.match_utils.update_changes(this.empty_state, this.previous_state, this.viewer_elements, this.switched);
     }
 
     get_value_at(location, group) {

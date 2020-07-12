@@ -127,26 +127,7 @@
             elements[i].hidden = !elements[i].hidden;
         }
     }
-    update_changes(i_previous, i_current, data, images, switched) {
-        const updater = this.config.update_function;
-
-        const data_previous = data[i_previous];
-        const data_current = data[i_current];
-        const data_length = data_previous.length;
-        const images_length = images.length;
-
-        for (let i = 0; i < data_length; i++) {
-            if (data_previous[i] != data_current[i]) {
-                const switched_index = this.calculate_switched_index(i, switched, images_length);
-                let current_element = images[switched_index];
-                let value = data_current[i];
-                let group = i % this.config.group_size;
-
-                updater(group, switched_index, current_element, value);
-            }
-        }
-    }
-    update_changes_better(data_previous, data_current, images, switched) {
+    update_changes(data_previous, data_current, images, switched) {
         const updater = this.config.update_function;
 
         const data_length = data_previous.length;
@@ -162,10 +143,6 @@
                 updater(group, switched_index, current_element, value);
             }
         }
-    }
-    switch_view(i_current, data, images, switched) {
-        this.update_changes(i_current, 0, data, images, switched);
-        this.update_changes(0, i_current, data, images, !switched);
     }
     get_custome_value_at(location, switched, group, current_frame_data) {
         let index = this.location_to_index(location);

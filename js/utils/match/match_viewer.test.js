@@ -26,7 +26,7 @@ describe('MatchViewer test', function() {
     test('show data', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
         matchViewer.show_data([]);
-        expect(mockMatchUtils.update_changes_better)
+        expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedParsedArray, mockedViewerElements, false);
     });
     test('switch without show data before', () => {
@@ -35,9 +35,9 @@ describe('MatchViewer test', function() {
 
         matchViewer.switch();
 
-        expect(mockMatchUtils.update_changes_better)
+        expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedEmptyArray, mockedViewerElements, false);
-        expect(mockMatchUtils.update_changes_better)
+        expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedEmptyArray, mockedViewerElements, true);
     });
 
@@ -48,9 +48,9 @@ describe('MatchViewer test', function() {
 
         matchViewer.switch();
 
-        expect(mockMatchUtils.update_changes_better)
+        expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedParsedArray, mockedEmptyArray, mockedViewerElements, false);
-        expect(mockMatchUtils.update_changes_better)
+        expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedParsedArray, mockedViewerElements, true);
     });
 

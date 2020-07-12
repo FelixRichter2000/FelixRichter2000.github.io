@@ -417,7 +417,7 @@ describe('Test toggle_hidden', function() {
     });
 });
 describe('Test update_changes', function() {
-    test('update_changes(0, 1, data, images, false)', () => {
+    test('update_changes(data[0], data[1], images, false)', () => {
         const mu_special = new MatchUtils({
             arena_settings: { size: 2, half: 1 },
             group_size: 1,
@@ -433,7 +433,7 @@ describe('Test update_changes', function() {
             [0, 1, 1, 0]
         ];
 
-        mu_special.update_changes(0, 1, data, images, false);
+        mu_special.update_changes(data[0], data[1], images, false);
 
         expect(images)
             .toEqual([{ hidden: true }, { hidden: false }, { hidden: false }, { hidden: true }]);
@@ -454,38 +454,13 @@ describe('Test update_changes', function() {
             [0, 5, 0, 0]
         ];
 
-        mu_special.update_changes(1, 0, data, images, false);
+        mu_special.update_changes(data[1], data[0], images, false);
 
         expect(images)
             .toEqual([{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: true }]);
     });
 });
-describe('Test switch_view', function() {
-    test('switch_view(1, data, images, false)', () => {
-        const mu_special = new MatchUtils({
-            arena_settings: { size: 2, half: 1 },
-            group_size: 1,
-        }, {
-            update_function: function(group, switched_index, current_element, value) {
-                current_element.hidden = value == 0;
-            },
-            additional_flipping: function(self, index) {
-                return index;
-            }
-        });
 
-        let images = [{ hidden: true }, { hidden: true }, { hidden: false }, { hidden: false }];
-        let data = [
-            [0, 0, 0, 0],
-            [0, 0, 1, 1]
-        ];
-
-        mu_special.switch_view(1, data, images, false);
-
-        expect(images)
-            .toEqual([{ hidden: false }, { hidden: false }, { hidden: true }, { hidden: true }]);
-    });
-});
 describe('Test get_custome_value_at', function() {
     test('location: [0, 0], flipped: false, group: 0, data: [1, 2, 3, 4] =>  3', () => {
         expect(mu_size2.get_custome_value_at([0, 0], false, 0, [1, 2, 3, 4]))

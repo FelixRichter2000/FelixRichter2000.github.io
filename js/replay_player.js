@@ -245,7 +245,7 @@
         //Update 
         position_span.innerHTML = position_text;
         stability_span.innerHTML = stability_text;
-        match_utils_flat.update_changes(0, 1, [hover_range_data, new_hover_range_data], highlight_elements, false);
+        match_utils_flat.update_changes(hover_range_data, new_hover_range_data, highlight_elements, false);
 
         //Update hover_range_data
         hover_range_data = new_hover_range_data;
