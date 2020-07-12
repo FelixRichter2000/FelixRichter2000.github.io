@@ -22,7 +22,7 @@
             viewer.stop_play();
         },
         switch_view: function() {
-            if (!reader.is_ready()) return;
+            if (!is_ready()) return;
 
             match_viewer.switch();
             switched = !switched;
@@ -183,7 +183,7 @@
 
     //Private methods
     function tick() {
-        if (first_time && reader.is_ready()) {
+        if (first_time && is_ready()) {
             first_time = false;
 
             update_static_stats();
@@ -233,7 +233,7 @@
     }
 
     function update_hover_info() {
-        if (!reader.is_ready()) return;
+        if (!is_ready()) return;
 
         //Setup empty
         let position_text = "";
@@ -271,7 +271,7 @@
     }
 
     function load_frame(new_frame) {
-        if (!reader.is_ready()) return;
+        if (!is_ready()) return;
 
         new_frame = match_utils.put_value_in_range(new_frame, { min: 0, max: reader.count - 1 });
         if (frame == new_frame) return;
@@ -324,6 +324,10 @@
 
     function get_turn_frame_number(frame) {
         return replay[frame].turnInfo[2];
+    }
+
+    function is_ready() {
+        return replay.length > 0;
     }
 
     if (!window.viewer) {
