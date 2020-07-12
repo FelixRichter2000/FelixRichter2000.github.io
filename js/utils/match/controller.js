@@ -30,11 +30,6 @@ class Controller {
         this.set_frame(this._get_previous_turn());
     }
 
-    do_action(function_name, parameter) {
-        if (this[function_name])
-            this[function_name](parameter);
-    }
-
     _show_frame_using_matchViewer(frame) {
         this.frame = frame;
         return this.matchViewer.show_data(this.replayData[frame]);
