@@ -197,13 +197,12 @@
     function update_static_stats() {
         let players = document.getElementsByName('player');
         let algos = document.getElementsByName('algo');
-        let data = user_data_algos;
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < user_data_algos.length; i++) {
             let toggled_index = match_utils.flip_player_if_switched(i, switched);
             if (players.length == 2)
-                players[toggled_index].innerHTML = data[i].user;
+                players[toggled_index].innerHTML = user_data_algos[i].user;
             if (algos.length == 2)
-                algos[toggled_index].innerHTML = data[i].name;
+                algos[toggled_index].innerHTML = user_data_algos[i].name;
         }
         document.getElementById('grid_overlay').hidden = false;
         $slider.slider('option', { min: 0, max: replay.length - 1 });
