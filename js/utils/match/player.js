@@ -23,6 +23,14 @@ class Player {
         this._updateInterval();
     }
 
+    previous_frame() {
+        this.pause();
+    }
+
+    previous_turn() {
+        this.pause();
+    }
+
     _updateFpsIfValid(fps) {
         if (fps >= 0 && fps <= 60)
             this.current_fps = fps;

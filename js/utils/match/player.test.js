@@ -124,4 +124,18 @@ describe('test player', () => {
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(7);
     });
+
+    test('previous_frame should pause player', () => {
+        let player = new Player(mockActionEventSystem);
+        player.previous_frame();
+        jest.advanceTimersByTime(1000);
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+    });
+
+    test('previous_turn should pause player', () => {
+        let player = new Player(mockActionEventSystem);
+        player.previous_turn();
+        jest.advanceTimersByTime(1000);
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+    });
 });
