@@ -14,6 +14,10 @@ class Player {
         this.playing = false;
     }
 
+    toggle_play() {
+        this.playing = !this.playing;
+    }
+
     set_playback_speed(fps = this.current_fps) {
         this._updateFpsIfValid(fps);
         this._updateInterval();

@@ -113,4 +113,15 @@ describe('test player', () => {
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(10);
     });
+
+    test('toggle play', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(10);
+        player.toggle_play();
+        jest.advanceTimersByTime(300);
+        player.toggle_play();
+        jest.advanceTimersByTime(700);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(7);
+    });
 });
