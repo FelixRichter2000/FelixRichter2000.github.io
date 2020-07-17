@@ -29,11 +29,11 @@ describe('MatchViewer test', function() {
         expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedParsedArray, mockedViewerElements, false);
     });
-    test('switch without show data before', () => {
+    test('switch_view without show data before', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
         jest.clearAllMocks();
 
-        matchViewer.switch();
+        matchViewer.switch_view();
 
         expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedEmptyArray, mockedViewerElements, false);
@@ -41,12 +41,12 @@ describe('MatchViewer test', function() {
             .toHaveBeenCalledWith(mockedEmptyArray, mockedEmptyArray, mockedViewerElements, true);
     });
 
-    test('switch', () => {
+    test('switch_view', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
         matchViewer.show_data([]);
         jest.clearAllMocks();
 
-        matchViewer.switch();
+        matchViewer.switch_view();
 
         expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedParsedArray, mockedEmptyArray, mockedViewerElements, false);
@@ -69,9 +69,9 @@ describe('MatchViewer test', function() {
             .toHaveBeenCalledWith('location', false, 'group', mockedParsedArray);
     });
 
-    test('get_value_at after switch calles matchUtils with correct parameters', () => {
+    test('get_value_at after switch_view calles matchUtils with correct parameters', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
-        matchViewer.switch();
+        matchViewer.switch_view();
         matchViewer.get_value_at('location', 'group');
         expect(mockMatchUtils.get_custome_value_at)
             .toHaveBeenCalledWith('location', true, 'group', mockedEmptyArray);

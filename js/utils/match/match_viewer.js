@@ -13,7 +13,7 @@ class MatchViewer {
         this.previous_state = new_state;
     }
 
-    switch () {
+    switch_view() {
         this.match_utils.update_changes(this.previous_state, this.empty_state, this.viewer_elements, this.switched);
         this.switched = !this.switched;
         this.match_utils.update_changes(this.empty_state, this.previous_state, this.viewer_elements, this.switched);
