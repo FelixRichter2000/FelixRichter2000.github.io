@@ -11,7 +11,7 @@ class Controller {
 
     set_frame(frame) {
         if (this._is_frame_valid(frame))
-            return this._show_frame_using_matchViewer(frame);
+            this._show_frame_using_matchViewer(frame);
     }
 
     next_frame() {
@@ -32,7 +32,7 @@ class Controller {
 
     _show_frame_using_matchViewer(frame) {
         this.frame = frame;
-        return this.matchViewer.show_data(this.replayData[frame]);
+        this.matchViewer.show_data(this.replayData[frame]);
     }
 
     _is_frame_valid(frame) {
