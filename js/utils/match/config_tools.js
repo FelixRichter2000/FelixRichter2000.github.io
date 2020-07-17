@@ -3,6 +3,10 @@ class ConfigTools {
         this.config = config;
     }
 
+    setConfig(config) {
+        this.config = config;
+    }
+
     getRange(unit_type, upgraded) {
         unit_type = this._adaptHighUnitTypes(unit_type);
         return this._getRange(unit_type, upgraded);

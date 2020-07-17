@@ -79,4 +79,12 @@ describe('test shortcut controller', () => {
         let result = config_tools.getRange(102, false);
         expect(result).toBe(2);
     });
+
+    test('setConfig later', () => {
+        let config = { unitInformation: [{}, {}, { hitRange: 2, upgrade: { hitRange: 4 } }] }
+        let config_tools = new ConfigTools();
+        config_tools.setConfig(config);
+        let result = config_tools.getRange(102, false);
+        expect(result).toBe(2);
+    });
 });
