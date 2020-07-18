@@ -10,7 +10,8 @@ class Slider {
             max: 0,
             step: 1,
             slide: function(event, ui) {
-                actionEventSystem.release_event(ui.value);
+                actionEventSystem.release_event('set_frame', ui.value);
+                actionEventSystem.release_event('pause');
             },
         });
     }

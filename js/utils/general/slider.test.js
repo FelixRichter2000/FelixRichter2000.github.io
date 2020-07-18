@@ -29,7 +29,8 @@ describe('test Slider', () => {
         let mockFunctioningSlider = { slider: (args) => { this.args = args; }, slide: (event, slider) => this.args.slide(event, slider) };
         new Slider(mockFunctioningSlider, mockActionEventSystem);
         mockFunctioningSlider.slide({}, { value: 5 });
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith(5);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_frame', 5);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('pause');
     });
 
     test('set current value outside of range should set to max_range', () => {
