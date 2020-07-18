@@ -10,7 +10,7 @@ const ActionEventSystem = require('../general/action_event_system');
 jest.mock('../general/action_event_system');
 const mockActionEventSystem = new ActionEventSystem();
 
-const HEALTH = 12;
+const HEALTH = 13;
 const UNIT_TYPE = 14;
 const UPGRADED = 10;
 
@@ -71,6 +71,6 @@ describe('test hover_information', () => {
         hoverInformation.show_field_info([0, 0]);
 
         expect(mockActionEventSystem.release_event)
-            .toHaveBeenCalledWith('update_view', { hover_health: 'returnValue', hover_location: '0, 0' });
+            .toHaveBeenCalledWith('update_view', { hover_health: ['returnValue'], hover_location: ['0, 0'] });
     });
 });
