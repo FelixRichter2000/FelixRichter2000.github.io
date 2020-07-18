@@ -1,5 +1,7 @@
 //ActionEventSystem
 let actionEventSystem = new ActionEventSystem();
+actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover')
+actionEventSystem.registerFollowUpEvent('show_data', 'update_hover')
 
 //Get match id from query
 let urlParams = new URLSearchParams(window.location.search);
@@ -17,6 +19,9 @@ match_utils_flat = new MatchUtils({
     update_function: function(group, switched_index, current_element, value) {
         current_element.hidden = value == 0;
     },
+    parse_frame_data_to_flat_array: function(self, data) {
+        return self.get_locations_in_range(data.location, data.range);
+    }
 });
 
 //FieldGenerator
@@ -30,8 +35,11 @@ const highlight_elements = fieldGenerator.get_hover_elements();
 let match_viewer = new MatchViewer(match_utils, viewer_elements);
 actionEventSystem.register(match_viewer);
 
+//FlatMatchViewer
+let flat_match_viewer = new MatchViewer(match_utils_flat, highlight_elements);
+
 //Controller
-let controller = new Controller(match_viewer);
+let controller = new Controller(actionEventSystem);
 actionEventSystem.register(controller);
 
 //ConfigTools
@@ -42,9 +50,7 @@ new ReplayDownloader()
     .then((result) => {
         controller.set_replay_data(result.replay);
         configTools.setConfig(result.config);
-        console.log(result.config)
-            // config = result.config;
-            // raw_replay = result.raw;
+        // raw_replay = result.raw;
     });
 new UserDataDownloader()
     .download(match_id)
@@ -52,6 +58,9 @@ new UserDataDownloader()
         // user_data_algos = result.algos;
     });
 
+//HoverInformation
+let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools);
+actionEventSystem.register(hoverInformation);
 
 let player = new Player(actionEventSystem);
 actionEventSystem.register(player);
