@@ -71,7 +71,7 @@ new UserDataDownloader()
     });
 
 //HoverInformation
-let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools);
+let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);
 actionEventSystem.register(hoverInformation);
 
 //StateParser
@@ -83,7 +83,8 @@ window.addEventListener('mousemove', (e) => {
     const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);
     let x = round(e.clientX);
     let y = 27 - round(e.clientY);
-    actionEventSystem.release_event('show_field_info', [x, y])
+    if (match_utils.is_in_arena_bounds(x, y))
+        actionEventSystem.release_event('show_field_info', [x, y])
 });
 
 let player = new Player(actionEventSystem);
