@@ -33,7 +33,7 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.show_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
 
     test('update event first uses default location', () => {
@@ -46,7 +46,7 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.show_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
 
     test('update_hover event', () => {
@@ -62,6 +62,6 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.show_data).toHaveBeenCalledWith({ location: [2, 3], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [2, 3], range: 'returnedRange' });
     });
 });

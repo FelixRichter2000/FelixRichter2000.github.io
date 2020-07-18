@@ -258,7 +258,7 @@
         if (frame == new_frame) return;
 
         let new_state = replay[new_frame];
-        match_viewer.show_data(new_state);
+        match_viewer.update_frame_data(new_state);
 
         frame = new_frame;
 

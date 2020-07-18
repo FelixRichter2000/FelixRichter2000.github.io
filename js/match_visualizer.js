@@ -1,7 +1,7 @@
 //ActionEventSystem
 let actionEventSystem = new ActionEventSystem();
 actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover')
-actionEventSystem.registerFollowUpEvent('show_data', 'update_hover')
+actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover')
 
 //Get match id from query
 let urlParams = new URLSearchParams(window.location.search);

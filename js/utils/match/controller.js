@@ -11,7 +11,7 @@ class Controller {
 
     set_frame(frame) {
         if (this._is_frame_valid(frame))
-            this._release_show_data_event(frame);
+            this._release_update_frame_data_event(frame);
     }
 
     next_frame() {
@@ -30,9 +30,10 @@ class Controller {
         this.set_frame(this._get_previous_turn());
     }
 
-    _release_show_data_event(frame) {
+    _release_update_frame_data_event(frame) {
         this.frame = frame;
-        this.actionEventSystem.release_event('show_data', this.replayData[frame]);
+        this.actionEventSystem.release_event('update_frame_data', this.replayData[frame]);
+        console.log(this.replayData[frame]);
     }
 
     _is_frame_valid(frame) {

@@ -26,41 +26,41 @@ describe('Controller tests', function() {
         const controller = new Controller(mockActionEventSystem);
     });
 
-    test('don`t throw exception when MatchViewer.show_data is called and replayData is not set', () => {
+    test('don`t throw exception when MatchViewer.update_frame_data is called and replayData is not set', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_frame(0);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
     });
 
-    test('don`t call MatchViewer.show_data when show_frame (-1) is called', () => {
+    test('don`t call MatchViewer.update_frame_data when show_frame (-1) is called', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(-1);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
     });
 
-    test('don`t call MatchViewer.show_data when show_frame with bigger than highest index is called', () => {
+    test('don`t call MatchViewer.update_frame_data when show_frame with bigger than highest index is called', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(3);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
     });
 
-    test('call MatchViewer.show_data with correct data when show_frame (0) is called', () => {
+    test('call MatchViewer.update_frame_data with correct data when show_frame (0) is called', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(0);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 10);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 10);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(11);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(12);
     });
 
-    test('call MatchViewer.show_data with correct data when show_frame (1) is called', () => {
+    test('call MatchViewer.update_frame_data with correct data when show_frame (1) is called', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(1);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(10);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 11);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 11);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(12);
     });
 });
@@ -77,14 +77,14 @@ describe('test do_action set_frame', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 20, 30]);
         controller.set_frame(0);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 10);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 10);
     });
 
     test('set_frame with frame_number = 2', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 20, 30]);
         controller.set_frame(2);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 30);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 30);
     });
 
     test('set_frame with frame_number = -1', () => {
@@ -114,7 +114,7 @@ describe('test do_action next_frame', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 20, 30]);
         controller.next_frame();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 20);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 20);
     });
 
     test('next_frame twice: show 2nd and then 3rd frame', () => {
@@ -122,8 +122,8 @@ describe('test do_action next_frame', () => {
         controller.set_replay_data([10, 20, 30]);
         controller.next_frame();
         controller.next_frame();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 20);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 30);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 20);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 30);
     });
 
     test('next_frame: calling it to often makes it do nothing', () => {
@@ -157,8 +157,8 @@ describe('test do_action previous_frame', () => {
         controller.set_replay_data([10, 20, 30]);
         controller.set_frame(2);
         controller.previous_frame();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 30);
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', 20);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 30);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 20);
     });
 
     test('combination of multiple next_frame and previous_frame calls', () => {
@@ -191,7 +191,7 @@ describe('test do_action next_turn', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data(mockReplayData);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 3, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 3, turnInfo: [1] });
     });
 
     test('should find and show next turn with multiple steps in between', () => {
@@ -199,7 +199,7 @@ describe('test do_action next_turn', () => {
         controller.set_replay_data(mockReplayData);
         controller.set_frame(3);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 6, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 6, turnInfo: [1] });
     });
 
     test('should find and show next turn with multiple steps in between from turn frame -1', () => {
@@ -207,7 +207,7 @@ describe('test do_action next_turn', () => {
         controller.set_replay_data(mockReplayData);
         controller.set_frame(2);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 6, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 6, turnInfo: [1] });
     });
 });
 
@@ -225,7 +225,7 @@ describe('test do_action previous_turn', () => {
         controller.set_frame(3);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 1, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 1, turnInfo: [1] });
     });
 
     test('should find and show previous turn from turn_frame -1', () => {
@@ -234,7 +234,7 @@ describe('test do_action previous_turn', () => {
         controller.set_frame(2);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 1, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 1, turnInfo: [1] });
     });
 
     test('should find and show previous turn with multiple steps', () => {
@@ -243,6 +243,6 @@ describe('test do_action previous_turn', () => {
         controller.set_frame(6);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('show_data', { frame: 3, turnInfo: [1] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 3, turnInfo: [1] });
     });
 });

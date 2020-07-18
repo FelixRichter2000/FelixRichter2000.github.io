@@ -7,7 +7,7 @@ class MatchViewer {
         this.switched = false;
     }
 
-    show_data(data) {
+    update_frame_data(data) {
         let new_state = this.match_utils.parse_single_object_to_array(data);
         this.match_utils.update_changes(this.previous_state, new_state, this.viewer_elements, this.switched);
         this.previous_state = new_state;

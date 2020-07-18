@@ -18,7 +18,7 @@ class HoverInformation {
 
         let range = this.configTools.getRange(unit_type, upgraded);
 
-        this.flatMatchViewer.show_data({ location: this.last_location, range });
+        this.flatMatchViewer.update_frame_data({ location: this.last_location, range });
     }
 }
 
