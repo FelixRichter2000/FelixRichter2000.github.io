@@ -15,6 +15,28 @@ describe('test ViewModel', () => {
         expect(document.getElementsByName('username')[0].innerHTML).toEqual('hans');
     });
 
+    test('update_view with null parameter should not throw error', () => {
+        document.body.innerHTML = `
+        <label name="username">defaultUsername</label>
+        `;
+
+        let viewModel = new ViewModel();
+        viewModel.update_view({ username: null });
+
+        expect(document.getElementsByName('username')[0].innerHTML).toEqual('defaultUsername');
+    });
+
+    test('update_view with empty array parameter should not throw error', () => {
+        document.body.innerHTML = `
+        <label name="username">defaultUsername</label>
+        `;
+
+        let viewModel = new ViewModel();
+        viewModel.update_view({ username: [] });
+
+        expect(document.getElementsByName('username')[0].innerHTML).toEqual('undefined');
+    });
+
     test('update_view with another value', () => {
         document.body.innerHTML = `
         <label name="username">defaultUsername</label>
