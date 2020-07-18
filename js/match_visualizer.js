@@ -49,13 +49,9 @@ actionEventSystem.register(controller);
 //ConfigTools
 let configTools = new ConfigTools();
 
-new ReplayDownloader()
-    .download(match_id)
-    .then((result) => {
-        controller.set_replay_data(result.replay);
-        configTools.setConfig(result.config);
-        // raw_replay = result.raw;
-    });
+new ReplayDownloader(actionEventSystem)
+    .download(match_id);
+
 new UserDataDownloader()
     .download(match_id)
     .then((result) => {
@@ -73,6 +69,12 @@ new UserDataDownloader()
 //HoverInformation
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);
 actionEventSystem.register(hoverInformation);
+
+//Slider
+let replay_slider = new Slider($('#replay_slider'), actionEventSystem);
+replay_slider.set_replay_data = function(data) { this.set_max_value(data.length); }
+replay_slider.update_frame_data = function(data) { this.set_current_value(data.turnInfo[3]); }
+actionEventSystem.register(replay_slider);
 
 //Play/Pause-AttributeToggler
 let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');
