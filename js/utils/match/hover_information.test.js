@@ -49,7 +49,7 @@ describe('test hover_information', () => {
         expect(mockFlatMatchViewer.show_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
 
-    test('update event', () => {
+    test('update_hover event', () => {
         const hoverInformation = new HoverInformation(mockMatchViewer, mockFlatMatchViewer, mockConfigTools);
         hoverInformation.show_field_info([2, 3]);
         jest.clearAllMocks();
