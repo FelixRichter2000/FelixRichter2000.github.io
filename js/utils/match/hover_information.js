@@ -6,8 +6,8 @@ class HoverInformation {
         this.last_location = [0, 0];
     }
 
-    show_field_info(x, y) {
-        this.last_location = [x, y];
+    show_field_info(location) {
+        this.last_location = location;
         this.update_hover();
     }
 

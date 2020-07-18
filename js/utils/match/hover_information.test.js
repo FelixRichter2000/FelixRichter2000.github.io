@@ -25,7 +25,7 @@ describe('test hover_information', () => {
 
     test('show_field_info event', () => {
         const hoverInformation = new HoverInformation(mockMatchViewer, mockFlatMatchViewer, mockConfigTools);
-        hoverInformation.show_field_info(0, 0);
+        hoverInformation.show_field_info([0, 0]);
 
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], HEALTH);
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], UNIT_TYPE);
@@ -51,7 +51,7 @@ describe('test hover_information', () => {
 
     test('update event', () => {
         const hoverInformation = new HoverInformation(mockMatchViewer, mockFlatMatchViewer, mockConfigTools);
-        hoverInformation.show_field_info(2, 3);
+        hoverInformation.show_field_info([2, 3]);
         jest.clearAllMocks();
 
         hoverInformation.update_hover();
