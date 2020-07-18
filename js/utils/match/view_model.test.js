@@ -34,7 +34,7 @@ describe('test ViewModel', () => {
         let viewModel = new ViewModel();
         viewModel.update_view({ username: [] });
 
-        expect(document.getElementsByName('username')[0].innerHTML).toEqual('undefined');
+        expect(document.getElementsByName('username')[0].innerHTML).toEqual('');
     });
 
     test('update_view with another value', () => {

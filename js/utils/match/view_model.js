@@ -17,7 +17,7 @@ class ViewModel {
     _updateFoundElements(foundElements, dataArray) {
         if (dataArray)
             foundElements.forEach((element, index) => {
-                element.innerHTML = dataArray[this._calculateIndex(foundElements.length, index)]
+                element.innerHTML = dataArray[this._calculateIndex(foundElements.length, index)] || ''
             });
     }
 
