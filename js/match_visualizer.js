@@ -74,6 +74,11 @@ new UserDataDownloader()
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);
 actionEventSystem.register(hoverInformation);
 
+//Play/Pause-AttributeToggler
+let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');
+playPauseAttributeToggler.toggle_play = function() { this.toggle_attributes(); }
+actionEventSystem.register(playPauseAttributeToggler);
+
 //StateParser
 let stateParser = new StateParser(actionEventSystem);
 actionEventSystem.register(stateParser);
