@@ -65,7 +65,7 @@ new UserDataDownloader()
         let transformed = names
             .map(element => result.algos
                 .reduce((a, algo) => [...a, algo[element]], []))
-            .reduce((a, values, index) => { return {...a, [names[index]]: values }; }, {});
+            .reduce((a, values, index) => ({...a, [names[index]]: values }), {});
 
         actionEventSystem.release_event('update_view', transformed);
         console.log(transformed);
@@ -74,6 +74,10 @@ new UserDataDownloader()
 //HoverInformation
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools);
 actionEventSystem.register(hoverInformation);
+
+//StateParser
+let stateParser = new StateParser(actionEventSystem);
+actionEventSystem.register(stateParser);
 
 window.addEventListener('mousemove', (e) => {
     let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
@@ -152,3 +156,15 @@ let shortcutController = new ShortcutController(actionEventSystem);
 document.querySelectorAll('[action]').forEach(function(e) {
     e.addEventListener('click', () => actionEventSystem.release_event(e.getAttribute('action')))
 });
+
+//Fancy Health-Bars
+setInterval(() => {
+    let health_values = [...document.getElementsByName('health')]
+        .map(e => `${parseInt(e.innerHTML) / .3}%`);
+
+    console.log(health_values);
+    [...document.getElementsByName('health-bar')]
+    .forEach((e, i) => {
+        e.style.width = health_values[i];
+    });
+}, 1000 / 60);
