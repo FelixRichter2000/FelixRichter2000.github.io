@@ -35,6 +35,10 @@ const highlight_elements = fieldGenerator.get_hover_elements();
 let match_viewer = new MatchViewer(match_utils, viewer_elements);
 actionEventSystem.register(match_viewer);
 
+//Create ViewModel
+let view_model = new ViewModel();
+actionEventSystem.register(view_model);
+
 //FlatMatchViewer
 let flat_match_viewer = new MatchViewer(match_utils_flat, highlight_elements);
 
@@ -55,7 +59,16 @@ new ReplayDownloader()
 new UserDataDownloader()
     .download(match_id)
     .then((result) => {
-        // user_data_algos = result.algos;
+
+        //Transform data
+        let names = Object.getOwnPropertyNames(result.algos[0]);
+        let transformed = names
+            .map(element => result.algos
+                .reduce((a, algo) => [...a, algo[element]], []))
+            .reduce((a, values, index) => { return {...a, [names[index]]: values }; }, {});
+
+        actionEventSystem.release_event('update_view', transformed);
+        console.log(transformed);
     });
 
 //HoverInformation
