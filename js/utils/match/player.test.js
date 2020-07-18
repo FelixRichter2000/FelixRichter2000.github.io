@@ -86,20 +86,38 @@ describe('test player', () => {
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(20);
     });
 
-    test('pause_play', () => {
+    test('pause replay whils running', () => {
         let player = new Player(mockActionEventSystem);
         player.pause();
-        jest.advanceTimersByTime(1000);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('toggle_play');
+    });
 
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    test('pause replay whils pausing', () => {
+        let player = new Player(mockActionEventSystem);
+        player.toggle_play();
+        player.pause();
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+    });
+
+    test('play replay whilst playing', () => {
+        let player = new Player(mockActionEventSystem);
+        player.play();
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+    });
+
+    test('play replay whilst pausing', () => {
+        let player = new Player(mockActionEventSystem);
+        player.toggle_play();
+        player.play();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('toggle_play');
     });
 
     test('combination of pause and play', () => {
         let player = new Player(mockActionEventSystem);
         player.set_playback_speed(10);
-        player.pause();
+        player.toggle_play();
         jest.advanceTimersByTime(300);
-        player.play();
+        player.toggle_play();
         jest.advanceTimersByTime(700);
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(7);
@@ -112,6 +130,68 @@ describe('test player', () => {
         jest.advanceTimersByTime(1000);
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(10);
+    });
+
+    test('faster_playback should increase the number of events per second', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(10);
+        player.faster_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(14);
+    });
+
+    test('faster_playback multiple times should increase the number of events per second more', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(10);
+        player.faster_playback();
+        player.faster_playback();
+        player.faster_playback();
+        player.faster_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(25);
+    });
+
+    test('faster_playback at max speed should not increase speed further', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(56);
+        player.faster_playback();
+        player.faster_playback();
+        player.faster_playback();
+        player.faster_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(60);
+    });
+
+    test('slower_playback should decrease the number of events per second', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(12);
+        player.slower_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(8);
+    });
+
+    test('slower_playback multiple times should decrease the number of events per second', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(12);
+        player.slower_playback();
+        player.slower_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(4);
+    });
+
+    test('slower_playback should never go lower than 4', () => {
+        let player = new Player(mockActionEventSystem);
+        player.set_playback_speed(8);
+        player.slower_playback();
+        player.slower_playback();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(4);
     });
 
     test('toggle play', () => {
@@ -128,14 +208,12 @@ describe('test player', () => {
     test('previous_frame should pause player', () => {
         let player = new Player(mockActionEventSystem);
         player.previous_frame();
-        jest.advanceTimersByTime(1000);
-        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('toggle_play');
     });
 
     test('previous_turn should pause player', () => {
         let player = new Player(mockActionEventSystem);
         player.previous_turn();
-        jest.advanceTimersByTime(1000);
-        expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('toggle_play');
     });
 });

@@ -7,11 +7,13 @@ class Player {
     }
 
     play() {
-        this.playing = true;
+        if (!this.playing)
+            this.actionEventSystem.release_event('toggle_play');
     }
 
     pause() {
-        this.playing = false;
+        if (this.playing)
+            this.actionEventSystem.release_event('toggle_play');
     }
 
     toggle_play() {
@@ -23,6 +25,14 @@ class Player {
         this._updateInterval();
     }
 
+    faster_playback() {
+        this.set_playback_speed(this.current_fps + 4);
+    }
+
+    slower_playback() {
+        this.set_playback_speed(this.current_fps - 4);
+    }
+
     previous_frame() {
         this.pause();
     }
@@ -32,7 +42,7 @@ class Player {
     }
 
     _updateFpsIfValid(fps) {
-        if (fps >= 0 && fps <= 60)
+        if (fps > 0 && fps <= 60)
             this.current_fps = fps;
     }
 
