@@ -18,7 +18,7 @@ class StateParser {
 
     _addTurnProperties(transformed, turn_values) {
         transformed = this.turn_names
-            .reduce((a, turn_name, index) => ({...a, [turn_name]: turn_values[index] }), transformed);
+            .reduce((a, turn_name, index) => ({...a, [turn_name]: [turn_values[index]] }), transformed);
         return transformed;
     }
 

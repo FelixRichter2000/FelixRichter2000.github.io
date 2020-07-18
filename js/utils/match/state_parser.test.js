@@ -22,10 +22,10 @@ describe('test StateParser', () => {
             core: ['cores1', 'cores2'],
             bit: ['bits1', 'bits2'],
             ms: ['ms1', 'ms2'],
-            turn_type: 'turnType',
-            turn_number: 'turnNumber',
-            action_phase_frame_number: 'actionPhaseFrameNumber',
-            total_frame_number: 'totalFrameNumber'
+            turn_type: ['turnType'],
+            turn_number: ['turnNumber'],
+            action_phase_frame_number: ['actionPhaseFrameNumber'],
+            total_frame_number: ['totalFrameNumber']
         }
 
         stateParser.update_frame_data(input_data);
