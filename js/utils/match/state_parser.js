@@ -2,7 +2,7 @@ class StateParser {
 
     constructor(actionEventSystem) {
         this.actionEventSystem = actionEventSystem;
-        this.stat_names = ['health', 'cores', 'bits', 'ms'];
+        this.stat_names = ['health', 'core', 'bit', 'ms'];
         this.turn_names = ['turn_type', 'turn_number', 'action_phase_frame_number', 'total_frame_number'];
     }
 

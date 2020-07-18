@@ -19,8 +19,8 @@ describe('test StateParser', () => {
 
         const expected_output_data = {
             health: ['health1', 'health2'],
-            cores: ['cores1', 'cores2'],
-            bits: ['bits1', 'bits2'],
+            core: ['cores1', 'cores2'],
+            bit: ['bits1', 'bits2'],
             ms: ['ms1', 'ms2'],
             turn_type: 'turnType',
             turn_number: 'turnNumber',
