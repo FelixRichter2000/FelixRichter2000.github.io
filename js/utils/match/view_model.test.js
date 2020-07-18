@@ -26,6 +26,17 @@ describe('test ViewModel', () => {
         expect(document.getElementsByName('username')[0].innerHTML).toEqual('defaultUsername');
     });
 
+    test('update_view with 0 parameter should work', () => {
+        document.body.innerHTML = `
+        <label name="username">defaultUsername</label>
+        `;
+
+        let viewModel = new ViewModel();
+        viewModel.update_view({ username: [0] });
+
+        expect(document.getElementsByName('username')[0].innerHTML).toEqual('0');
+    });
+
     test('update_view with empty array parameter should not throw error', () => {
         document.body.innerHTML = `
         <label name="username">defaultUsername</label>
