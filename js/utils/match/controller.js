@@ -33,7 +33,6 @@ class Controller {
     _release_update_frame_data_event(frame) {
         this.frame = frame;
         this.actionEventSystem.release_event('update_frame_data', this.replayData[frame]);
-        console.log(this.replayData[frame]);
     }
 
     _is_frame_valid(frame) {

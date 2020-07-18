@@ -68,7 +68,6 @@ new UserDataDownloader()
             .reduce((a, values, index) => ({...a, [names[index]]: values }), {});
 
         actionEventSystem.release_event('update_view', transformed);
-        console.log(transformed);
     });
 
 //HoverInformation
@@ -161,10 +160,6 @@ document.querySelectorAll('[action]').forEach(function(e) {
 setInterval(() => {
     let health_values = [...document.getElementsByName('health')]
         .map(e => `${parseInt(e.innerHTML) / .3}%`);
-
-    console.log(health_values);
     [...document.getElementsByName('health-bar')]
-    .forEach((e, i) => {
-        e.style.width = health_values[i];
-    });
+    .forEach((e, i) => e.style.width = health_values[i]);
 }, 1000 / 60);
