@@ -1,6 +1,6 @@
 class Controller {
-    constructor(matchViewer) {
-        this.matchViewer = matchViewer;
+    constructor(actionEventSystem) {
+        this.actionEventSystem = actionEventSystem;
         this.replayData = [];
         this.frame = 0;
     }
@@ -32,7 +32,7 @@ class Controller {
 
     _show_frame_using_matchViewer(frame) {
         this.frame = frame;
-        this.matchViewer.show_data(this.replayData[frame]);
+        this.actionEventSystem.release_event('show_data', this.replayData[frame]);
     }
 
     _is_frame_valid(frame) {
