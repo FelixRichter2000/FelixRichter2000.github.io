@@ -11,7 +11,7 @@ class Controller {
 
     set_frame(frame) {
         if (this._is_frame_valid(frame))
-            this._show_frame_using_matchViewer(frame);
+            this._release_show_data_event(frame);
     }
 
     next_frame() {
@@ -30,7 +30,7 @@ class Controller {
         this.set_frame(this._get_previous_turn());
     }
 
-    _show_frame_using_matchViewer(frame) {
+    _release_show_data_event(frame) {
         this.frame = frame;
         this.actionEventSystem.release_event('show_data', this.replayData[frame]);
     }
