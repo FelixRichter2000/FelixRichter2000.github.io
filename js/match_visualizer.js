@@ -81,10 +81,10 @@ actionEventSystem.register(stateParser);
 window.addEventListener('mousemove', (e) => {
     let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
     const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);
-    let x = round(e.clientX);
-    let y = 27 - round(e.clientY);
-    if (match_utils.is_in_arena_bounds(x, y))
-        actionEventSystem.release_event('show_field_info', [x, y])
+    let location = [round(e.clientX), 27 - round(e.clientY)];
+    if (!match_utils.is_in_arena_bounds(...location))
+        location = [0, 0];
+    actionEventSystem.release_event('show_field_info', location)
 });
 
 let player = new Player(actionEventSystem);
