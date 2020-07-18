@@ -1,11 +1,13 @@
 class ReplayDownloader {
-    constructor(fetch = window.fetch_string) {
+    constructor(actionEventSystem, fetch = window.fetch_string) {
+        this.actionEventSystem = actionEventSystem;
         this._fetch = fetch;
     }
 
     async download(match_id) {
         let request = 'https://terminal.c1games.com/api/game/replayexpanded/' + match_id;
-        await this._fetch(request).then(result => this.handle_result(result));
+        await this._fetch(request)
+            .then(result => this.handle_result(result));
         return this;
     }
 
@@ -14,6 +16,10 @@ class ReplayDownloader {
         let allLines = this.parse_file(result);
         this.config = allLines[0];
         this.replay = allLines.slice(1, -1);
+
+        this.actionEventSystem.release_event('set_replay_data', this.replay);
+        this.actionEventSystem.release_event('set_config', this.config);
+        this.actionEventSystem.release_event('set_replay_raw', this.raw);
     }
 
     parse_file(file) {
