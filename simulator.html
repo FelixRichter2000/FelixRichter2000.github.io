@@ -17,14 +17,14 @@
         <table id="watch_table" class="full_size"></table>
 
         <!-- Inside table elements -->
-        <div id="grid_overlay" class="full_size" hidden>
+        <div id="grid_overlay" class="full_size">
             <overlay class="top-left">
                 <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
-                <img class="left-mask bar p1-bar" src="images/green_health_bar.svg" style="position: absolute;" />
+                <img name="health-bar" class="left-mask bar" src="images/green_health_bar.svg" style="position: absolute;" />
                 <span name="health" class="left smaller-text top-fix" style="position: absolute; left: 80%;">30</span>
 
-                <span name="player" class="left smaller-text top-fix black" style="position: absolute;">Player 1</span>
-                <span name="algo" class="left smaller-text green algo-name top-fix" style="position: absolute;">BY HAND</span>
+                <span name="user" class="left smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
+                <span name="name" class="left smaller-text green algo-name top-fix" style="position: absolute;">BY ALGO</span>
 
                 <label class="left top-4 very-small-text" style="position: absolute;">CORES:</label>
                 <span name="core" class="left-indented top-4 very-small-text" style="position: absolute;">40</span>
@@ -37,11 +37,11 @@
             </overlay>
             <overlay class="top-right">
                 <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
-                <img class="right-mask bar p2-bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
+                <img name="health-bar" class="right-mask bar" src="images/red_health_bar.svg" style="position: absolute; right: 0;" />
                 <span name="health" class="right smaller-text top-fix" style="position: absolute; right: 80%;">30</span>
 
-                <span name="player" class="right smaller-text top-fix black" style="position: absolute;">Player 2</span>
-                <span name="algo" class="right smaller-text red algo-name" style="position: absolute;">BY HAND</span>
+                <span name="user" class="right smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
+                <span name="name" class="right smaller-text red algo-name" style="position: absolute;">BY ALGO</span>
 
                 <label class="right-indented top-4 very-small-text top-fix" style="position: absolute;">CORES:</label>
                 <span name="core" class="right top-4 very-small-text" style="position: absolute;">40</span>
@@ -54,55 +54,55 @@
             </overlay>
             <overlay class="bottom-left">
                 <section class="playback-section right-indented bottom-1">
-                    <button onclick="viewer.download();" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
+                    <button action="download" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
                         <img class="playback-button" src="images/download.svg" />
                     </button>
                 </section>
-                <button onclick="viewer.watch_on_terminal();" class="very-small-text bottom-1" style="background-color:gray;">
+                <button action="watch_on_terminal" class="very-small-text bottom-1" style="background-color:gray;">
                     >_ Terminal
                 </button>
             </overlay>
             <overlay class="bottom-right">
 
                 <label class="right-indented bottom-9 very-small-text" style="position: absolute;">Health:</label>
-                <span id="stability" class="right bottom-9 very-small-text" style="position: absolute;"></span>
+                <span name="hover_health" class="right bottom-9 very-small-text" style="position: absolute;"></span>
 
                 <label class="right-indented bottom-8 very-small-text" style="position: absolute;">X, Y:</label>
-                <span id="position" class="right bottom-8 very-small-text" style="position: absolute;"></span>
+                <span name="hover_location" class="right bottom-8 very-small-text" style="position: absolute;"></span>
 
                 <label class="right-indented bottom-6 very-small-text" style="position: absolute;">TURN:</label>
-                <span id="turn_number" class="right bottom-6 very-small-text" style="position: absolute;">0</span>
+                <span name="turn_number" class="right bottom-6 very-small-text" style="position: absolute;">0</span>
 
                 <label class="right-indented bottom-5 very-small-text" style="position: absolute;">FRAME:</label>
-                <span id="frame_number" class="right bottom-5 very-small-text" style="position: absolute;">0</span>
+                <span name="total_frame_number" class="right bottom-5 very-small-text" style="position: absolute;">0</span>
 
                 <label class="right-indented bottom-4 very-small-text" style="position: absolute;" title="Turn-Frame: frame number during a turn">T_FRAME:</label>
-                <span id="turn_frame_number" class="right bottom-4 very-small-text" style="position: absolute;">0</span>
+                <span name="action_phase_frame_number" class="right bottom-4 very-small-text" style="position: absolute;">0</span>
 
                 <div class="right bottom-3" style="width: 73%; height: 3%;">
-                    <div class="slider"></div>
+                    <div id="replay_slider" class="slider"></div>
                 </div>
 
                 <section class="playback-section bottom-4 left-indented">
-                    <button onclick="viewer.switch_view();" title="Turn Board Around [ALT + x]">
+                    <button action="switch_view" title="Turn Board Around [ALT + x]">
                         <img class="playback-button" src="images/switch_view.svg" />
                     </button>
                 </section>
                 <section class="playback-section right bottom-1">
-                    <button onclick="viewer.previous_turn();" title="Previous Turn [CTRL + ArrowLeft]">
+                    <button action="previous_turn" title="Previous Turn [CTRL + ArrowLeft]">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button onclick="viewer.previous_frame();" title="Previous Frame [ArrowLeft]">
+                    <button action="previous_frame" title="Previous Frame [ArrowLeft]">
                         <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
                     </button>
-                    <button onclick="viewer.toggle_play();" title="Toggle Play [Spacebar]">
+                    <button action="toggle_play" title="Toggle Play [Spacebar]">
                         <img name="play_button_img" class="playback-button" src="images/play.svg" hidden />
                         <img name="play_button_img" class="playback-button" src="images/pause.svg" />
                     </button>
-                    <button onclick="viewer.next_frame();" title="Next Frame [ArrowRight]">
+                    <button action="next_frame" title="Next Frame [ArrowRight]">
                         <img class="playback-button" src="images/next_frame.svg" />
                     </button>
-                    <button onclick="viewer.next_turn();" title="Next Turn [CTRL + ArrowRight]">
+                    <button action="next_turn" title="Next Turn [CTRL + ArrowRight]">
                         <img class="playback-button" src="images/next_turn.svg" />
                     </button>
                 </section>
@@ -112,18 +112,29 @@
 
     <script src="lib/jquery.js"></script>
     <script src="lib/jquery_ui.js"></script>
-    <script src="js/dynamic_css.js"></script>
+    <script src="js/utils/general/dynamic_css.js"></script>
+    <script src="js/utils/general/fetch.js"></script>
+    <script src="js/utils/general/slider.js"></script>
     <script src="js/utils/match/downloader.js"></script>
-    <script src="js/utils/match/event_listener.js"></script>
     <script src="js/utils/match/match_utils_config.js"></script>
     <script src="js/utils/match/match_utils_functions.js"></script>
     <script src="js/utils/match/match_utils.js"></script>
     <script src="js/utils/match/match_viewer.js"></script>
-    <script src="js/replay_reader.js"></script>
-    <script src="js/replay_player.js"></script>
-    <script src="js/keyboard_control.js"></script>
-    <script src="js/config/match_viewer/match_viewer_keyboard_controls.js"></script>
+    <script src="js/utils/match/replay_downloader.js"></script>
+    <script src="js/utils/match/user_data_downloader.js"></script>
+    <script src="js/utils/match/field_generator.js"></script>
+    <script src="js/utils/match/controller.js"></script>
+    <script src="js/utils/match/player.js"></script>
+    <script src="js/utils/match/hover_information.js"></script>
+    <script src="js/utils/match/config_tools.js"></script>
+    <script src="js/utils/match/view_model.js"></script>
+    <script src="js/utils/match/state_parser.js"></script>
+    <script src="js/utils/match/attribute_toggler.js"></script>
+    <script src="js/utils/general/action_event_system.js"></script>
+    <script src="js/utils/general/shortcut_controller.js"></script>
+    <script src="js/match_visualizer.js"></script>
     <script src="js/utils/match/terminal_ws_handler.js"></script>
+
 </body>
 
 </html>
