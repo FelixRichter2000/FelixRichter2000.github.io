@@ -10,6 +10,8 @@ const mockReplayData = [
     { frame: 4, turnInfo: [1] },
     { frame: 5, turnInfo: [0] },
     { frame: 6, turnInfo: [1] },
+    { frame: 7, turnInfo: [0] },
+    { frame: 8, turnInfo: [0] },
 ]
 
 afterEach(() => {
@@ -178,13 +180,22 @@ describe('test do_action previous_frame', () => {
 });
 
 describe('test do_action next_turn', () => {
-    test('should not show next turn if it`s already the last turn', () => {
+    test('should jump to last frame if it`s already the last turn', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data(mockReplayData);
         controller.set_frame(6);
         jest.clearAllMocks();
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 8, turnInfo: [0] });
+    });
+
+    test('should jump to last frame if it`s already the last turn from within turn', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(7);
+        jest.clearAllMocks();
+        controller.next_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 8, turnInfo: [0] });
     });
 
     test('should find and show next turn', () => {
