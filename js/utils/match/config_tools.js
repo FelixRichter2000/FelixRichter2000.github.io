@@ -3,7 +3,7 @@ class ConfigTools {
         this.config = config;
     }
 
-    setConfig(config) {
+    set_config(config) {
         this.config = config;
     }
 

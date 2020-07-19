@@ -1,11 +1,12 @@
 //ActionEventSystem
 let actionEventSystem = new ActionEventSystem();
-actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover')
-actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover')
+actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover');
+actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
+actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 
 //Get match id from query
 let urlParams = new URLSearchParams(window.location.search);
-let match_id = urlParams.get('id') || 5979377;
+let match_id = urlParams.get('id') || 6773646;
 
 //Match_Utils
 match_utils = new MatchUtils(match_utils_config, match_utils_functions);
@@ -48,6 +49,7 @@ actionEventSystem.register(controller);
 
 //ConfigTools
 let configTools = new ConfigTools();
+actionEventSystem.register(configTools);
 
 new ReplayDownloader(actionEventSystem)
     .download(match_id);
@@ -64,6 +66,12 @@ let replay_slider = new Slider($('#replay_slider'), actionEventSystem);
 replay_slider.set_replay_data = function(data) { this.set_max_value(data.length); }
 replay_slider.update_frame_data = function(data) { this.set_current_value(data.turnInfo[3]); }
 actionEventSystem.register(replay_slider);
+
+//Downloader
+let downloader = new Downloader();
+downloader.set_user_data = function(userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
+downloader.set_replay_raw = function(content) { this.content = content };
+actionEventSystem.register(downloader);
 
 //Play/Pause-AttributeToggler
 let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');
