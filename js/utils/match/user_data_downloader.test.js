@@ -22,7 +22,7 @@ describe('UserDataDownloader tests', function() {
             .then(_ => {
                 expect(mock_fetch_json).toHaveBeenCalledWith('https://terminal.c1games.com/api/game/match/123456/algos');
                 expect(mockActionEventSystem.release_event)
-                    .toHaveBeenCalledWith('update_view', { f1: [1, 11], f2: [2, 22] });
+                    .toHaveBeenCalledWith('set_user_data', { f1: [1, 11], f2: [2, 22], match_id: [123456] });
             });
     });
 });

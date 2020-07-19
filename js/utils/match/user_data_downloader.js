@@ -5,14 +5,16 @@ class UserDataDownloader {
     }
 
     async download(match_id) {
+        this.match_id = match_id;
         let request = `https://terminal.c1games.com/api/game/match/${match_id}/algos`;
-        await this.fetch_json(request).then(result => this.handle_result(result));
+        await this.fetch_json(request).then(response => this.handle_response(response));
         return this;
     }
 
-    handle_result(result) {
-        let userData = this._transformUserData(result);
-        this.actionEventSystem.release_event('update_view', userData);
+    handle_response(response) {
+        let userData = this._transformUserData(response);
+        userData.match_id = [this.match_id];
+        this.actionEventSystem.release_event('set_user_data', userData);
     }
 
     _transformUserData(result) {
