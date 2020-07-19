@@ -4,9 +4,32 @@ actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover');
 actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 
+let replayDownloader = new ReplayDownloader(actionEventSystem);
+actionEventSystem.register(replayDownloader);
+
 //Get match id from query
 let urlParams = new URLSearchParams(window.location.search);
-let match_id = urlParams.get('id') || 6773646;
+let match_id = urlParams.get('id');
+if (match_id) {
+    replayDownloader.download(match_id);
+    new UserDataDownloader(actionEventSystem)
+        .download(match_id);
+}
+
+//Drag and drop
+document.addEventListener("dragover", function(e) {
+    e.preventDefault();
+}, false);
+document.addEventListener("drop", function(e) {
+    e.preventDefault();
+    let file = e.dataTransfer.files[0];
+    var reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = function(evt) {
+        let full_text = evt.target.result;
+        actionEventSystem.release_event('handle_result', full_text);
+    }
+}, false);
 
 //Match_Utils
 match_utils = new MatchUtils(match_utils_config, match_utils_functions);
@@ -50,12 +73,6 @@ actionEventSystem.register(controller);
 //ConfigTools
 let configTools = new ConfigTools();
 actionEventSystem.register(configTools);
-
-new ReplayDownloader(actionEventSystem)
-    .download(match_id);
-
-new UserDataDownloader(actionEventSystem)
-    .download(match_id);
 
 //HoverInformation
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);
