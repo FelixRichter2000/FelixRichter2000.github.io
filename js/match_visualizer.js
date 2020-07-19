@@ -52,19 +52,8 @@ let configTools = new ConfigTools();
 new ReplayDownloader(actionEventSystem)
     .download(match_id);
 
-new UserDataDownloader()
-    .download(match_id)
-    .then((result) => {
-
-        //Transform data
-        let names = Object.getOwnPropertyNames(result.algos[0]);
-        let transformed = names
-            .map(element => result.algos
-                .reduce((a, algo) => [...a, algo[element]], []))
-            .reduce((a, values, index) => ({...a, [names[index]]: values }), {});
-
-        actionEventSystem.release_event('update_view', transformed);
-    });
+new UserDataDownloader(actionEventSystem)
+    .download(match_id);
 
 //HoverInformation
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);

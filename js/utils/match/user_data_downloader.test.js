@@ -1,6 +1,11 @@
 const UserDataDownloader = require('./user_data_downloader');
 let mock_fetch_json = jest.fn();
-mock_fetch_json.mockImplementation(() => new Promise(resolve => resolve({ "data": { "algos": [1, 2] } })));
+mock_fetch_json.mockImplementation(() => new Promise(resolve =>
+    resolve({ "data": { "algos": [{ f1: 1, f2: 2 }, { f1: 11, f2: 22 }] } })));
+const ActionEventSystem = require('../general/action_event_system');
+jest.mock('../general/action_event_system');
+const mockActionEventSystem = new ActionEventSystem();
+
 
 afterEach(() => {
     jest.clearAllMocks();
@@ -8,15 +13,16 @@ afterEach(() => {
 
 describe('UserDataDownloader tests', function() {
     test('create UserDataDownloader', () => {
-        new UserDataDownloader(mock_fetch_json);
+        new UserDataDownloader(mockActionEventSystem, mock_fetch_json);
     });
 
-    test('download replay config and replay are getting set', () => {
-        return new UserDataDownloader(mock_fetch_json)
+    test('downloads and transforms downloaded data', () => {
+        return new UserDataDownloader(mockActionEventSystem, mock_fetch_json)
             .download(123456)
-            .then((result) => {
+            .then(_ => {
                 expect(mock_fetch_json).toHaveBeenCalledWith('https://terminal.c1games.com/api/game/match/123456/algos');
-                expect(result.algos).toEqual([1, 2]);
+                expect(mockActionEventSystem.release_event)
+                    .toHaveBeenCalledWith('update_view', { f1: [1, 11], f2: [2, 22] });
             });
     });
 });
