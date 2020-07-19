@@ -27,7 +27,6 @@ describe('test shortcut controller', () => {
             ctrlKey: false,
             shiftKey: false,
             altKey: false,
-            callback: "toggle_play",
         }));
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(1);
@@ -49,10 +48,32 @@ describe('test shortcut controller', () => {
             ctrlKey: false,
             shiftKey: false,
             altKey: true,
-            callback: "switch_view",
         }));
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(1);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith("switch_view");
+    });
+
+    test('any shortcut should remove focus from any element', () => {
+        document.body.innerHTML = '<button id="button1"/>';
+        document.getElementById('button1').focus();
+
+        let shortcutController = new ShortcutController(mockActionEventSystem);
+        shortcutController.addNewShortcut({
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            callback: "toggle_play",
+        });
+
+        document.dispatchEvent(new KeyboardEvent('keydown', {
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+        }));
+
+        expect(document.querySelector(':focus')).toBe(null);
     });
 });
