@@ -67,7 +67,7 @@ describe('Controller tests', function() {
     });
 });
 
-describe('test do_action set_frame', () => {
+describe('test set_frame', () => {
     test('set_frame with frame_number when replay_data is not set', () => {
         const controller = new Controller(mockActionEventSystem);
 
@@ -104,7 +104,7 @@ describe('test do_action set_frame', () => {
     });
 });
 
-describe('test do_action next_frame', () => {
+describe('test next_frame', () => {
     test('next_frame when replay_data is not set', () => {
         const controller = new Controller(mockActionEventSystem);
 
@@ -139,7 +139,7 @@ describe('test do_action next_frame', () => {
     });
 });
 
-describe('test do_action previous_frame', () => {
+describe('test previous_frame', () => {
     test('previous_frame when replay_data is not set', () => {
         const controller = new Controller(mockActionEventSystem);
 
@@ -179,7 +179,7 @@ describe('test do_action previous_frame', () => {
     });
 });
 
-describe('test do_action next_turn', () => {
+describe('test next_turn', () => {
     test('should jump to last frame if it`s already the last turn', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data(mockReplayData);
@@ -222,7 +222,7 @@ describe('test do_action next_turn', () => {
     });
 });
 
-describe('test do_action previous_turn', () => {
+describe('test previous_turn', () => {
     test('should not show previous turn if it`s already the first turn', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data(mockReplayData);
