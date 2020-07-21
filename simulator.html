@@ -54,11 +54,11 @@
             </overlay>
             <overlay class="bottom-left">
                 <section class="playback-section right-indented bottom-1">
-                    <button action="download" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
+                    <button action="download_to_client" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
                         <img class="playback-button" src="images/download.svg" />
                     </button>
                 </section>
-                <button action="watch_on_terminal" class="very-small-text bottom-1" style="background-color:gray;">
+                <button onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')" class="very-small-text bottom-1" style="background-color:gray;">
                     >_ Terminal
                 </button>
             </overlay>
@@ -133,8 +133,7 @@
     <script src="js/utils/general/action_event_system.js"></script>
     <script src="js/utils/general/shortcut_controller.js"></script>
     <script src="js/match_visualizer.js"></script>
-    <script src="js/utils/match/terminal_ws_handler.js"></script>
-
+    <script src="js/utils/match/game_engine.js"></script>
 </body>
 
 </html>

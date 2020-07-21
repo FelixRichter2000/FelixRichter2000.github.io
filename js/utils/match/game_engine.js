@@ -134,9 +134,11 @@ let input_actions = [
 
 new TerminalWsHandler()
     .get_replay_turn_actions(game_state, input_actions)
-    .then(message => {
+    .then(messages => {
         // you can use message here and only in here
-        console.log(message)
+        console.log(messages)
         console.log(new Date());
+
+        actionEventSystem.release_event('set_replay_data', messages);
     })
     .catch(e => console.log(e));
