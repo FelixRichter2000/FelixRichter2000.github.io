@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/FelixRichter2000/FelixRichter2000.github.io#readme",
   "devDependencies": {
+    "jest-websocket-mock": "^2.1.0",
+    "mock-socket": "^9.0.3",
     "node-fetch": "^2.6.0"
   },
   "dependencies": {
