@@ -1,7 +1,7 @@
 class Socket {
-    prefixes = ['m!', 'm!', 'm"', 'm"'];
 
     constructor(init_string) {
+        this.prefixes = ['m!', 'm!', 'm"', 'm"'];
         this.socket = new WebSocket("wss://playground.c1games.com/");
         this.socket.onopen = (_ => this.socket.send(init_string)).bind(this);
         this.socket.onmessage = (message => this._handle_message(message)).bind(this);
