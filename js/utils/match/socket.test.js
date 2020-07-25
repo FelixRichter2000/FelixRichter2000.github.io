@@ -24,7 +24,7 @@ const default_game_state = {
 };
 
 
-jest.setTimeout(40);
+jest.setTimeout(50);
 jest.useFakeTimers();
 
 beforeEach(async() => {
@@ -220,12 +220,14 @@ describe('socket.submit_turn', () => {
             "p2Units": [],
             "turnInfo": [0, 13, -1, 0]
         }]));
+
         jest.runTimersToTime(10);
-        retured_actions = socket.submit_actions(testing_actions);
+        let second_retured_actions = socket.submit_actions(testing_actions);
+        terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,15,0,0]}'); //frames 0, 1, 2, 3, ...
         terminalServer.send('m {"p2Units":[],"turnInfo":[0,16,-1,0]}'); //end_state -1
-        await retured_actions.then(a => expect(a).toEqual([{
+        await second_retured_actions.then(a => expect(a).toEqual([{
             "p2Units": [],
             "turnInfo": [1, 15, 0, 0]
         }, {

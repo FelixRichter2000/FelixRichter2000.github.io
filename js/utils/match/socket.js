@@ -78,11 +78,15 @@ class Socket {
 
     _resolve_promise() {
         this.resolve(JSON.parse(JSON.stringify(this.all_messages)));
+        this._reset_properties();
+        this._open_socket();
+    }
+
+    _reset_properties() {
         this.all_messages = [];
         this.submit_enabled = false;
         this.has_submitted = false;
         this.actions = null;
-        this._open_socket();
     }
 
     _is_end_of_turn(parsed) {
