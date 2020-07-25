@@ -1,11 +1,23 @@
 class Socket {
 
-    constructor(init_string) {
+    constructor(startingStringGenerator) {
+        this.startingStringGenerator = startingStringGenerator;
         this.prefixes = ['m!', 'm!', 'm"', 'm"'];
-        this.socket = new WebSocket("wss://playground.c1games.com/");
-        this.socket.onopen = (_ => this.socket.send(init_string)).bind(this);
-        this.socket.onmessage = (message => this._handle_message(message)).bind(this);
         this.all_messages = [];
+    }
+
+    _open_socket(init_string) {
+        this.init_string = init_string || this.init_string;
+        if (this.socket)
+            this.socket.close();
+        this.socket = new WebSocket("wss://playground.c1games.com/");
+        this.socket.onopen = (_ => this.socket.send(this.init_string)).bind(this);
+        this.socket.onmessage = (message => this._handle_message(message)).bind(this);
+    }
+
+    set_game_state(game_state) {
+        let starting_string = this.startingStringGenerator.generate(game_state);
+        this._open_socket(starting_string);
     }
 
     async submit_actions(actions) {
@@ -61,13 +73,16 @@ class Socket {
     }
 
     _is_message_relevant(message) {
-        return !this.has_resolved && message.data[0] === 'm';
+        return message.data[0] === 'm';
     }
 
     _resolve_promise() {
-        this.resolve(this.all_messages);
-        this.has_resolved = true;
-        this.socket.close();
+        this.resolve(JSON.parse(JSON.stringify(this.all_messages)));
+        this.all_messages = [];
+        this.submit_enabled = false;
+        this.has_submitted = false;
+        this.actions = null;
+        this._open_socket();
     }
 
     _is_end_of_turn(parsed) {
