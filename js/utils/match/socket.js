@@ -33,7 +33,7 @@ class Socket {
         };
     }
 
-    set_game_state(game_state) {
+    set_simulation_game_state(game_state) {
         let starting_string = this.startingStringGenerator.generate(game_state || this.default_game_state);
         this._open_socket(starting_string);
     }
