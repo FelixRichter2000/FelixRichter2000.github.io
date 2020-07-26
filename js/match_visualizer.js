@@ -3,6 +3,7 @@ let actionEventSystem = new ActionEventSystem();
 actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover');
 actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
+actionEventSystem.registerFollowUpEvent('start_of_turn', 'pause');
 
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
@@ -102,7 +103,7 @@ actionEventSystem.register(stateParser);
 //Simulator
 let startStringGenerator = new StartStringGenerator();
 let socket = new Socket(actionEventSystem, startStringGenerator);
-socket.set_game_state();
+socket.set_simulation_game_state();
 actionEventSystem.register(socket);
 
 //SimulationIntegrator

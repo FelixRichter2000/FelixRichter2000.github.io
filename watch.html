@@ -61,6 +61,9 @@
                 <button onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')" class="very-small-text bottom-1" style="background-color:gray;">
                     >_ Terminal
                 </button>
+                <button action="start_of_turn" class="very-small-text bottom-3" style="background-color:gray;">
+                    New Simulation
+                </button>
             </overlay>
             <overlay class="bottom-right">
 
@@ -130,6 +133,9 @@
     <script src="js/utils/match/view_model.js"></script>
     <script src="js/utils/match/state_parser.js"></script>
     <script src="js/utils/match/attribute_toggler.js"></script>
+    <script src="js/utils/match/socket.js"></script>
+    <script src="js/utils/match/start_string_generator.js"></script>
+    <script src="js/utils/match/simulation_integrator.js"></script>
     <script src="js/utils/general/action_event_system.js"></script>
     <script src="js/utils/general/shortcut_controller.js"></script>
     <script src="js/match_visualizer.js"></script>
