@@ -1,9 +1,46 @@
 class Socket {
 
-    constructor(startingStringGenerator) {
+    constructor(actionEventSystem, startingStringGenerator) {
+        this.actionEventSystem = actionEventSystem;
         this.startingStringGenerator = startingStringGenerator;
         this.prefixes = ['m!', 'm!', 'm"', 'm"'];
         this.all_messages = [];
+        this.default_game_state = {
+            "p2Units": [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            "turnInfo": [0, 0, -1, 0],
+            "p1Stats": [30.0, 40.0, 5.0, 0],
+            "p1Units": [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            "p2Stats": [30.0, 40.0, 5.0, 0],
+            "events": { "selfDestruct": [], "breach": [], "damage": [], "shield": [], "move": [], "spawn": [], "death": [], "attack": [], "melee": [] }
+        };
+    }
+
+    set_game_state(game_state) {
+        let starting_string = this.startingStringGenerator.generate(game_state || this.default_game_state);
+        this._open_socket(starting_string);
+    }
+
+    submit_actions(actions) {
+        this.actions = actions;
+        this._submit_if_possible();
     }
 
     _open_socket(init_string) {
@@ -13,21 +50,6 @@ class Socket {
         this.socket = new WebSocket("wss://playground.c1games.com/");
         this.socket.onopen = (_ => this.socket.send(this.init_string)).bind(this);
         this.socket.onmessage = (message => this._handle_message(message)).bind(this);
-    }
-
-    set_game_state(game_state) {
-        let starting_string = this.startingStringGenerator.generate(game_state);
-        this._open_socket(starting_string);
-    }
-
-    async submit_actions(actions) {
-        this.actions = actions;
-        this._submit_if_possible();
-        return this._create_promise();
-    }
-
-    _create_promise() {
-        return new Promise((resolve) => this.resolve = resolve);
     }
 
     _handle_message(message) {
@@ -77,7 +99,7 @@ class Socket {
     }
 
     _resolve_promise() {
-        this.resolve(JSON.parse(JSON.stringify(this.all_messages)));
+        this.actionEventSystem.release_event('add_simulation_result', JSON.parse(JSON.stringify(this.all_messages)))
         this._reset_properties();
         this._open_socket();
     }
