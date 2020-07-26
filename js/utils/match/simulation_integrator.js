@@ -24,6 +24,11 @@ class SimulationIntegrator {
     }
 
     _insert(insertion_index, simulation_result) {
+        if (this.replay_data.length)
+            if (insertion_index === this.replay_data.length - 1)
+                simulation_result.splice(0, 1);
+            else
+                simulation_result.splice(-1, 1);
         this.replay_data.splice(insertion_index + 1, 0, ...simulation_result);
     }
 
