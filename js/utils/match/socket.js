@@ -31,10 +31,12 @@ class Socket {
             "p2Stats": [30.0, 40.0, 5.0, 0],
             "events": { "selfDestruct": [], "breach": [], "damage": [], "shield": [], "move": [], "spawn": [], "death": [], "attack": [], "melee": [] }
         };
+        this.current_game_state = null;
     }
 
     set_simulation_game_state(game_state) {
-        let starting_string = this.startingStringGenerator.generate(game_state || this.default_game_state);
+        this.current_game_state = game_state || this.default_game_state;
+        let starting_string = this.startingStringGenerator.generate(this.current_game_state);
         this._open_socket(starting_string);
     }
 
@@ -48,8 +50,13 @@ class Socket {
         if (this.socket)
             this.socket.close();
         this.socket = new WebSocket("wss://playground.c1games.com/");
-        this.socket.onopen = (_ => this.socket.send(this.init_string)).bind(this);
+        this.socket.onopen = (_ => this._initialize_socket()).bind(this);
         this.socket.onmessage = (message => this._handle_message(message)).bind(this);
+    }
+
+    _initialize_socket() {
+        this.connected = true;
+        return this.socket.send(this.init_string);
     }
 
     _handle_message(message) {
@@ -95,11 +102,12 @@ class Socket {
     }
 
     _is_message_relevant(message) {
-        return message.data[0] === 'm';
+        return message.data[0] === 'm' && message.data[4] !== 'd';
     }
 
     _resolve_promise() {
-        this.actionEventSystem.release_event('add_simulation_result', JSON.parse(JSON.stringify(this.all_messages)))
+        const complete_turn_data = [JSON.parse(JSON.stringify(this.current_game_state)), ...JSON.parse(JSON.stringify(this.all_messages))];
+        this.actionEventSystem.release_event('add_simulation_result', complete_turn_data);
         this._reset_properties();
         this._open_socket();
     }
@@ -109,6 +117,7 @@ class Socket {
         this.submit_enabled = false;
         this.has_submitted = false;
         this.actions = null;
+        this.connected = false;
     }
 
     _is_end_of_turn(parsed) {
@@ -131,7 +140,7 @@ class Socket {
     }
 
     _can_submit() {
-        return this.submit_enabled && this.actions;
+        return this.submit_enabled && this.actions && this.connected;
     }
 }
 

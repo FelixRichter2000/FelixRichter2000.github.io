@@ -189,6 +189,9 @@ describe('socket.submit_turn', () => {
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
             "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        }, {
+            "p2Units": [],
             "turnInfo": [1, 12, 0, 0]
         }, {
             "p2Units": [],
@@ -220,6 +223,9 @@ describe('socket.submit_turn', () => {
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
             "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        }, {
+            "p2Units": [],
             "turnInfo": [1, 12, 0, 0]
         }, {
             "p2Units": [],
@@ -242,6 +248,9 @@ describe('socket.submit_turn', () => {
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
             "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        }, {
+            "p2Units": [],
             "turnInfo": [1, 12, 0, 0]
         }, {
             "p2Units": [],
@@ -262,6 +271,9 @@ describe('socket.submit_turn', () => {
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
             "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        }, {
+            "p2Units": [],
             "turnInfo": [1, 12, 0, 0]
         }, {
             "p2Units": [],
@@ -275,6 +287,9 @@ describe('socket.submit_turn', () => {
         terminalServer.send('m {"p2Units":[],"turnInfo":[0,16,-1,0]}'); //end_state -1
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
+            "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        }, {
             "p2Units": [],
             "turnInfo": [1, 15, 0, 0]
         }, {
