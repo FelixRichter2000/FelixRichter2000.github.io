@@ -99,6 +99,16 @@ actionEventSystem.register(playPauseAttributeToggler);
 let stateParser = new StateParser(actionEventSystem);
 actionEventSystem.register(stateParser);
 
+//Simulator
+let startStringGenerator = new StartStringGenerator();
+let socket = new Socket(actionEventSystem, startStringGenerator);
+socket.set_game_state();
+actionEventSystem.register(socket);
+
+//SimulationIntegrator
+let simulationIntegrator = new SimulationIntegrator(actionEventSystem);
+actionEventSystem.register(simulationIntegrator);
+
 window.addEventListener('mousemove', (e) => {
     let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
     const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);
