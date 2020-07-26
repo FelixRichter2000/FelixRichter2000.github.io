@@ -14,6 +14,7 @@ class ActionEventSystem {
     }
 
     release_event(name, parameter) {
+        // console.log(name, parameter);
         this.listeners
             .filter(listener => listener[name])
             .forEach(listener => listener[name](parameter));

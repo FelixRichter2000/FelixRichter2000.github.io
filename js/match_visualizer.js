@@ -87,6 +87,7 @@ actionEventSystem.register(replay_slider);
 
 //Downloader
 let downloader = new Downloader();
+downloader.filename = 'simulation.txt';
 downloader.set_user_data = function(userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
 downloader.set_replay_raw = function(content) { this.content = content };
 actionEventSystem.register(downloader);
@@ -119,6 +120,17 @@ window.addEventListener('mousemove', (e) => {
     actionEventSystem.release_event('show_field_info', location)
 });
 
+const socketCondition = data => {
+    let b = data.turnInfo[2] == -1;
+    if (b)
+        console.log(data);
+    return b;
+};
+let socketEventForwarder = new ConditionalEventForwarder(actionEventSystem, 'update_frame_data', socketCondition, 'set_simulation_game_state');
+actionEventSystem.register(socketEventForwarder);
+
+
+//Player
 let player = new Player(actionEventSystem);
 actionEventSystem.register(player);
 
