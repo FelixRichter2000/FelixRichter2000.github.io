@@ -12,7 +12,7 @@ const mockReplayData = [
     { frame: 6, turnInfo: [1] },
     { frame: 7, turnInfo: [0] },
     { frame: 8, turnInfo: [0] },
-]
+];
 
 afterEach(() => {
     jest.clearAllMocks();
@@ -255,5 +255,52 @@ describe('test previous_turn', () => {
         jest.clearAllMocks();
         controller.previous_turn();
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 3, turnInfo: [1] });
+    });
+});
+
+describe('Test start_of_turn', () => {
+    it('should do nothing if already on first frame of turn', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(0);
+        jest.clearAllMocks();
+        controller.start_of_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    });
+
+    it('should load frame 0 when starting on frame 1', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(1);
+        jest.clearAllMocks();
+        controller.start_of_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 0, turnInfo: [0] });
+    });
+
+    it('should do nothing if already on first frame of second turn', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(2);
+        jest.clearAllMocks();
+        controller.start_of_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    });
+
+    it('should load frame 2 when starting on frame 3', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(3);
+        jest.clearAllMocks();
+        controller.start_of_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 2, turnInfo: [0] });
+    });
+
+    it('should load frame 2 when starting on frame 4', () => {
+        const controller = new Controller(mockActionEventSystem);
+        controller.set_replay_data(mockReplayData);
+        controller.set_frame(4);
+        jest.clearAllMocks();
+        controller.start_of_turn();
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 2, turnInfo: [0] });
     });
 });

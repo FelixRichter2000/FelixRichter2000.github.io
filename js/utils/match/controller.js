@@ -30,6 +30,18 @@ class Controller {
         this.set_frame(this._get_previous_turn());
     }
 
+    start_of_turn() {
+        if (this._is_action_phase(this.frame))
+            this.set_frame(this._get_first_frame_of_current_turn());
+    }
+
+    _get_first_frame_of_current_turn() {
+        let frame = this.frame;
+        while (this._is_action_phase(frame))
+            frame--;
+        return frame;
+    }
+
     _release_update_frame_data_event(frame) {
         this.frame = frame;
         this.actionEventSystem.release_event('update_frame_data', this.replayData[frame]);
@@ -41,19 +53,19 @@ class Controller {
 
     _get_next_turn(frame = this.frame) {
         frame++;
-        while (this._should_keep_moving(frame))
+        while (this._is_action_phase(frame))
             frame++;
         return this._isFrameInRange(frame) ? frame + 1 : frame;
     }
 
     _get_previous_turn(frame = this.frame) {
         frame -= 2;
-        while (this._should_keep_moving(frame))
+        while (this._is_action_phase(frame))
             frame--;
         return frame + 1;
     }
 
-    _should_keep_moving(frame) {
+    _is_action_phase(frame) {
         return this._isFrameInRange(frame) && this._isFrameDuringTurn(frame);
     }
 
