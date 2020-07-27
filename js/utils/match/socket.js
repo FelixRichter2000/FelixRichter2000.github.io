@@ -31,11 +31,14 @@ class Socket {
             "p2Stats": [30.0, 40.0, 5.0, 0],
             "events": { "selfDestruct": [], "breach": [], "damage": [], "shield": [], "move": [], "spawn": [], "death": [], "attack": [], "melee": [] }
         };
-        this.current_game_state = null;
+        this.current_game_state = this.default_game_state;
     }
 
     set_simulation_game_state(game_state) {
         this.current_game_state = game_state || this.default_game_state;
+    }
+
+    restart_socket() {
         let starting_string = this.startingStringGenerator.generate(this.current_game_state);
         this._open_socket(starting_string);
     }
