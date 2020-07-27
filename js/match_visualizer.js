@@ -4,6 +4,7 @@ actionEventSystem.registerFollowUpEvent('switch_view', 'update_hover');
 actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'pause');
+actionEventSystem.registerFollowUpEvent('start_of_turn', 'restart_socket');
 
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
