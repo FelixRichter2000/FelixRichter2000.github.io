@@ -10,7 +10,7 @@ class ActionEventSystem {
     }
 
     registerFollowUpEvent(triggerEvent, followUpEvent) {
-        this.followUpMap[triggerEvent] = followUpEvent;
+        this.followUpMap[triggerEvent] = [...(this.followUpMap[triggerEvent] || []), followUpEvent];
     }
 
     release_event(name, parameter) {
@@ -23,8 +23,7 @@ class ActionEventSystem {
     }
 
     _releaseFollowUpEventIfExists(name, parameter) {
-        if (this.followUpMap[name])
-            this.release_event(this.followUpMap[name], parameter);
+        (this.followUpMap[name] || []).forEach(e => this.release_event(e, parameter));
     }
 }
 
