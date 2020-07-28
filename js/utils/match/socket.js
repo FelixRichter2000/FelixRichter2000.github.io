@@ -91,9 +91,14 @@ class Socket {
     }
 
     _handle_turn_message(parsed_message) {
-        this._add_to_all_messages(parsed_message);
-        if (this._is_end_of_turn(parsed_message))
+        if (!this._is_endStats(parsed_message))
+            this._add_to_all_messages(parsed_message);
+        if (this._is_end_of_turn(parsed_message) || this._is_endStats(parsed_message))
             this._resolve_promise();
+    }
+
+    _is_endStats(parsed_message) {
+        return parsed_message.endStats;
     }
 
     _parse_message(message) {
