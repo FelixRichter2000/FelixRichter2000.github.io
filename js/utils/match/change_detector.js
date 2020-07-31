@@ -5,28 +5,18 @@ class ChangeDetector {
     }
 
     detect_changes(game_state_before, game_state_after) {
-        let before_existing_units = this._take_flat(game_state_before.p1Units, 0, 6)
-            .map(e => e[3]);
-        let firewalls = game_state_after.p1Units
-            .slice(0, 3)
-            .map((units, unit_index) => units
-                .filter(unit => !before_existing_units.includes(unit[3]))
-                .map(unit => [this.shorthands[unit_index], ...unit.slice(0, 2)]));
 
-        let before_existing_modifiers = this._take_flat(game_state_before.p1Units, 6, 8)
-            .map(e => e[3]);
-        let modifiers = game_state_after.p1Units
-            .slice(6, 8)
-            .map((units, unit_index) => units
-                .filter(unit => !before_existing_modifiers.includes(unit[3]))
-                .map(unit => [this.shorthands[unit_index + 6], ...unit.slice(0, 2)]));
-
+        let firewalls = this._get_changes_in_range(game_state_before, 0, 3, game_state_after);
+        let modifiers = this._get_changes_in_range(game_state_before, 6, 8, game_state_after);
         let firewalls_flat = this._flatten([...firewalls, ...modifiers]);
+
+        let information = this._get_changes_in_range(game_state_before, 3, 6, game_state_after);
+        let information_flat = this._flatten(information);
+
 
         if (game_state_before != game_state_after)
             return [
-                firewalls_flat, [],
-                [],
+                firewalls_flat, information_flat, [],
                 []
             ];
         return [
@@ -35,6 +25,17 @@ class ChangeDetector {
             [],
             []
         ];
+    }
+
+    _get_changes_in_range(game_state_before, begin, end, game_state_after) {
+        let before_existing_units = this._take_flat(game_state_before.p1Units, begin, end)
+            .map(e => e[3]);
+        let firewalls = game_state_after.p1Units
+            .slice(begin, end)
+            .map((units, unit_index) => units
+                .filter(unit => !before_existing_units.includes(unit[3]))
+                .map(unit => [this.shorthands[unit_index + begin], ...unit.slice(0, 2)]));
+        return firewalls;
     }
 
     _flatten(all_data) {
