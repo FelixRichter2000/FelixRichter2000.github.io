@@ -6,18 +6,15 @@ class ChangeDetector {
 
     detect_changes(game_state_before, game_state_after) {
 
-        let firewalls = this._get_changes_in_range(game_state_before, 0, 3, game_state_after);
-        let modifiers = this._get_changes_in_range(game_state_before, 6, 8, game_state_after);
-        let firewalls_flat = this._flatten([...firewalls, ...modifiers]);
+        let p1_data = this._get_changes(game_state_before.p1Units, game_state_after.p1Units);
+        let p2_data = this._get_changes(game_state_before.p2Units, game_state_after.p2Units);
 
-        let information = this._get_changes_in_range(game_state_before, 3, 6, game_state_after);
-        let information_flat = this._flatten(information);
+        p2_data = p2_data.map(e => e = e.map(f => [f[0], 27 - f[1], 27 - f[2]]));
 
 
         if (game_state_before != game_state_after)
             return [
-                firewalls_flat, information_flat, [],
-                []
+                ...p1_data, ...p2_data
             ];
         return [
             [],
@@ -27,10 +24,21 @@ class ChangeDetector {
         ];
     }
 
-    _get_changes_in_range(game_state_before, begin, end, game_state_after) {
-        let before_existing_units = this._take_flat(game_state_before.p1Units, begin, end)
+    _get_changes(units_before, units_after) {
+        let firewalls = this._get_changes_in_range(units_before, 0, 3, units_after);
+        let modifiers = this._get_changes_in_range(units_before, 6, 8, units_after);
+        let p1_firewalls_flat = this._flatten([...firewalls, ...modifiers]);
+
+        let information = this._get_changes_in_range(units_before, 3, 6, units_after);
+        let p1_information_flat = this._flatten(information);
+
+        return [p1_firewalls_flat, p1_information_flat];
+    }
+
+    _get_changes_in_range(unit_before, begin, end, units_after) {
+        let before_existing_units = this._take_flat(unit_before, begin, end)
             .map(e => e[3]);
-        let firewalls = game_state_after.p1Units
+        let firewalls = units_after
             .slice(begin, end)
             .map((units, unit_index) => units
                 .filter(unit => !before_existing_units.includes(unit[3]))

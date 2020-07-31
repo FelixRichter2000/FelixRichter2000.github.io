@@ -617,4 +617,43 @@ describe('detect changes', () => {
             []
         ]);
     });
+
+    it('should return an additional filter at 0, 0 for player2 (expect flipped coordinates)', () => {
+        const game_state_after = {
+            p1Units: [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            p2Units: [
+                [
+                    [0, 0, 60, '1']
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        };
+
+        let change_detector = new ChangeDetector();
+        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        expect(changes).toEqual([
+            [],
+            [],
+            [
+                ['FF', 27, 27]
+            ],
+            []
+        ]);
+    });
+
 });
