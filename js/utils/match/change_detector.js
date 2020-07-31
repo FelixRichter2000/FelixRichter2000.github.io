@@ -9,30 +9,33 @@ class ChangeDetector {
         let p1_data = this._get_changes(game_state_before.p1Units, game_state_after.p1Units);
         let p2_data = this._get_changes(game_state_before.p2Units, game_state_after.p2Units);
 
+        p2_data = this._flip_coordinates(p2_data);
+
+        return [...p1_data, ...p2_data];
+    }
+
+    _flip_coordinates(p2_data) {
         p2_data = p2_data.map(e => e = e.map(f => [f[0], 27 - f[1], 27 - f[2]]));
-
-
-        if (game_state_before != game_state_after)
-            return [
-                ...p1_data, ...p2_data
-            ];
-        return [
-            [],
-            [],
-            [],
-            []
-        ];
+        return p2_data;
     }
 
     _get_changes(units_before, units_after) {
+        let p1_firewalls_flat = this._get_firewall_changes(units_before, units_after);
+        let p1_information_flat = this._get_information_changes(units_before, units_after);
+        return [p1_firewalls_flat, p1_information_flat];
+    }
+
+    _get_information_changes(units_before, units_after) {
+        let information = this._get_changes_in_range(units_before, 3, 6, units_after);
+        let p1_information_flat = this._flatten(information);
+        return p1_information_flat;
+    }
+
+    _get_firewall_changes(units_before, units_after) {
         let firewalls = this._get_changes_in_range(units_before, 0, 3, units_after);
         let modifiers = this._get_changes_in_range(units_before, 6, 8, units_after);
         let p1_firewalls_flat = this._flatten([...firewalls, ...modifiers]);
-
-        let information = this._get_changes_in_range(units_before, 3, 6, units_after);
-        let p1_information_flat = this._flatten(information);
-
-        return [p1_firewalls_flat, p1_information_flat];
+        return p1_firewalls_flat;
     }
 
     _get_changes_in_range(unit_before, begin, end, units_after) {
