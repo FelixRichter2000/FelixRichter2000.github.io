@@ -427,7 +427,7 @@ describe('detect changes', () => {
         ]);
     });
 
-    it('should return an additional ping at 1, 12', () => {
+    it('should return three additional ping at 1, 12', () => {
         const game_state_after = {
             p1Units: [
                 [],
@@ -462,6 +462,71 @@ describe('detect changes', () => {
             [
                 ['PI', 1, 12],
                 ['PI', 1, 12],
+                ['PI', 1, 12],
+            ],
+            [],
+            []
+        ]);
+    });
+
+    it('should return one additional ping at 1, 12', () => {
+        const game_state_before = {
+            p1Units: [
+                [],
+                [],
+                [],
+                [
+                    [1, 12, 60, '1'],
+                    [1, 12, 60, '3'],
+                ],
+                [],
+                [],
+                [],
+                []
+            ],
+            p2Units: [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        };
+        const game_state_after = {
+            p1Units: [
+                [],
+                [],
+                [],
+                [
+                    [1, 12, 60, '1'],
+                    [1, 12, 60, '2'],
+                    [1, 12, 60, '3'],
+                ],
+                [],
+                [],
+                [],
+                []
+            ],
+            p2Units: [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        };
+
+        let change_detector = new ChangeDetector();
+        let changes = change_detector.detect_changes(game_state_before, game_state_after);
+        expect(changes).toEqual([
+            [],
+            [
                 ['PI', 1, 12],
             ],
             [],
