@@ -656,4 +656,42 @@ describe('detect changes', () => {
         ]);
     });
 
+    it('should flip position from [12, 26] to [15, 1] for player2', () => {
+        const game_state_after = {
+            p1Units: [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
+            p2Units: [
+                [
+                    [12, 26, 60, '1']
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        };
+
+        let change_detector = new ChangeDetector();
+        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        expect(changes).toEqual([
+            [],
+            [],
+            [
+                ['FF', 15, 1]
+            ],
+            []
+        ]);
+    });
+
 });
