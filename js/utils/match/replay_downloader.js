@@ -17,14 +17,18 @@ class ReplayDownloader {
         this.config = allLines[0];
         this.replay = allLines.slice(1);
 
-        this.replay[this.replay.length - 1].turnInfo[0] = 0;
-        this.replay[this.replay.length - 1].turnInfo[1] += 1;
-        this.replay[this.replay.length - 1].turnInfo[2] = -1;
-        this.replay[this.replay.length - 1].turnInfo[3] += 1;
+        this._fix_last_frame_turnInfo();
 
         this.actionEventSystem.release_event('set_replay_data', this.replay);
         this.actionEventSystem.release_event('set_config', this.config);
         this.actionEventSystem.release_event('set_replay_raw', this.raw);
+    }
+
+    _fix_last_frame_turnInfo() {
+        this.replay[this.replay.length - 1].turnInfo[0] = 0;
+        this.replay[this.replay.length - 1].turnInfo[1] += 1;
+        this.replay[this.replay.length - 1].turnInfo[2] = -1;
+        this.replay[this.replay.length - 1].turnInfo[3] += 1;
     }
 
     parse_file(file) {
