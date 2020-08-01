@@ -68,8 +68,11 @@ actionEventSystem.register(view_model);
 //FlatMatchViewer
 let flat_match_viewer = new MatchViewer(match_utils_flat, highlight_elements);
 
+//ChangeDetector
+let changeDetector = new ChangeDetector();
+
 //Controller
-let controller = new Controller(actionEventSystem);
+let controller = new Controller(actionEventSystem, changeDetector);
 actionEventSystem.register(controller);
 
 //ConfigTools
@@ -105,7 +108,6 @@ actionEventSystem.register(stateParser);
 //Simulator
 let startStringGenerator = new StartStringGenerator();
 let socket = new Socket(actionEventSystem, startStringGenerator);
-socket.set_simulation_game_state();
 actionEventSystem.register(socket);
 
 //SimulationIntegrator
@@ -120,16 +122,6 @@ window.addEventListener('mousemove', (e) => {
         location = [0, 0];
     actionEventSystem.release_event('show_field_info', location)
 });
-
-// const socketCondition = data => {
-//     let b = data.turnInfo[2] == -1;
-//     if (b)
-//         console.log(data);
-//     return b;
-// };
-// let socketEventForwarder = new ConditionalEventForwarder(actionEventSystem, 'update_frame_data', socketCondition, 'set_simulation_game_state');
-// actionEventSystem.register(socketEventForwarder);
-
 
 //Player
 let player = new Player(actionEventSystem);
