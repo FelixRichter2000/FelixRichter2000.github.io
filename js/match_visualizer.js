@@ -121,14 +121,14 @@ window.addEventListener('mousemove', (e) => {
     actionEventSystem.release_event('show_field_info', location)
 });
 
-const socketCondition = data => {
-    let b = data.turnInfo[2] == -1;
-    if (b)
-        console.log(data);
-    return b;
-};
-let socketEventForwarder = new ConditionalEventForwarder(actionEventSystem, 'update_frame_data', socketCondition, 'set_simulation_game_state');
-actionEventSystem.register(socketEventForwarder);
+// const socketCondition = data => {
+//     let b = data.turnInfo[2] == -1;
+//     if (b)
+//         console.log(data);
+//     return b;
+// };
+// let socketEventForwarder = new ConditionalEventForwarder(actionEventSystem, 'update_frame_data', socketCondition, 'set_simulation_game_state');
+// actionEventSystem.register(socketEventForwarder);
 
 
 //Player
