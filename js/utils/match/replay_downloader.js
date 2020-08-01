@@ -15,7 +15,12 @@ class ReplayDownloader {
         this.raw = result;
         let allLines = this.parse_file(result);
         this.config = allLines[0];
-        this.replay = allLines.slice(1, -1);
+        this.replay = allLines.slice(1);
+
+        this.replay[this.replay.length - 1].turnInfo[0] = 0;
+        this.replay[this.replay.length - 1].turnInfo[1] += 1;
+        this.replay[this.replay.length - 1].turnInfo[2] = -1;
+        this.replay[this.replay.length - 1].turnInfo[3] += 1;
 
         this.actionEventSystem.release_event('set_replay_data', this.replay);
         this.actionEventSystem.release_event('set_config', this.config);
