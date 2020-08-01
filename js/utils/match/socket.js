@@ -48,6 +48,7 @@ class Socket {
     }
 
     _restart_socket() {
+        this._reset_properties();
         let starting_string = this.startingStringGenerator.generate(this.current_game_state);
         this._open_socket(starting_string);
     }

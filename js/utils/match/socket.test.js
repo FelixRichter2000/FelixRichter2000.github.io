@@ -101,6 +101,15 @@ describe('test ws-mock', () => {
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(['one', 'two']);
     });
+
+    test('test send message before connection is established', async() => {
+        const client = new WebSocket("wss://playground.c1games.com/");
+        client.send("hi");
+
+        terminalServer.onmessage = function(event) {
+            expect(event.data).toBe('hi');
+        }
+    });
 });
 
 describe('create socket and set starting state', () => {
