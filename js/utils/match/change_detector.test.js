@@ -1,28 +1,8 @@
 const ChangeDetector = require("./change_detector");
 
-const empty_game_state = {
-    p1Units: [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-    ],
-    p2Units: [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-    ]
-};
-
+//Format of spawns: [[[x, y], type, id, player_index], ...]
+//Resultign format: [[p1FirewallSpawns],[p1InformationSpawns],[p2FirewallSpawns],[p2InformationSpawns]]
+//resolting single spawn format: [type_shorthand, x, y]
 
 describe('create ChangeDetector', () => {
     test('create', () => {
@@ -31,14 +11,20 @@ describe('create ChangeDetector', () => {
 });
 
 describe('detect changes', () => {
-    it('has a method called detect_changes that throws when the parameter after has no p1Units property', () => {
-        let change_detector = new ChangeDetector();;
-        expect(() => change_detector.detect_changes()).toThrow();
+    it('has a method called detect_changes that returns empty actions when nothing gets passed', () => {
+        let change_detector = new ChangeDetector();
+        let changes = change_detector.detect_changes();
+        expect(changes).toEqual([
+            [],
+            [],
+            [],
+            []
+        ]);
     });
 
-    it('should return an array with four empty arrays when nothing is different', () => {
+    it('has a method called detect_changes that returns empty actions an empty array gets passed', () => {
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, empty_game_state);
+        let changes = change_detector.detect_changes([]);
         expect(changes).toEqual([
             [],
             [],
@@ -48,33 +34,12 @@ describe('detect changes', () => {
     });
 
     it('should return an additional filter at 0, 0', () => {
-        const game_state_after = {
-            p1Units: [
-                [
-                    [0, 0, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [0, 0], 0, '0', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['FF', 0, 0]
@@ -86,33 +51,12 @@ describe('detect changes', () => {
     });
 
     it('should return an additional filter at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [1, 12], 0, '0', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['FF', 1, 12]
@@ -124,34 +68,15 @@ describe('detect changes', () => {
     });
 
     it('should return multiple additional filters at [2, 2] and [3, 3]', () => {
-        const game_state_after = {
-            p1Units: [
-                [
-                    [2, 2, 60, '1'],
-                    [3, 3, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [2, 2], 0, '0', 1
+            ],
+            [
+                [3, 3], 0, '1', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['FF', 2, 2],
@@ -163,132 +88,13 @@ describe('detect changes', () => {
         ]);
     });
 
-    it('should not return filters when the filter was already there before', () => {
-        const game_state_before = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-        const game_state_after = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(game_state_before, game_state_after);
-        expect(changes).toEqual([
-            [],
-            [],
-            [],
-            []
-        ]);
-    });
-
-    it('should return an additional destructor at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
-        expect(changes).toEqual([
-            [
-                ['DF', 1, 12]
-            ],
-            [],
-            [],
-            []
-        ]);
-    });
-
     it('should return an additional encryptor at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [1, 12], 1, '0', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['EF', 1, 12]
@@ -299,60 +105,30 @@ describe('detect changes', () => {
         ]);
     });
 
-    it('should return an removal at 1, 12', () => {
-        const game_state_before = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-        const game_state_after = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1']
-                ],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
+    it('should return an additional destructor at 1, 12', () => {
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(game_state_before, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [1, 12], 2, '0', 1
+            ]
+        ]);
+        expect(changes).toEqual([
+            [
+                ['DF', 1, 12]
+            ],
+            [],
+            [],
+            []
+        ]);
+    });
+
+    it('should return an removal at 1, 12', () => {
+        let change_detector = new ChangeDetector();
+        let changes = change_detector.detect_changes([
+            [
+                [1, 12], 6, '0', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['RM', 1, 12]
@@ -364,59 +140,12 @@ describe('detect changes', () => {
     });
 
     it('should return an upgrade at 1, 12', () => {
-        const game_state_before = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-        const game_state_after = {
-            p1Units: [
-                [
-                    [1, 12, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1']
-                ]
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(game_state_before, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [1, 12], 7, '0', 1
+            ]
+        ]);
         expect(changes).toEqual([
             [
                 ['UP', 1, 12]
@@ -427,190 +156,24 @@ describe('detect changes', () => {
         ]);
     });
 
-    it('should return three additional ping at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1'],
-                    [1, 12, 60, '2'],
-                    [1, 12, 60, '3'],
-                ],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
+    it('should return a ping, emp and scrambler', () => {
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
-        expect(changes).toEqual([
-            [],
+        let changes = change_detector.detect_changes([
             [
-                ['PI', 1, 12],
-                ['PI', 1, 12],
-                ['PI', 1, 12],
+                [1, 12], 3, '0', 1
             ],
-            [],
-            []
+            [
+                [1, 12], 4, '0', 1
+            ],
+            [
+                [1, 12], 5, '0', 1
+            ],
         ]);
-    });
-
-    it('should return one additional ping at 1, 12', () => {
-        const game_state_before = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1'],
-                    [1, 12, 60, '3'],
-                ],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1'],
-                    [1, 12, 60, '2'],
-                    [1, 12, 60, '3'],
-                ],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(game_state_before, game_state_after);
         expect(changes).toEqual([
             [],
             [
                 ['PI', 1, 12],
-            ],
-            [],
-            []
-        ]);
-    });
-
-    it('should return three additional emps at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1'],
-                    [1, 12, 60, '2'],
-                    [1, 12, 60, '3'],
-                ],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
-        expect(changes).toEqual([
-            [],
-            [
                 ['EI', 1, 12],
-                ['EI', 1, 12],
-                ['EI', 1, 12],
-            ],
-            [],
-            []
-        ]);
-    });
-
-    it('should return three additional scramblers at 1, 12', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [
-                    [1, 12, 60, '1'],
-                    [1, 12, 60, '2'],
-                    [1, 12, 60, '3'],
-                ],
-                [],
-                []
-            ],
-            p2Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
-        expect(changes).toEqual([
-            [],
-            [
-                ['SI', 1, 12],
-                ['SI', 1, 12],
                 ['SI', 1, 12],
             ],
             [],
@@ -618,80 +181,49 @@ describe('detect changes', () => {
         ]);
     });
 
-    it('should return an additional filter at 0, 0 for player2 (expect flipped coordinates)', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [
-                    [0, 0, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
+    it('everything once of player 2', () => {
         let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
+        let changes = change_detector.detect_changes([
+            [
+                [26, 15], 0, '0', 2
+            ],
+            [
+                [26, 15], 1, '0', 2
+            ],
+            [
+                [26, 15], 2, '0', 2
+            ],
+            [
+                [26, 15], 3, '0', 2
+            ],
+            [
+                [26, 15], 4, '0', 2
+            ],
+            [
+                [26, 15], 5, '0', 2
+            ],
+            [
+                [26, 15], 6, '0', 2
+            ],
+            [
+                [26, 15], 7, '0', 2
+            ],
+        ]);
         expect(changes).toEqual([
             [],
             [],
             [
-                ['FF', 27, 27]
+                ['FF', 1, 12],
+                ['EF', 1, 12],
+                ['DF', 1, 12],
+                ['RM', 1, 12],
+                ['UP', 1, 12],
             ],
-            []
-        ]);
-    });
-
-    it('should flip position from [12, 26] to [15, 1] for player2', () => {
-        const game_state_after = {
-            p1Units: [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ],
-            p2Units: [
-                [
-                    [12, 26, 60, '1']
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
-            ]
-        };
-
-        let change_detector = new ChangeDetector();
-        let changes = change_detector.detect_changes(empty_game_state, game_state_after);
-        expect(changes).toEqual([
-            [],
-            [],
             [
-                ['FF', 15, 1]
-            ],
-            []
+                ['PI', 1, 12],
+                ['EI', 1, 12],
+                ['SI', 1, 12],
+            ]
         ]);
     });
-
 });
