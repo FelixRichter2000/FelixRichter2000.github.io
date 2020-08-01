@@ -2,6 +2,10 @@ const Controller = require('./controller');
 const ActionEventSystem = require('../general/action_event_system');
 jest.mock('../general/action_event_system');
 const mockActionEventSystem = new ActionEventSystem();
+const ChangeDetector = require('./change_detector');
+jest.mock('./change_detector');
+const mockChangeDetector = new ChangeDetector();
+mockChangeDetector.detect_changes.mockImplementation(_ => 'detected_changes');
 const mockReplayData = [
     { frame: 0, turnInfo: [0] },
     { frame: 1, turnInfo: [1] },
@@ -302,5 +306,30 @@ describe('Test start_of_turn', () => {
         jest.clearAllMocks();
         controller.start_of_turn();
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 2, turnInfo: [0] });
+    });
+});
+
+describe('test resimulate', () => {
+    const replayData = [
+        { frame: 0, turnInfo: [0], events: { spawn: [] } },
+        { frame: 1, turnInfo: [1], events: { spawn: 'spawnDataToPassToChangeDetector' } },
+        { frame: 2, turnInfo: [0], events: { spawn: [] } },
+        { frame: 3, turnInfo: [1], events: { spawn: [] } },
+        { frame: 4, turnInfo: [1], events: { spawn: [] } },
+        { frame: 5, turnInfo: [0], events: { spawn: [] } },
+        { frame: 6, turnInfo: [1], events: { spawn: [] } },
+        { frame: 7, turnInfo: [0], events: { spawn: [] } },
+        { frame: 8, turnInfo: [0], events: { spawn: [] } },
+    ];
+
+    it('should call the ChangeDetector to figure out the changes between the start of the current turn and the next frame', () => {
+        let controller = new Controller(mockActionEventSystem, mockChangeDetector);
+        controller.set_replay_data(replayData);
+        controller.set_frame(1);
+        jest.clearAllMocks();
+        controller.resimulate();
+        expect(mockChangeDetector.detect_changes).toHaveBeenCalledWith('spawnDataToPassToChangeDetector');
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_simulation_game_state', { 'events': { 'spawn': [] }, 'frame': 0, 'turnInfo': [0] });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('submit_actions', 'detected_changes');
     });
 });
