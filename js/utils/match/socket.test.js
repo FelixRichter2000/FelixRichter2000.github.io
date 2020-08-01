@@ -106,7 +106,7 @@ describe('test ws-mock', () => {
 describe('create socket and set starting state', () => {
     it('should create a WebSocket to the terminalServer and send the init string 3', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
-        socket.restart_socket();
+        socket.set_simulation_game_state();
         expect(mockStartingStringGenerator.generate).toHaveBeenCalledWith(default_game_state);
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
@@ -115,7 +115,6 @@ describe('create socket and set starting state', () => {
     it('should create a WebSocket to the terminalServer and send the init string', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         expect(mockStartingStringGenerator.generate).toHaveBeenCalledWith(special_game_state);
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
@@ -125,7 +124,6 @@ describe('create socket and set starting state', () => {
         mockStartingStringGenerator.generate.mockReturnValueOnce('another_init_string')
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         expect(mockStartingStringGenerator.generate).toHaveBeenCalledWith(special_game_state);
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["another_init_string"]);
@@ -136,7 +134,6 @@ describe('socket.submit_turn', () => {
     it('should not submit turn before the starting state got returned', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions([]);
         jest.runTimersToTime(10);
@@ -146,7 +143,6 @@ describe('socket.submit_turn', () => {
     it('should submit turn when a message containing p2Units arrived before', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         terminalServer.send('a [{"make_move_1":33,"make_move_2":34},{}]');
         terminalServer.send('m {"debug":"lots of data"}');
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -159,7 +155,6 @@ describe('socket.submit_turn', () => {
     it('should not submit turn when no message containing p2Units arrived before', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         terminalServer.send('a [{"make_move_1":33,"make_move_2":34},{}]');
         terminalServer.send('m {"debug":"lots of data"}');
         terminalServer.send('m {"p6Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -172,7 +167,6 @@ describe('socket.submit_turn', () => {
     it('should wait with submit turn until message containing p2Units arrived', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -183,7 +177,6 @@ describe('socket.submit_turn', () => {
     it('should return an array of all replay frames (deserialized) in object form', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -218,7 +211,6 @@ describe('socket.submit_turn', () => {
     it('should return an array of all replay frames (deserialized) in object form when one message arrives that has a turnInfo[2] of -1', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -247,7 +239,6 @@ describe('socket.submit_turn', () => {
     it('should close and reopen the socket after all turn messages were received', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -271,7 +262,6 @@ describe('socket.submit_turn', () => {
     it('submit actions multiple times', async() => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
@@ -312,7 +302,6 @@ describe('socket.submit_turn', () => {
     it('should stop waiting when the endStats were sent', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
-        socket.restart_socket();
         jest.runTimersToTime(10);
         socket.submit_actions(testing_actions);
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
