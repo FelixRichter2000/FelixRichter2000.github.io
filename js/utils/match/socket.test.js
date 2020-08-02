@@ -122,7 +122,7 @@ describe('create socket and set starting state', () => {
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
     });
 
-    it('should not restart the socket when the same gamestate gets set twice', async() => {
+    it('should not restart the socket when the same gamestate gets set twice(even when the frame is different)', async() => {
         const first_game_state = {
             "p2Units": [],
             "turnInfo": [0, 12, -1, 0]
@@ -130,7 +130,7 @@ describe('create socket and set starting state', () => {
 
         const second_game_state = {
             "p2Units": [],
-            "turnInfo": [0, 12, -1, 0]
+            "turnInfo": [0, 12, -1, 999]
         };
 
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);

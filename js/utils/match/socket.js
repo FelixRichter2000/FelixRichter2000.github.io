@@ -43,7 +43,15 @@ class Socket {
     }
 
     _is_new_game_state_different(new_game_state) {
-        return JSON.stringify(this.current_game_state) !== JSON.stringify(new_game_state);
+        if (!this.current_game_state)
+            return true;
+        return this._deep_comparison_excluding_turnInfo_frame(new_game_state);
+    }
+
+    _deep_comparison_excluding_turnInfo_frame(new_game_state) {
+        let cloned_states = [JSON.parse(JSON.stringify(this.current_game_state)), JSON.parse(JSON.stringify(new_game_state))];
+        cloned_states.forEach(e => e.turnInfo[3] = 0);
+        return JSON.stringify(cloned_states[0]) !== JSON.stringify(cloned_states[1]);
     }
 
     submit_actions(actions) {
