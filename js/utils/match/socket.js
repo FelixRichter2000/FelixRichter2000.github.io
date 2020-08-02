@@ -96,10 +96,17 @@ class Socket {
     }
 
     _handle_turn_message(parsed_message) {
-        if (!this._is_endStats(parsed_message))
-            this._add_to_all_messages(parsed_message);
+        if (this._is_endStats(parsed_message))
+            this._fix_last_frame_turnInfo(parsed_message)
+        this._add_to_all_messages(parsed_message);
         if (this._is_end_of_turn(parsed_message) || this._is_endStats(parsed_message))
             this._resolve_promise();
+    }
+
+    _fix_last_frame_turnInfo(last_frame) {
+        last_frame.turnInfo[0] = 0;
+        last_frame.turnInfo[1] += 1;
+        last_frame.turnInfo[2] = -1;
     }
 
     _is_endStats(parsed_message) {

@@ -317,7 +317,7 @@ describe('socket.submit_turn', () => {
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,1,0]}'); //
-        terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,1,0], "endStats":{}}'); //endStats
+        terminalServer.send('m {"p2Units":[],"turnInfo":[2,12,1,0], "endStats":{}}'); //endStats
         jest.runTimersToTime(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('add_simulation_result', [{
             "p2Units": [],
@@ -328,6 +328,10 @@ describe('socket.submit_turn', () => {
         }, {
             "p2Units": [],
             "turnInfo": [1, 12, 1, 0]
+        }, {
+            "p2Units": [],
+            "turnInfo": [0, 13, -1, 0],
+            "endStats": {}
         }]);
         expect(terminalServer.messages).toEqual(["mocked_init_string", ...action_messages, "mocked_init_string"]);
     });
