@@ -53,11 +53,6 @@
                 <span name="ms" class="right top-7 very-small-text" style="position: absolute;">0</span>
             </overlay>
             <overlay class="bottom-left">
-                <section class="playback-section right-indented bottom-1">
-                    <button action="download_to_client" class="very-small-text bottom-2" title="Download Replay [ALT + r]">
-                        <img class="playback-button" src="images/download.svg" />
-                    </button>
-                </section>
                 <button onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')" class="very-small-text bottom-1" style="background-color:gray;">
                     >_ Terminal
                 </button>
@@ -92,6 +87,9 @@
                     </button>
                 </section>
                 <section class="playback-section right bottom-1">
+                    <button action="download_to_client" title="Download Replay [ALT + r]">
+                        <img class="playback-button" src="images/download.svg" />
+                    </button>
                     <button action="previous_turn" title="Previous Turn [CTRL + ArrowLeft]">
                         <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
                     </button>
