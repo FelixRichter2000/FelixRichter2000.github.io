@@ -39,7 +39,7 @@ describe('Controller tests', function() {
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalled();
     });
 
-    test('don`t call MatchViewer.update_frame_data when show_frame (-1) is called', () => {
+    test('don`t call MatchViewer.update_frame_data when set_frame (-1) is called', () => {
         const controller = new Controller(mockActionEventSystem);
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(-1);
