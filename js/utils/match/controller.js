@@ -45,7 +45,7 @@ class Controller {
 
     _get_first_frame_of_current_turn() {
         let frame = this.frame;
-        while (this._is_action_phase(frame))
+        while (this._isFrameDuringTurn(frame))
             frame--;
         return frame;
     }
