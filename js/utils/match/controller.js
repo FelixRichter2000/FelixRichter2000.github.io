@@ -56,7 +56,7 @@ class Controller {
     }
 
     _is_frame_valid(frame) {
-        return frame >= 0 && frame < this.replayData.length;
+        return frame >= 0 && frame < this.replayData.length - 1;
     }
 
     _get_next_turn(frame = this.frame) {
@@ -78,7 +78,7 @@ class Controller {
     }
 
     _isFrameInRange(frame) {
-        return frame > 0 && frame < this.replayData.length - 1;
+        return frame > 0 && frame < this.replayData.length - 2;
     }
 
     _isFrameDuringTurn(frame) {

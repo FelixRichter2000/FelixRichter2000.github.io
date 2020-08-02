@@ -16,6 +16,7 @@ const mockReplayData = [
     { frame: 6, turnInfo: [1] },
     { frame: 7, turnInfo: [0] },
     { frame: 8, turnInfo: [0] },
+    { frame: 9, turnInfo: [0] }, //This one should not be reachable during play
 ];
 
 afterEach(() => {
@@ -88,7 +89,7 @@ describe('test set_frame', () => {
 
     test('set_frame with frame_number = 2', () => {
         const controller = new Controller(mockActionEventSystem);
-        controller.set_replay_data([10, 20, 30]);
+        controller.set_replay_data([10, 20, 30, 'unreachable']);
         controller.set_frame(2);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 30);
     });
@@ -125,7 +126,7 @@ describe('test next_frame', () => {
 
     test('next_frame twice: show 2nd and then 3rd frame', () => {
         const controller = new Controller(mockActionEventSystem);
-        controller.set_replay_data([10, 20, 30]);
+        controller.set_replay_data([10, 20, 30, 'unreachable']);
         controller.next_frame();
         controller.next_frame();
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 20);
@@ -134,7 +135,7 @@ describe('test next_frame', () => {
 
     test('next_frame: calling it to often makes it do nothing', () => {
         const controller = new Controller(mockActionEventSystem);
-        controller.set_replay_data([10, 20, 30]);
+        controller.set_replay_data([10, 20, 30, 'unreachable']);
         controller.next_frame();
         controller.next_frame();
         controller.next_frame();
@@ -160,7 +161,7 @@ describe('test previous_frame', () => {
 
     test('previous_frame: should work now', () => {
         const controller = new Controller(mockActionEventSystem);
-        controller.set_replay_data([10, 20, 30]);
+        controller.set_replay_data([10, 20, 30, 'unreachable']);
         controller.set_frame(2);
         controller.previous_frame();
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 30);
@@ -169,7 +170,7 @@ describe('test previous_frame', () => {
 
     test('combination of multiple next_frame and previous_frame calls', () => {
         const controller = new Controller(mockActionEventSystem);
-        controller.set_replay_data([10, 20, 30]);
+        controller.set_replay_data([10, 20, 30, 'unreachable']);
         controller.next_frame(); //1
         controller.next_frame(); //2
         controller.next_frame(); //does nothing

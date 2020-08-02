@@ -85,7 +85,7 @@ actionEventSystem.register(hoverInformation);
 
 //Slider
 let replay_slider = new Slider($('#replay_slider'), actionEventSystem);
-replay_slider.set_replay_data = function(data) { this.set_max_value(data.length); }
+replay_slider.set_replay_data = function(data) { this.set_max_value(data.length - 1); }
 replay_slider.update_frame_data = function(data) { this.set_current_value(data.turnInfo[3]); }
 actionEventSystem.register(replay_slider);
 
