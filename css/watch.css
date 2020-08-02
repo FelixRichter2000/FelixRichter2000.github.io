@@ -318,3 +318,23 @@ svg {
     border-radius: .25em;
     border: none;
 }
+
+.btn-normal {
+    height: var(--tile-size);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-normal * {
+    height: 80%;
+}
+
+.fancy-blue {
+    background-color: rgb(181, 219, 255);
+}
+
+button:hover {
+    filter: brightness(130%);
+    transform: scale(1.02);
+}
