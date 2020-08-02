@@ -36,10 +36,14 @@ class Socket {
 
     set_simulation_game_state(game_state) {
         let new_game_state = game_state || this.default_game_state;
-        if (this.current_game_state !== new_game_state) {
+        if (this._is_new_game_state_different(new_game_state)) {
             this.current_game_state = new_game_state;
             this._restart_socket();
         }
+    }
+
+    _is_new_game_state_different(new_game_state) {
+        return JSON.stringify(this.current_game_state) !== JSON.stringify(new_game_state);
     }
 
     submit_actions(actions) {

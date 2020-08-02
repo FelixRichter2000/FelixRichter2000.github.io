@@ -117,6 +117,27 @@ describe('create socket and set starting state', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state();
         expect(mockStartingStringGenerator.generate).toHaveBeenCalledWith(default_game_state);
+        expect(mockStartingStringGenerator.generate).toHaveBeenCalledTimes(1);
+        jest.runTimersToTime(10);
+        expect(terminalServer.messages).toEqual(["mocked_init_string"]);
+    });
+
+    it('should not restart the socket when the same gamestate gets set twice', async() => {
+        const first_game_state = {
+            "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        };
+
+        const second_game_state = {
+            "p2Units": [],
+            "turnInfo": [0, 12, -1, 0]
+        };
+
+        let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
+        socket.set_simulation_game_state(first_game_state);
+        socket.set_simulation_game_state(second_game_state);
+        expect(mockStartingStringGenerator.generate).toHaveBeenCalledWith(first_game_state);
+        expect(mockStartingStringGenerator.generate).toHaveBeenCalledTimes(1);
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
     });
