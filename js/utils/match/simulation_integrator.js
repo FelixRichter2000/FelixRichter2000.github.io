@@ -24,21 +24,27 @@ class SimulationIntegrator {
     }
 
     _insert(insertion_index, simulation_result) {
-        if (this.replay_data.length)
-            if (insertion_index === this.replay_data.length - 2)
-                simulation_result.splice(0, 1);
-            else
-                simulation_result.splice(-1, 1);
-        this.replay_data.splice(insertion_index + 1, 0, ...simulation_result);
+        if (insertion_index === this.replay_data.length - 1) {
+            simulation_result.splice(0, 1);
+            this.replay_data.splice(insertion_index + 1, 0, ...simulation_result);
+        } else if (insertion_index !== Number.MAX_VALUE) {
+            simulation_result.splice(-1, 1);
+            this.replay_data.splice(insertion_index, 0, ...simulation_result);
+        } else
+            this.replay_data.splice(insertion_index, 0, ...simulation_result);
     }
 
     _get_insertion_index(simulation_result) {
         let turn_number = simulation_result[0].turnInfo[1];
-        let turn_data = this.replay_data
-            .filter(e => e.turnInfo[1] == turn_number)
-            .slice(-1)[0];
-        let insertion_index = turn_data ? turn_data.turnInfo[3] : this.replay_data.length - 1;
-        return insertion_index;
+        let first_frame = this._find_first_frame_of_turn(turn_number);
+        return first_frame ? first_frame.turnInfo[3] : Number.MAX_VALUE;
+    }
+
+    _find_first_frame_of_turn(turn_number) {
+        return this.replay_data
+            .find(function(e) {
+                return e.turnInfo[1] == turn_number;
+            });
     }
 }
 
