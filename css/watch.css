@@ -338,3 +338,25 @@ button:hover {
     filter: brightness(130%);
     transform: scale(1.02);
 }
+
+.editor-section button {
+    width: var(--tile-size);
+    height: var(--tile-size);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    box-sizing: border-box;
+    transform: scale(.95);
+}
+
+.editor-section button img {
+    padding: 2px;
+    border: 1px white solid;
+    width: 95%;
+}
+
+.editor-section button img.selected {
+    background-color: #444444;
+}
