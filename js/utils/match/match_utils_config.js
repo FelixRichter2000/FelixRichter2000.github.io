@@ -5,7 +5,7 @@
     const shield_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="shield-bar" cx="15" cy="15" r="0"></circle></svg>';
     const empty_field_img = '<img class="match-default-img" src="images/EmptyField.svg">';
     const damage_bar_svg = '<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 30 30"><circle class="damage-bar" cx="15" cy="15" r="16"></circle></svg>';
-    const remove_img = '<img class="match-changing-img" src="images/Remove.svg">';
+    const remove_img = '<img class="match-changing-img" src="images/Remove1.svg">';
     const upgrade_img = '<img class="match-changing-img" src="images/Upgrade1.svg">';
 
     //P1
