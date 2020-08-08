@@ -33,9 +33,20 @@ document.addEventListener("drop", function(e) {
     }
 }, false);
 
+//Config data
+const quantity_label = '<label class="quantity"></label>';
+const remove2_img = '<img class="match-changing-img" src="images/Remove2.svg">';
+const upgrade2_img = '<img class="match-changing-img" src="images/Upgrade2.svg">';
+const filter3_img = '<img class="match-changing-img" src="images/Filter3.svg">';
+const encryptor3_img = '<img class="match-changing-img" src="images/Encryptor3.svg">';
+const destructor3_img = '<img class="match-changing-img" src="images/Destructor3.svg">';
+const ping3_img = '<img class="match-changing-img" src="images/Ping3.svg">';
+const emp3_img = '<img class="match-changing-img" src="images/Emp3.svg">';
+const scrambler3_img = '<img class="match-changing-img" src="images/Scrambler3.svg">';
+
 //Match_Utils
-match_utils = new MatchUtils(match_utils_config, match_utils_functions);
-match_utils_flat = new MatchUtils({
+let match_utils = new MatchUtils(match_utils_config, match_utils_functions);
+let match_utils_flat = new MatchUtils({
     arena_settings: {
         size: 28,
         half: 14
@@ -49,6 +60,38 @@ match_utils_flat = new MatchUtils({
         return self.get_locations_in_range(data.location, data.range);
     }
 });
+let match_utils_simulator = new MatchUtils({
+    field_contents: [
+        filter3_img +
+        encryptor3_img +
+        destructor3_img +
+        ping3_img +
+        emp3_img +
+        scrambler3_img +
+        remove2_img +
+        upgrade2_img +
+        quantity_label,
+
+        filter3_img +
+        encryptor3_img +
+        destructor3_img +
+        ping3_img +
+        emp3_img +
+        scrambler3_img +
+        remove2_img +
+        upgrade2_img +
+        quantity_label
+    ],
+
+    arena_settings: {
+        size: 28,
+        half: 14
+    },
+
+    group_size: 9
+}, {
+
+});
 
 //FieldGenerator
 const watch_table = document.getElementById('watch_table');
@@ -59,6 +102,7 @@ const highlight_elements = fieldGenerator.get_hover_elements();
 
 //Create MatchViewer
 let match_viewer = new MatchViewer(match_utils, viewer_elements);
+match_viewer.update_frame_data = e => match_viewer.update_data(e);
 actionEventSystem.register(match_viewer);
 
 //Create ViewModel

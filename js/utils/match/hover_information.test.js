@@ -37,7 +37,7 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
 
     test('update event first uses default location', () => {
@@ -49,7 +49,7 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
 
     test('update_hover event', () => {
@@ -64,7 +64,7 @@ describe('test hover_information', () => {
 
         expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
 
-        expect(mockFlatMatchViewer.update_frame_data).toHaveBeenCalledWith({ location: [2, 3], range: 'returnedRange' });
+        expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [2, 3], range: 'returnedRange' });
     });
 
     test('show_field_info should release_event update_view with hover_health and hover_location set', () => {

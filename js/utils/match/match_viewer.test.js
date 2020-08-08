@@ -25,7 +25,7 @@ describe('MatchViewer test', function() {
     });
     test('show data', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
-        matchViewer.update_frame_data([]);
+        matchViewer.update_data([]);
         expect(mockMatchUtils.update_changes)
             .toHaveBeenCalledWith(mockedEmptyArray, mockedParsedArray, mockedViewerElements, false);
     });
@@ -43,7 +43,7 @@ describe('MatchViewer test', function() {
 
     test('switch_view', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
-        matchViewer.update_frame_data([]);
+        matchViewer.update_data([]);
         jest.clearAllMocks();
 
         matchViewer.switch_view();
@@ -63,7 +63,7 @@ describe('MatchViewer test', function() {
 
     test('get_value_at after show data calles matchUtils with correct parameters', () => {
         const matchViewer = new MatchViewer(mockMatchUtils, mockedViewerElements);
-        matchViewer.update_frame_data([]);
+        matchViewer.update_data([]);
         matchViewer.get_value_at('location', 'group');
         expect(mockMatchUtils.get_custome_value_at)
             .toHaveBeenCalledWith('location', false, 'group', mockedParsedArray);

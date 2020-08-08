@@ -18,7 +18,7 @@ class HoverInformation {
         let upgraded = this.matchViewer.get_value_at(this.last_location, 10);
         let range = this.configTools.getRange(unit_type, upgraded);
 
-        this.flatMatchViewer.update_frame_data({ location: this.last_location, range });
+        this.flatMatchViewer.update_data({ location: this.last_location, range });
         const event_data = { hover_health: [hover_health], hover_location: [this._getLocationFormatted()] };
         this.actionEventSystem.release_event('update_view', event_data);
     }
