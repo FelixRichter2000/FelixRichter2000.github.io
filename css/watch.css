@@ -58,7 +58,7 @@ svg {
     height: var(--min-size);
 }
 
-#watch_table {
+.abs {
     position: absolute;
 }
 
