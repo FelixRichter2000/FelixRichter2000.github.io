@@ -40,7 +40,7 @@ class Controller {
         let begin_index = this._get_first_frame_of_current_turn();
         let actions_for_submit = this.changeDetector.detect_changes(this.replayData[begin_index + 1].events.spawn);
         this.actionEventSystem.release_event('set_simulation_game_state', this.replayData[begin_index]);
-        this.actionEventSystem.release_event('submit_actions', actions_for_submit);
+        this.actionEventSystem.release_event('reset_actions', actions_for_submit);
     }
 
     _get_first_frame_of_current_turn() {

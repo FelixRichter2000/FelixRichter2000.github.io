@@ -331,6 +331,6 @@ describe('test resimulate', () => {
         controller.resimulate();
         expect(mockChangeDetector.detect_changes).toHaveBeenCalledWith('spawnDataToPassToChangeDetector');
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_simulation_game_state', { 'events': { 'spawn': [] }, 'frame': 0, 'turnInfo': [0] });
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('submit_actions', 'detected_changes');
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('reset_actions', 'detected_changes');
     });
 });
