@@ -58,8 +58,8 @@ describe('Controller tests', function() {
         controller.set_replay_data([10, 11, 12]);
         controller.set_frame(0);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 10);
-        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(11);
-        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(12);
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith('update_frame_data', 11);
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith('update_frame_data', 12);
     });
 
     test('call MatchViewer.update_frame_data with correct data when show_frame (1) is called', () => {
@@ -68,7 +68,7 @@ describe('Controller tests', function() {
         controller.set_frame(1);
         expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(10);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', 11);
-        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith(12);
+        expect(mockActionEventSystem.release_event).not.toHaveBeenCalledWith('update_frame_data', 12);
     });
 });
 
