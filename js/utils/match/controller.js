@@ -11,8 +11,14 @@ class Controller {
     }
 
     set_frame(frame) {
-        if (this._is_frame_valid(frame))
+        if (this._is_frame_valid(frame)) {
             this._release_update_frame_data_event(frame);
+
+            if (!this._isFrameDuringTurn(frame))
+                this.resimulate();
+            else
+                this.actionEventSystem.release_event('reset_actions', []);
+        }
     }
 
     next_frame() {
