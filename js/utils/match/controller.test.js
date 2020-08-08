@@ -151,10 +151,10 @@ describe('test previous_frame', () => {
 
         controller.previous_frame(); //does nothing
         controller.previous_frame(); //does nothing
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(10);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(8);
 
         controller.next_frame(); //5
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(12);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(10);
     });
 });
 
