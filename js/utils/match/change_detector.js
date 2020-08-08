@@ -26,8 +26,8 @@ class ChangeDetector {
         return events
             .filter(e => e[3] === player)
             .filter(e => want_information_units === this.information_indices.includes(e[1]))
-            .map(e => [this.shorthands[e[1]], ...e[0]])
-            .map(e => player === 1 ? e : [e[0], 27 - e[1], 27 - e[2]]);
+            .map(e => [this.shorthands[e[1]], ...e[0]]);
+        // .map(e => player === 1 ? e : [e[0], 27 - e[1], 27 - e[2]]);
     }
 }
 
