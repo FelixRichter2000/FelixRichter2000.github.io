@@ -112,7 +112,7 @@ describe('test next_frame', () => {
         controller.next_frame(); //no call
 
         //expect 4 other calls to release event from somewhere else
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(6);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(4);
     });
 });
 
@@ -147,7 +147,7 @@ describe('test previous_frame', () => {
         controller.next_frame(); //2
         controller.previous_frame(); //3
         controller.previous_frame(); //4
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(10);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(8);
 
         controller.previous_frame(); //does nothing
         controller.previous_frame(); //does nothing
@@ -302,9 +302,8 @@ describe('test resimulate', () => {
         controller.set_replay_data(replayData);
         controller.set_frame(1);
         jest.clearAllMocks();
-        controller.resimulate();
+        controller.set_frame(0);
         expect(mockChangeDetector.detect_changes).toHaveBeenCalledWith('spawnDataToPassToChangeDetector');
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_simulation_game_state', { 'events': { 'spawn': [] }, 'frame': 0, 'turnInfo': [0] });
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('reset_actions', 'detected_changes');
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', 'detected_changes');
     });
 });

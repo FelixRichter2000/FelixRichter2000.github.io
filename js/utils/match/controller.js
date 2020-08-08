@@ -12,13 +12,14 @@ class Controller {
 
     set_frame(frame) {
         if (this._is_frame_valid(frame)) {
-            this._release_update_frame_data_event(frame);
-
-            if (!this._isFrameDuringTurn(frame))
-                this.resimulate();
-            else
-                this.actionEventSystem.release_event('reset_actions', []);
+            this.frame = frame;
+            this._release_events();
         }
+    }
+
+    _release_events() {
+        this._release_update_frame_data_event();
+        this._handle_actions();
     }
 
     next_frame() {
@@ -42,11 +43,26 @@ class Controller {
             this.set_frame(this._get_first_frame_of_current_turn());
     }
 
-    resimulate() {
-        let begin_index = this._get_first_frame_of_current_turn();
-        let actions_for_submit = this.changeDetector.detect_changes(this.replayData[begin_index + 1].events.spawn);
-        this.actionEventSystem.release_event('set_simulation_game_state', this.replayData[begin_index]);
-        this.actionEventSystem.release_event('reset_actions', actions_for_submit);
+    _handle_actions() {
+        let actions = this._isFrameDuringTurn(this.frame) ? [] : this._get_actions();
+        this._set_actions(actions);
+    }
+
+    _handle_simulation_game_state() {
+        if (!this._isFrameDuringTurn(this.frame))
+            this._set_simulation_game_state();
+    }
+
+    _set_simulation_game_state() {
+        this.actionEventSystem.release_event('set_simulation_game_state', this.replayData[this.frame]);
+    }
+
+    _set_actions(actions) {
+        this.actionEventSystem.release_event('set_actions', actions);
+    }
+
+    _get_actions() {
+        return this.changeDetector.detect_changes(this.replayData[this.frame + 1].events.spawn);
     }
 
     _get_first_frame_of_current_turn() {
@@ -56,9 +72,8 @@ class Controller {
         return frame;
     }
 
-    _release_update_frame_data_event(frame) {
-        this.frame = frame;
-        this.actionEventSystem.release_event('update_frame_data', this.replayData[frame]);
+    _release_update_frame_data_event() {
+        this.actionEventSystem.release_event('update_frame_data', this.replayData[this.frame]);
     }
 
     _is_frame_valid(frame) {
