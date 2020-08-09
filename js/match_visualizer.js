@@ -90,20 +90,85 @@ let match_utils_simulator = new MatchUtils({
 
     group_size: 9
 }, {
+    td_to_elements_converter: function(td) {
+        let ims = td.getElementsByClassName('match-changing-img');
+        let quantity_label = td.getElementsByClassName('quantity');
+        return [...ims, ...quantity_label];
+    },
+    add_object_to_array: function(self, group, index, frame_data_array) {
+        ///Set flags
+        //  Firewalls + Inforamtion + Removal + Upgrade
+        if (group >= 0 && group <= 7) {
+            self.set_value(frame_data_array, index, group, 1);
+        }
 
+        ///Add together for quantity
+        //Information
+        if (group >= 3 && group <= 5) {
+            self.add_one(frame_data_array, index, 8);
+        }
+    },
+    parse_frame_data_to_flat_array: function(self, actions) {
+
+        let frame_data_array = self.create_new_array();
+
+        const type_to_index = {
+            'FF': 0,
+            'EF': 1,
+            'DF': 2,
+            'PI': 3,
+            'EI': 4,
+            'SI': 5,
+            'RM': 6,
+            'UP': 7,
+        }
+
+        actions.forEach(a =>
+            a.forEach(e => {
+                let type = e[0];
+                let location = [e[1], e[2]]
+                let group = type_to_index[type];
+                let index = self.location_to_index(location);
+                self.config.add_object_to_array(self, group, index, frame_data_array);
+            }));
+
+        return frame_data_array;
+    },
+    update_function: function(group, switched_index, current_element, value) {
+        current_element.hidden = value == 0;
+
+        // Quantity
+        if (group === 8) {
+            current_element.innerHTML = value;
+        }
+    },
+    additional_flipping: function(self, index) {
+        return index;
+    }
 });
 
-//FieldGenerator
+//MainFieldGenerator
 const watch_table = document.getElementById('watch_table');
 let fieldGenerator = new FieldGenerator(match_utils);
 fieldGenerator.generate(watch_table);
 const viewer_elements = fieldGenerator.get_viewer_elements();
 const highlight_elements = fieldGenerator.get_hover_elements();
 
+//SimulationSetupFieldGenerator
+const simulation_table = document.getElementById('simulation_table');
+let simulationFieldGenerator = new FieldGenerator(match_utils_simulator);
+simulationFieldGenerator.generate(simulation_table);
+const simulation_elements = simulationFieldGenerator.get_viewer_elements();
+
 //Create MatchViewer
 let match_viewer = new MatchViewer(match_utils, viewer_elements);
 match_viewer.update_frame_data = e => match_viewer.update_data(e);
 actionEventSystem.register(match_viewer);
+
+//Create SimulationMatchViewer
+let simulation_match_viewer = new MatchViewer(match_utils_simulator, simulation_elements);
+simulation_match_viewer.set_actions = e => simulation_match_viewer.update_data(e);
+actionEventSystem.register(simulation_match_viewer);
 
 //Create ViewModel
 let view_model = new ViewModel();
