@@ -87,4 +87,44 @@ describe('receive click_on_location events', () => {
         actionManager.click_on_location([0, 0]);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
     });
+
+    it('should add filter on new location', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [
+                ['FF', 0, 0],
+                ['FF', 1, 2]
+            ],
+            [],
+            [],
+            []
+        ]);
+        actionManager.click_on_location([2, 3]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [
+                ['FF', 0, 0],
+                ['FF', 1, 2],
+                ['FF', 2, 3],
+            ],
+            [],
+            [],
+            []
+        ]);
+    });
+
+    it('should not add another Filter if another filter is placed there already', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [
+                ['FF', 1, 2],
+                ['FF', 0, 0],
+                ['FF', 2, 3],
+            ],
+            [],
+            [],
+            []
+        ]);
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    });
 });
