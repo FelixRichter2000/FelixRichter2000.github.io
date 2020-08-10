@@ -127,4 +127,64 @@ describe('receive click_on_location events', () => {
         actionManager.click_on_location([0, 0]);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
     });
+
+    it('should add a Encryptor to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('EF');
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [
+                ['EF', 0, 0]
+            ],
+            [],
+            [],
+            []
+        ]);
+    });
+
+    it('should add a Destructor to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('DF');
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [
+                ['DF', 0, 0]
+            ],
+            [],
+            [],
+            []
+        ]);
+    });
+
+    it('should add a Filter in third array when the location is on the upper half of the board', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('FF');
+        actionManager.click_on_location([0, 14]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [
+                ['FF', 0, 14]
+            ],
+            []
+        ]);
+    });
+
+    it('should add a Encryptor in third array when the location is on the upper half of the board', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('EF');
+        actionManager.click_on_location([0, 14]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [
+                ['EF', 0, 14]
+            ],
+            []
+        ]);
+    });
 });
