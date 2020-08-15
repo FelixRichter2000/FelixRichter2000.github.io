@@ -105,4 +105,25 @@ describe('test shortcut controller', () => {
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(1);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith("toggle_play");
     });
+
+    test('another type of event should not trigger', () => {
+        let shortcutController = new ShortcutController(mockActionEventSystem);
+        shortcutController.addNewShortcut({
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            callback: "toggle_play",
+            type: "a",
+        });
+
+        document.dispatchEvent(new KeyboardEvent('b', {
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+        }));
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    });
 });
