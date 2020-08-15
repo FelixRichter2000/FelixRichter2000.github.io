@@ -233,8 +233,8 @@ window.addEventListener('mousemove', (e) => {
 });
 
 //ActionManager
-let actionSimulator = new ActionSimulator(actionEventSystem);
-actionEventSystem.register(actionSimulator);
+let actionManager = new ActionManager(actionEventSystem);
+actionEventSystem.register(actionManager);
 
 //Player
 let player = new Player(actionEventSystem);
