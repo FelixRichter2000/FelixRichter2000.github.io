@@ -232,6 +232,14 @@ window.addEventListener('mousemove', (e) => {
     actionEventSystem.release_event('show_field_info', location)
 });
 
+window.addEventListener('click', (e) => {
+    let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
+    const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);
+    let location = [round(e.clientX), 27 - round(e.clientY)];
+    if (match_utils.is_in_arena_bounds(...location))
+        actionEventSystem.release_event('click_on_location', location)
+});
+
 //ActionManager
 let actionManager = new ActionManager(actionEventSystem);
 actionEventSystem.register(actionManager);
