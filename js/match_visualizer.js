@@ -308,7 +308,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
 
 //Setup Button bindings
 document.querySelectorAll('[action]').forEach(function(e) {
-    e.addEventListener('click', () => actionEventSystem.release_event(e.getAttribute('action')))
+    e.addEventListener('click', () => actionEventSystem.release_event(e.getAttribute('action'), e.getAttribute('parameter')))
 });
 
 //Fancy Health-Bars
