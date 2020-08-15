@@ -43,14 +43,14 @@ class Controller {
             this.set_frame(this._get_first_frame_of_current_turn());
     }
 
+    send_simulation_game_state() {
+        if (!this._isFrameDuringTurn(this.frame))
+            this._set_simulation_game_state();
+    }
+
     _handle_actions() {
         let actions = this._isFrameDuringTurn(this.frame) ? [] : this._get_actions();
         this._set_actions(actions);
-    }
-
-    _handle_simulation_game_state() {
-        if (!this._isFrameDuringTurn(this.frame))
-            this._set_simulation_game_state();
     }
 
     _set_simulation_game_state() {
