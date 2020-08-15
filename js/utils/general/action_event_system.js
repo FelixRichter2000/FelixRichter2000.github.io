@@ -15,13 +15,13 @@ class ActionEventSystem {
     }
 
     registerPreEvent(triggerEvent, preEvent) {
-        this.followUpMap[triggerEvent] = [...(this.preMap[triggerEvent] || []), preEvent];
+        this.preMap[triggerEvent] = [...(this.preMap[triggerEvent] || []), preEvent];
     }
 
     release_event(name, parameter) {
-        console.log(name, parameter);
-
         this._releasePreEventIfExists(name, parameter);
+
+        console.log(name, parameter);
 
         this.listeners
             .filter(listener => listener[name])

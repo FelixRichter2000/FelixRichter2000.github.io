@@ -5,6 +5,7 @@ actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'pause');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'restart_socket');
+actionEventSystem.registerPreEvent('simulate', 'send_simulation_game_state');
 
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
