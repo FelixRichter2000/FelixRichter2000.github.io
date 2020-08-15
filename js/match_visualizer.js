@@ -232,6 +232,10 @@ window.addEventListener('mousemove', (e) => {
     actionEventSystem.release_event('show_field_info', location)
 });
 
+//ActionManager
+let actionSimulator = new ActionSimulator(actionEventSystem);
+actionEventSystem.register(actionSimulator);
+
 //Player
 let player = new Player(actionEventSystem);
 actionEventSystem.register(player);
