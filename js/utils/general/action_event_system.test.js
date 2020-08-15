@@ -102,4 +102,18 @@ describe('test action_event_system', () => {
         expect(mockObj.followUpEventName1).toHaveBeenCalledWith('param');
         expect(mockObj.followUpEventName2).toHaveBeenCalledWith('param');
     });
+
+    test('register pre event', () => {
+        let eventSystem = new ActionEventSystem();
+
+        eventSystem.registerPreEvent('triggerEventName', 'preEventName');
+
+        let mockMyFunction = jest.fn();
+        let mockMySecondFunction = jest.fn();
+        eventSystem.register({ triggerEventName: mockMyFunction, preEventName: mockMySecondFunction });
+
+        eventSystem.release_event('triggerEventName', 'param');
+        expect(mockMyFunction).toHaveBeenCalledWith('param');
+        expect(mockMySecondFunction).toHaveBeenCalledWith('param');
+    });
 });
