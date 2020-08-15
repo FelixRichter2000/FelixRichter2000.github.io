@@ -244,6 +244,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "next_frame",
+        type: "keydown"
     },
     {
         code: "ArrowLeft",
@@ -251,6 +252,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "previous_frame",
+        type: "keydown"
     },
     {
         code: "ArrowRight",
@@ -258,6 +260,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "next_turn",
+        type: "keydown"
     },
     {
         code: "ArrowLeft",
@@ -265,6 +268,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "previous_turn",
+        type: "keydown"
     },
     {
         code: "ArrowUp",
@@ -272,6 +276,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "faster_playback",
+        type: "keydown"
     },
     {
         code: "ArrowDown",
@@ -279,6 +284,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "slower_playback",
+        type: "keydown"
     },
     {
         code: "Space",
@@ -286,6 +292,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: false,
         callback: "toggle_play",
+        type: "keydown"
     },
     {
         code: "KeyX",
@@ -293,6 +300,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
         shiftKey: false,
         altKey: true,
         callback: "switch_view",
+        type: "keydown"
     }
 ].forEach(function(shortcut) {
     shortcutController.addNewShortcut(shortcut);
