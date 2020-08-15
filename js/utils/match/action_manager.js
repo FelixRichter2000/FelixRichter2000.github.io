@@ -7,7 +7,10 @@ class ActionManager {
             [],
             []
         ];
+        this.information_units = ['PI', 'EI', 'SI']
         this.action_mode = 'FF';
+        this.switched = false;
+        this.removal_mode = false;
     }
 
     set_actions(actions) {
@@ -19,18 +22,59 @@ class ActionManager {
     }
 
     switch_view() {
+        this.switched = !this.switched;
+    }
 
+    toggle_removal_mode() {
+        this.removal_mode = !this.removal_mode;
     }
 
     click_on_location(location) {
-        let action_index = location[1] > 13 ? 2 : 0;
+        location = this._switch_location_if_needed(location);
+
+        let action_index = this._calculate_action_index(location);
 
         let new_action = [this.action_mode, ...location];
 
-        if (this.actions[action_index].filter(e => JSON.stringify(e) == JSON.stringify(new_action)).length == 0) {
-            this.actions[action_index].push(new_action);
-            this._release_set_actions_event();
-        }
+        let index = this._get_index_of_action(action_index, new_action);
+        let action_exists = index != -1;
+
+        if (this.removal_mode) {
+            if (action_exists)
+                this._remove_action(action_index, index);
+        } else if (!action_exists || this._is_information_mode())
+            this._append_action(action_index, new_action);
+    }
+
+    _append_action(action_index, new_action) {
+        this.actions[action_index].push(new_action);
+        this._release_set_actions_event();
+    }
+
+    _remove_action(action_index, index) {
+        this.actions[action_index].splice(index, 1);
+        this._release_set_actions_event();
+    }
+
+    _switch_location_if_needed(location) {
+        if (this.switched)
+            location = [27 - location[0], 27 - location[1]];
+        return location;
+    }
+
+    _get_index_of_action(action_index, new_action) {
+        return this.actions[action_index].findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
+    }
+
+    _calculate_action_index(location) {
+        let action_index = location[1] > 13 ? 2 : 0;
+        if (this._is_information_mode())
+            action_index++;
+        return action_index;
+    }
+
+    _is_information_mode() {
+        return this.information_units.includes(this.action_mode);
     }
 
     _release_set_actions_event() {

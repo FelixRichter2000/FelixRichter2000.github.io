@@ -42,9 +42,43 @@ describe('receive switch_view event', () => {
         let actionManager = new ActionManager(mockActionEventSystem);
         actionManager.switch_view();
     });
+
+    it('should switch location around', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.switch_view();
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [
+                ['FF', 27, 27]
+            ],
+            []
+        ]);
+    });
+
+    it('should switch location twice around', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.switch_view();
+        actionManager.click_on_location([0, 0]);
+        actionManager.switch_view();
+        actionManager.click_on_location([1, 1]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [
+                ['FF', 1, 1]
+            ],
+            [],
+            [
+                ['FF', 27, 27]
+            ],
+            []
+        ]);
+    });
 });
 
-describe('receive click_on_location events', () => {
+describe('click_on_location with firewall units', () => {
     it('should add a Filter (default mode) to the actions on the clicked location [0, 0]', () => {
         let actionManager = new ActionManager(mockActionEventSystem);
         actionManager.click_on_location([0, 0]);
@@ -184,6 +218,165 @@ describe('receive click_on_location events', () => {
             [
                 ['EF', 0, 14]
             ],
+            []
+        ]);
+    });
+
+    it('should add a Destructor in third array when the location is on the upper half of the board', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('DF');
+        actionManager.click_on_location([0, 14]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [
+                ['DF', 0, 14]
+            ],
+            []
+        ]);
+    });
+});
+
+describe('click_on_location with information units', () => {
+    it('should add a Ping in third array when the location is on the upper half of the board', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('DF');
+        actionManager.click_on_location([0, 14]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [
+                ['DF', 0, 14]
+            ],
+            []
+        ]);
+    });
+
+    it('should add a Ping to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('PI');
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['PI', 0, 0]
+            ],
+            [],
+            []
+        ]);
+    });
+
+    it('should add two Pings to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('PI');
+        actionManager.click_on_location([0, 0]);
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['PI', 0, 0],
+                ['PI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+    });
+
+    it('should add two Emps to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('EI');
+        actionManager.click_on_location([0, 0]);
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['EI', 0, 0],
+                ['EI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+    });
+
+    it('should add two Scramblers to the actions on the clicked location [0, 0]', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_action_mode('SI');
+        actionManager.click_on_location([0, 0]);
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['SI', 0, 0],
+                ['SI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+    });
+});
+
+describe('toggle_removal_mode', () => {
+    it('should remove the filter', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [
+                ['FF', 0, 0],
+            ],
+            [],
+            [],
+            []
+        ]);
+        actionManager.toggle_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [],
+            []
+        ]);
+    });
+
+    it('should not remove the other filter', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [
+                ['FF', 1, 1],
+            ],
+            [],
+            [],
+            []
+        ]);
+        actionManager.toggle_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
+    });
+
+    it('should remove one Ping', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [],
+            [
+                ['PI', 0, 0],
+                ['PI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+        actionManager.set_action_mode('PI');
+        actionManager.toggle_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['PI', 0, 0],
+            ],
+            [],
             []
         ]);
     });
