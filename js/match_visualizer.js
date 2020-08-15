@@ -313,6 +313,38 @@ let shortcutController = new ShortcutController(actionEventSystem);
         altKey: true,
         callback: "switch_view",
         type: "keydown"
+    },
+    {
+        code: "ShiftLeft",
+        ctrlKey: false,
+        shiftKey: true,
+        altKey: false,
+        callback: "set_removal_mode",
+        type: "keydown"
+    },
+    {
+        code: "ShiftLeft",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        callback: "unset_removal_mode",
+        type: "keyup"
+    },
+    {
+        code: "ShiftRight",
+        ctrlKey: false,
+        shiftKey: true,
+        altKey: false,
+        callback: "set_removal_mode",
+        type: "keydown"
+    },
+    {
+        code: "ShiftRight",
+        ctrlKey: false,
+        shiftKey: false,
+        altKey: false,
+        callback: "unset_removal_mode",
+        type: "keyup"
     }
 ].forEach(function(shortcut) {
     shortcutController.addNewShortcut(shortcut);
