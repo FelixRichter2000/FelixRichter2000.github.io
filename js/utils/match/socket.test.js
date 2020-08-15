@@ -16,14 +16,18 @@ let terminalServer;
 const testing_actions = [
     ['p1_firewalls'],
     ['p1_units'],
-    ['p2_firewalls'],
-    ['p2_units']
+    [
+        ['p2_firewalls', 0, 0]
+    ],
+    [
+        ['p2_units', 0, 0]
+    ]
 ];
 const action_messages = [
     'm!["p1_firewalls"]',
     'm!["p1_units"]',
-    'm"["p2_firewalls"]',
-    'm"["p2_units"]'
+    'm"[["p2_firewalls",27,27]]',
+    'm"[["p2_units",27,27]]'
 ];
 const special_game_state = {
     "p2Units": [],

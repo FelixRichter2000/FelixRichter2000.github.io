@@ -43,7 +43,12 @@ class Socket {
     }
 
     set_actions(actions) {
-        this.actions = actions;
+        this.actions = actions.map((e, i) => {
+            if (i > 1) {
+                return e.map(a => [a[0], 27 - a[1], 27 - a[2]]);
+            }
+            return e;
+        });
     }
 
     simulate() {
