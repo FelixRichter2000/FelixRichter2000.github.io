@@ -42,6 +42,14 @@ class Socket {
         }
     }
 
+    set_actions(actions) {
+        this.actions = actions;
+    }
+
+    simulate() {
+        this._submit_if_possible();
+    }
+
     _is_new_game_state_different(new_game_state) {
         if (!this.current_game_state)
             return true;
@@ -52,11 +60,6 @@ class Socket {
         let cloned_states = [JSON.parse(JSON.stringify(this.current_game_state)), JSON.parse(JSON.stringify(new_game_state))];
         cloned_states.forEach(e => e.turnInfo[3] = 0);
         return JSON.stringify(cloned_states[0]) !== JSON.stringify(cloned_states[1]);
-    }
-
-    submit_actions(actions) {
-        this.actions = actions;
-        this._submit_if_possible();
     }
 
     _restart_socket() {

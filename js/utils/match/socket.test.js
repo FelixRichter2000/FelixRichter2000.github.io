@@ -165,7 +165,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions([]);
+        socket.set_actions([]);
+        socket.simulate();
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
     });
@@ -177,7 +178,8 @@ describe('socket.submit_turn', () => {
         terminalServer.send('m {"debug":"lots of data"}');
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string", ...action_messages]);
     });
@@ -189,7 +191,8 @@ describe('socket.submit_turn', () => {
         terminalServer.send('m {"debug":"lots of data"}');
         terminalServer.send('m {"p6Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string"]);
     });
@@ -198,7 +201,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         expect(terminalServer.messages).toEqual(["mocked_init_string", ...action_messages]);
@@ -208,7 +212,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1, 2, 3, ...
@@ -242,7 +247,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1, 2, 3, ...
@@ -270,7 +276,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1, 2, 3, ...
@@ -293,7 +300,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1, 2, 3, ...
@@ -310,7 +318,8 @@ describe('socket.submit_turn', () => {
             "turnInfo": [0, 13, -1, 0]
         }]);
 
-        let second_retured_actions = socket.submit_actions(testing_actions);
+        let second_retured_actions = socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,15,0,0]}'); //frames 0, 1, 2, 3, ...
@@ -333,7 +342,8 @@ describe('socket.submit_turn', () => {
         let socket = new Socket(mockActionEventSystem, mockStartingStringGenerator);
         socket.set_simulation_game_state(special_game_state);
         jest.runTimersToTime(10);
-        socket.submit_actions(testing_actions);
+        socket.set_actions(testing_actions);
+        socket.simulate();
         terminalServer.send('m {"p2Units":[[],[],[],[],[],[],[],[]],"turnInfo":[0,12,-1,0]}');
         jest.runTimersToTime(10);
         terminalServer.send('m {"p2Units":[],"turnInfo":[1,12,0,0]}'); //frames 0, 1
