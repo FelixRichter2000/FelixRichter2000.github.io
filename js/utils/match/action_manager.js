@@ -25,8 +25,12 @@ class ActionManager {
         this.switched = !this.switched;
     }
 
-    toggle_removal_mode() {
-        this.removal_mode = !this.removal_mode;
+    set_removal_mode() {
+        this.removal_mode = true;
+    }
+
+    unset_removal_mode() {
+        this.removal_mode = false;
     }
 
     click_on_location(location) {

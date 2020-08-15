@@ -321,7 +321,7 @@ describe('click_on_location with information units', () => {
     });
 });
 
-describe('toggle_removal_mode', () => {
+describe('set_removal_mode', () => {
     it('should remove the filter', () => {
         let actionManager = new ActionManager(mockActionEventSystem);
         actionManager.set_actions([
@@ -332,7 +332,7 @@ describe('toggle_removal_mode', () => {
             [],
             []
         ]);
-        actionManager.toggle_removal_mode();
+        actionManager.set_removal_mode();
         actionManager.click_on_location([0, 0]);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
             [],
@@ -352,7 +352,7 @@ describe('toggle_removal_mode', () => {
             [],
             []
         ]);
-        actionManager.toggle_removal_mode();
+        actionManager.set_removal_mode();
         actionManager.click_on_location([0, 0]);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
     });
@@ -369,13 +369,32 @@ describe('toggle_removal_mode', () => {
             []
         ]);
         actionManager.set_action_mode('PI');
-        actionManager.toggle_removal_mode();
+        actionManager.set_removal_mode();
         actionManager.click_on_location([0, 0]);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
             [],
             [
                 ['PI', 0, 0],
             ],
+            [],
+            []
+        ]);
+    });
+});
+
+
+describe('unset removal mode', () => {
+    it('should be normal again', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_removal_mode();
+        actionManager.unset_removal_mode();
+        actionManager.click_on_location([0, 0]);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [
+                ['FF', 0, 0]
+            ],
+            [],
             [],
             []
         ]);
