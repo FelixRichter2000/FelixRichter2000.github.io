@@ -156,7 +156,6 @@ class Socket {
         this.all_messages = [];
         this.submit_enabled = false;
         this.has_submitted = false;
-        this.actions = null;
         this.connected = false;
     }
 
@@ -173,6 +172,7 @@ class Socket {
         this._create_messages()
             .forEach(e => this.socket.send(e));
         this.has_submitted = true;
+        this.actions = null;
     }
 
     _create_messages() {
