@@ -20,6 +20,7 @@ describe('test shortcut controller', () => {
             shiftKey: false,
             altKey: false,
             callback: "toggle_play",
+            type: "keydown",
         });
 
         document.dispatchEvent(new KeyboardEvent('keydown', {
@@ -41,6 +42,7 @@ describe('test shortcut controller', () => {
             shiftKey: false,
             altKey: true,
             callback: "switch_view",
+            type: "keydown",
         });
 
         document.dispatchEvent(new KeyboardEvent('keydown', {
@@ -65,6 +67,7 @@ describe('test shortcut controller', () => {
             shiftKey: false,
             altKey: false,
             callback: "toggle_play",
+            type: "keydown",
         });
 
         document.dispatchEvent(new KeyboardEvent('keydown', {
@@ -75,5 +78,31 @@ describe('test shortcut controller', () => {
         }));
 
         expect(document.querySelector(':focus')).toBe(null);
+    });
+
+    test('another type of event', () => {
+        document.body.innerHTML = '<button id="button1"/>';
+        document.getElementById('button1').focus();
+
+        let shortcutController = new ShortcutController(mockActionEventSystem);
+        shortcutController.addNewShortcut({
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            callback: "toggle_play",
+            type: "keyup",
+        });
+
+        document.dispatchEvent(new KeyboardEvent('keyup', {
+            code: "Space",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+        }));
+
+        expect(document.querySelector(':focus')).toBe(null);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(1);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith("toggle_play");
     });
 });

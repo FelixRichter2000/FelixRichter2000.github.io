@@ -2,15 +2,22 @@ class ShortcutController {
     constructor(actionEventSystem) {
         this.actionEventSystem = actionEventSystem;
         this.shortCuts = [];
-        this._setupEventListener();
+        this.events_listening_on = [];
     }
 
     addNewShortcut(shortcut) {
         this.shortCuts.push(shortcut);
+        this._add_listener_if_needed(shortcut);
     }
 
-    _setupEventListener() {
-        document.addEventListener('keydown', this._handleEvent.bind(this));
+    _add_listener_if_needed(shortcut) {
+        if (!this.events_listening_on.includes(shortcut.type))
+            this._add_event_listener(shortcut.type);
+    }
+
+    _add_event_listener(type) {
+        document.addEventListener(type, this._handleEvent.bind(this));
+        this.events_listening_on.push(type);
     }
 
     _handleEvent(keyEvent) {
