@@ -215,7 +215,7 @@ describe('test previous_turn', () => {
         controller.set_frame(3);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 1, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 0, turnInfo: [0], events: { spawn: [] } });
     });
 
     test('should find and show previous turn from turn_frame -1', () => {
@@ -224,7 +224,7 @@ describe('test previous_turn', () => {
         controller.set_frame(2);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 1, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 0, turnInfo: [0], events: { spawn: [] } });
     });
 
     test('should find and show previous turn with multiple steps', () => {
@@ -233,7 +233,7 @@ describe('test previous_turn', () => {
         controller.set_frame(6);
         jest.clearAllMocks();
         controller.previous_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 3, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 2, turnInfo: [0], events: { spawn: [] } });
     });
 });
 

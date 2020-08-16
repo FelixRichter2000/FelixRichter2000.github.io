@@ -91,7 +91,7 @@ class Controller {
         frame -= 2;
         while (this._is_action_phase(frame))
             frame--;
-        return frame + 1;
+        return frame;
     }
 
     _is_action_phase(frame) {
