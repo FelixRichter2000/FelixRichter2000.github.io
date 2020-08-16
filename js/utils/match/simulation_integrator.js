@@ -11,11 +11,14 @@ class SimulationIntegrator {
     add_simulation_result(simulation_result) {
         this._merge_with_simulation_result(simulation_result);
         this.actionEventSystem.release_event('set_replay_data', this.replay_data);
+        this.actionEventSystem.release_event('set_frame', this.insertion_index);
+        this.actionEventSystem.release_event('play');
+
     }
 
     _merge_with_simulation_result(simulation_result) {
-        let insertion_index = this._get_insertion_index(simulation_result);
-        this._insert(insertion_index, simulation_result);
+        this.insertion_index = this._get_insertion_index(simulation_result);
+        this._insert(simulation_result);
         this._fix_frame_numbers();
     }
 
@@ -23,15 +26,15 @@ class SimulationIntegrator {
         this.replay_data = this.replay_data.map((e, i) => { e.turnInfo[3] = i; return e; });
     }
 
-    _insert(insertion_index, simulation_result) {
-        if (insertion_index === this.replay_data.length - 1) {
+    _insert(simulation_result) {
+        if (this.insertion_index === this.replay_data.length - 1) {
             simulation_result.splice(0, 1);
-            this.replay_data.splice(insertion_index + 1, 0, ...simulation_result);
-        } else if (insertion_index !== Number.MAX_VALUE) {
+            this.replay_data.splice(this.insertion_index + 1, 0, ...simulation_result);
+        } else if (this.insertion_index !== Number.MAX_VALUE) {
             simulation_result.splice(-1, 1);
-            this.replay_data.splice(insertion_index, 0, ...simulation_result);
+            this.replay_data.splice(this.insertion_index, 0, ...simulation_result);
         } else
-            this.replay_data.splice(insertion_index, 0, ...simulation_result);
+            this.replay_data.splice(this.insertion_index, 0, ...simulation_result);
     }
 
     _get_insertion_index(simulation_result) {

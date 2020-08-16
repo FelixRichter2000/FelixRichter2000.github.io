@@ -46,6 +46,8 @@ describe('SimulationIntegrator.add_simulation_result', () => {
         simulationIntegrator.set_replay_data(starting_state);
         simulationIntegrator.add_simulation_result(additinal_state);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_replay_data', complete_state);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_frame', Number.MAX_VALUE);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('play');
     });
 
     test('should insert addtional_state without the last frame before everything else in the same turn', () => {
@@ -87,6 +89,8 @@ describe('SimulationIntegrator.add_simulation_result', () => {
         simulationIntegrator.set_replay_data(starting_state);
         simulationIntegrator.add_simulation_result(additinal_state);
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_replay_data', complete_state);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_frame', 0);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('play');
     });
 
     test('should append addtional_state without the first frame after the last frame from the starting_state', () => {
