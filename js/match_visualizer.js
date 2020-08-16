@@ -359,7 +359,7 @@ document.querySelectorAll('[action]').forEach(function(e) {
 //Fancy Health-Bars
 setInterval(() => {
     let health_values = [...document.getElementsByName('health')]
-        .map(e => `${parseInt(e.innerHTML) / .3}%`);
+        .map(e => `${Math.max(parseInt(e.innerHTML) / .3, 0)}%`);
     [...document.getElementsByName('health-bar')]
     .forEach((e, i) => e.style.width = health_values[i]);
 }, 1000 / 60);
