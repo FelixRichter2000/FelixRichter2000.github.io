@@ -84,7 +84,7 @@ class Controller {
         frame++;
         while (this._is_action_phase(frame))
             frame++;
-        return this._isFrameInRange(frame) ? frame + 1 : frame;
+        return frame;
     }
 
     _get_previous_turn(frame = this.frame) {

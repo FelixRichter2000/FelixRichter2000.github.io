@@ -165,7 +165,7 @@ describe('test next_turn', () => {
         controller.set_frame(6);
         jest.clearAllMocks();
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 8, turnInfo: [0], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 7, turnInfo: [0], events: { spawn: [] } });
     });
 
     test('should jump to last frame if it`s already the last turn from within turn', () => {
@@ -181,7 +181,7 @@ describe('test next_turn', () => {
         const controller = new Controller(mockActionEventSystem, mockChangeDetector);
         controller.set_replay_data(mockReplayData);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 3, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 2, turnInfo: [0], events: { spawn: [] } });
     });
 
     test('should find and show next turn with multiple steps in between', () => {
@@ -189,7 +189,7 @@ describe('test next_turn', () => {
         controller.set_replay_data(mockReplayData);
         controller.set_frame(3);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 6, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 5, turnInfo: [0], events: { spawn: [] } });
     });
 
     test('should find and show next turn with multiple steps in between from turn frame -1', () => {
@@ -197,7 +197,7 @@ describe('test next_turn', () => {
         controller.set_replay_data(mockReplayData);
         controller.set_frame(2);
         controller.next_turn();
-        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 6, turnInfo: [1], events: { spawn: [] } });
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_frame_data', { frame: 5, turnInfo: [0], events: { spawn: [] } });
     });
 });
 
