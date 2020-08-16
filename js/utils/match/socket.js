@@ -32,6 +32,7 @@ class Socket {
             "events": { "selfDestruct": [], "breach": [], "damage": [], "shield": [], "move": [], "spawn": [], "death": [], "attack": [], "melee": [] }
         };
         this.current_game_state = null;
+        this.should_submit = false;
     }
 
     set_simulation_game_state(game_state) {
@@ -52,6 +53,7 @@ class Socket {
     }
 
     simulate() {
+        this.should_submit = true;
         this._submit_if_possible();
     }
 
@@ -173,6 +175,7 @@ class Socket {
             .forEach(e => this.socket.send(e));
         this.has_submitted = true;
         this.actions = null;
+        this.should_submit = false;
     }
 
     _create_messages() {
@@ -180,7 +183,7 @@ class Socket {
     }
 
     _can_submit() {
-        return this.submit_enabled && this.actions && this.connected;
+        return this.submit_enabled && this.actions && this.connected && this.should_submit;
     }
 }
 
