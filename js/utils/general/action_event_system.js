@@ -23,11 +23,15 @@ class ActionEventSystem {
 
         console.log(name, parameter);
 
+        this._releaseActualEvent(name, parameter);
+
+        this._releaseFollowUpEventIfExists(name, parameter);
+    }
+
+    _releaseActualEvent(name, parameter) {
         this.listeners
             .filter(listener => listener[name])
             .forEach(listener => listener[name](parameter));
-
-        this._releaseFollowUpEventIfExists(name, parameter);
     }
 
     _releasePreEventIfExists(name, parameter) {
