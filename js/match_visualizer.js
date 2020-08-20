@@ -346,6 +346,14 @@ let shortcutController = new ShortcutController(actionEventSystem);
         altKey: false,
         callback: "unset_removal_mode",
         type: "keyup"
+    },
+    {
+        code: "Enter",
+        ctrlKey: true,
+        shiftKey: false,
+        altKey: false,
+        callback: "simulate",
+        type: "keydown"
     }
 ].forEach(function(shortcut) {
     shortcutController.addNewShortcut(shortcut);
