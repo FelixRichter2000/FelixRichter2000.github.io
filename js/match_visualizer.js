@@ -224,6 +224,21 @@ actionEventSystem.register(socket);
 let simulationIntegrator = new SimulationIntegrator(actionEventSystem);
 actionEventSystem.register(simulationIntegrator);
 
+//Mode highlighter
+let modeHighlighter = {
+    set_action_mode: function(mode) {
+        mode_buttons = document.querySelectorAll('button[action="set_action_mode"]');
+        mode_buttons.forEach(e => {
+            if (e.getAttribute('parameter') == mode)
+                e.classList.add('selected')
+            else
+                e.classList.remove('selected')
+        });
+    }
+}
+actionEventSystem.register(modeHighlighter);
+
+
 window.addEventListener('mousemove', (e) => {
     let tile_size = Math.min(window.innerWidth, window.innerHeight) / 28;
     const round = (pixel) => Math.round((pixel - tile_size / 2) / tile_size);

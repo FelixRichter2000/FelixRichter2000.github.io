@@ -335,8 +335,8 @@ svg {
 }
 
 button:hover {
-    filter: brightness(130%);
-    transform: scale(1.02);
+    filter: brightness(150%);
+    transform: scale(1.05);
 }
 
 .editor-section button {
@@ -362,6 +362,6 @@ button:hover {
 }
 
 .selected {
-    filter: brightness(200%);
-    transform: scale(1.02);
+    filter: brightness(140%);
+    transform: scale(1.03);
 }
