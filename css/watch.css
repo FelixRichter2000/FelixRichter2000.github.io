@@ -360,3 +360,8 @@ button:hover {
 .editor-section button img.selected {
     background-color: #444444;
 }
+
+.selected {
+    filter: brightness(200%);
+    transform: scale(1.02);
+}
