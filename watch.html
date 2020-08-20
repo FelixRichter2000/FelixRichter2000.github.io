@@ -36,9 +36,7 @@
                 <label class="left top-7 very-small-text" style="position: absolute;">MS:</label>
                 <span name="ms" class="left-indented top-7 very-small-text" style="position: absolute;">0</span>
 
-                <button class="very-small-text top-9 fancy-blue black" onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')">
-                    >_ Terminal&nbsp;
-                </button>
+
             </overlay>
             <overlay class="top-right">
                 <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
@@ -58,7 +56,10 @@
                 <span name="ms" class="right top-7 very-small-text" style="position: absolute;">0</span>
             </overlay>
             <overlay class="bottom-left">
-                <button action="simulate" class="btn-normal bottom-9 black very-small-text fancy-blue" title="Run Simulation [ctrl + enter]">
+                <button class="very-small-text bottom-9 fancy-blue black" onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')">
+                    >_ Terminal&nbsp;
+                </button>
+                <button action="simulate" class="btn-normal bottom-3 black very-small-text fancy-blue" title="Run Simulation [ctrl + enter]">
                     &nbsp;
                     <img src="images/simulator_icon.svg" alt="" class="very-small-text">
                     &nbsp;Simulate&nbsp;
