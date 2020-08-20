@@ -126,4 +126,27 @@ describe('test shortcut controller', () => {
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(0);
     });
+
+    it('should pass the parameter aswell', () => {
+        let shortcutController = new ShortcutController(mockActionEventSystem);
+        shortcutController.addNewShortcut({
+            code: "KeyE",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            callback: "set_action_mode",
+            type: "keydown",
+            parameter: "EF"
+        });
+
+        document.dispatchEvent(new KeyboardEvent('keydown', {
+            code: "KeyE",
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+        }));
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledTimes(1);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith("set_action_mode", "EF");
+    });
 });

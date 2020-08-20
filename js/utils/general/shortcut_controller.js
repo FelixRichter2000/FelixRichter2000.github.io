@@ -23,7 +23,10 @@ class ShortcutController {
     _handleEvent(keyEvent) {
         let match = this.shortCuts.find((e) => this._areKeyEventsEqual(e, keyEvent), this);
         if (match) {
-            this.actionEventSystem.release_event(match.callback);
+            if ('parameter' in match)
+                this.actionEventSystem.release_event(match.callback, match.parameter);
+            else
+                this.actionEventSystem.release_event(match.callback);
             this._preventDefaultBehaviours(keyEvent);
         }
     }
