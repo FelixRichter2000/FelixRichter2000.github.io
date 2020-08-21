@@ -380,6 +380,54 @@ describe('set_removal_mode', () => {
             []
         ]);
     });
+
+    it('should prefer to remove the current type', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [],
+            [
+                ['PI', 0, 0],
+                ['EI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+        actionManager.set_action_mode('EI');
+        actionManager.set_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['PI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+    });
+
+    it('should remove a different type if no same type is on clicked location', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [],
+            [
+                ['PI', 0, 0],
+                ['SI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+        actionManager.set_action_mode('EI');
+        actionManager.set_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [
+                ['SI', 0, 0],
+            ],
+            [],
+            []
+        ]);
+    });
 });
 
 

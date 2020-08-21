@@ -67,7 +67,10 @@ class ActionManager {
     }
 
     _get_index_of_action(action_index, new_action) {
-        return this.actions[action_index].findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
+        let index = this.actions[action_index].findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
+        if (index == -1)
+            index = this.actions[action_index].findIndex(e => e[1] == new_action[1] && e[2] == new_action[2]);
+        return index;
     }
 
     _calculate_action_index(location) {
