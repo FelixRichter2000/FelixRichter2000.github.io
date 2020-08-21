@@ -1,12 +1,7 @@
 class ActionManager {
     constructor(actionEventSystem) {
         this.actionEventSystem = actionEventSystem;
-        this.actions = [
-            [],
-            [],
-            [],
-            []
-        ];
+        this.actions = [];
         this.information_units = ['PI', 'EI', 'SI']
         this.action_mode = 'FF';
         this.switched = false;
@@ -14,7 +9,7 @@ class ActionManager {
     }
 
     set_actions(actions) {
-        this.actions = actions;
+        this.actions = actions.reduce((a, v) => [...a, ...v], []);
     }
 
     set_action_mode(action_mode) {
@@ -36,27 +31,25 @@ class ActionManager {
     click_on_location(location) {
         location = this._switch_location_if_needed(location);
 
-        let action_index = this._calculate_action_index(location);
-
         let new_action = [this.action_mode, ...location];
 
-        let index = this._get_index_of_action(action_index, new_action);
+        let index = this._get_index_of_action(new_action);
         let action_exists = index != -1;
 
         if (this.removal_mode) {
             if (action_exists)
-                this._remove_action(action_index, index);
+                this._remove_action(index);
         } else if (!action_exists || this._is_information_mode())
-            this._append_action(action_index, new_action);
+            this._append_action(new_action);
     }
 
-    _append_action(action_index, new_action) {
-        this.actions[action_index].push(new_action);
+    _append_action(new_action) {
+        this.actions.push(new_action);
         this._release_set_actions_event();
     }
 
-    _remove_action(action_index, index) {
-        this.actions[action_index].splice(index, 1);
+    _remove_action(index) {
+        this.actions.splice(index, 1);
         this._release_set_actions_event();
     }
 
@@ -66,10 +59,10 @@ class ActionManager {
         return location;
     }
 
-    _get_index_of_action(action_index, new_action) {
-        let index = this.actions[action_index].findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
+    _get_index_of_action(new_action) {
+        let index = this.actions.findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
         if (index == -1)
-            index = this.actions[action_index].findIndex(e => e[1] == new_action[1] && e[2] == new_action[2]);
+            index = this.actions.findIndex(e => e[1] == new_action[1] && e[2] == new_action[2]);
         return index;
     }
 
@@ -85,7 +78,18 @@ class ActionManager {
     }
 
     _release_set_actions_event() {
-        this.actionEventSystem.release_event('set_actions', this.actions);
+        this.actionEventSystem.release_event('set_actions', this._get_formatted_actions());
+    }
+
+    _get_formatted_actions() {
+        let actions = [
+            [],
+            [],
+            [],
+            []
+        ];
+        this.actions.forEach(e => actions[this._calculate_action_index(e.slice(1))].push(e));
+        return actions;
     }
 }
 

@@ -428,6 +428,27 @@ describe('set_removal_mode', () => {
             []
         ]);
     });
+
+    it('should remove a different firewall when information unit is type', () => {
+        let actionManager = new ActionManager(mockActionEventSystem);
+        actionManager.set_actions([
+            [
+                ['FF', 0, 0],
+            ],
+            [],
+            [],
+            []
+        ]);
+        actionManager.set_action_mode('PI');
+        actionManager.set_removal_mode();
+        actionManager.click_on_location([0, 0]);
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('set_actions', [
+            [],
+            [],
+            [],
+            []
+        ]);
+    });
 });
 
 
