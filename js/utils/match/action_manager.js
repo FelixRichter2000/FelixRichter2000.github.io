@@ -39,7 +39,7 @@ class ActionManager {
         if (this.removal_mode) {
             if (action_exists)
                 this._remove_action(index);
-        } else if (!action_exists || this._is_information_mode())
+        } else if (!action_exists || this._is_information_mode() || (action_exists && !this.complete_match))
             this._append_action(new_action);
     }
 
@@ -61,8 +61,11 @@ class ActionManager {
 
     _get_index_of_action(new_action) {
         let index = this.actions.findIndex(e => JSON.stringify(e) == JSON.stringify(new_action));
-        if (index == -1)
+        this.complete_match = true;
+        if (index == -1) {
             index = this.actions.findIndex(e => e[1] == new_action[1] && e[2] == new_action[2]);
+            this.complete_match = false;
+        }
         return index;
     }
 
