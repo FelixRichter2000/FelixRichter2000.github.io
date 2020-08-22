@@ -69,15 +69,15 @@ class ActionManager {
         return index;
     }
 
-    _calculate_action_index(location) {
-        let action_index = location[1] > 13 ? 2 : 0;
-        if (this._is_information_mode())
+    _calculate_action_index(action) {
+        let action_index = action[2] > 13 ? 2 : 0;
+        if (this._is_information_mode(action[0]))
             action_index++;
         return action_index;
     }
 
-    _is_information_mode() {
-        return this.information_units.includes(this.action_mode);
+    _is_information_mode(action_mode = this.action_mode) {
+        return this.information_units.includes(action_mode);
     }
 
     _release_set_actions_event() {
@@ -91,7 +91,7 @@ class ActionManager {
             [],
             []
         ];
-        this.actions.forEach(e => actions[this._calculate_action_index(e.slice(1))].push(e));
+        this.actions.forEach(e => actions[this._calculate_action_index(e)].push(e));
         return actions;
     }
 }
