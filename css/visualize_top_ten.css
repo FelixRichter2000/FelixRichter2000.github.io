@@ -11,35 +11,38 @@ table {
     background: #1a181e;
 }
 
-table, tr, td, th {
+table,
+tr,
+td,
+th {
     border: 1px solid #000;
     position: relative;
     padding: 3px;
 }
 
-    th span {
-        transform-origin: 0 50%;
-        transform: rotate(-90deg);
-        white-space: nowrap;
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-    }
+th span {
+    transform-origin: 0 50%;
+    transform: rotate(-90deg);
+    white-space: nowrap;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+}
 
-    td img {
-        border-radius: 50%;
-        width: 15px;
-    }
+td img {
+    border-radius: 50%;
+    width: 15px;
+}
 
 a {
     color: #ddd;
     text-decoration: none;
 }
 
-    a:visited {
-        color: #444;
-    }
+a:visited {
+    color: #444;
+}
 
 td.result-w a {
     color: #53b3a0;
@@ -71,4 +74,8 @@ td.result-w a:visited {
 
 td.result-l a:visited {
     color: #780000;
+}
+
+td {
+    font-size: 8pt;
 }
