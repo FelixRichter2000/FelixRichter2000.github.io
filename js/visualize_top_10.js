@@ -1,4 +1,5 @@
 ﻿window.onload = () => main();
+let handled_match_ids = new Set();
 
 async function main() {
     const leaderboard_data = await get_leaderboard_data();
@@ -89,6 +90,10 @@ function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
 
     let matches = result.data.matches;
     matches.forEach(m => {
+        if (handled_match_ids.has(m.id))
+            return;
+        handled_match_ids.add(m.id);
+
         let winning = m.winning_algo.id;
         let loosing = m.losing_algo.id;
 
@@ -104,13 +109,13 @@ function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
 }
 
 function make_winning_link(td, match_id) {
-    td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">W</a>`;
+    td.innerHTML += `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">W</a>`;
     td.classList.add("result-w");
     handleMoreThanOneMatch(td);
 }
 
 function make_losing_link(td, match_id) {
-    td.innerHTML = `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">L</a>`;
+    td.innerHTML += `<a href="https://felixrichter2000.github.io/watch?id=${match_id}" target="_blank">L</a>`;
     td.classList.add("result-l");
     handleMoreThanOneMatch(td);
 }
@@ -123,7 +128,6 @@ function handleMoreThanOneMatch(td) {
 function showResultU(td) {
     td.classList.remove(...td.classList);
     td.classList.add("result-u");
-    td.firstChild.innerHTML = "U";
 }
 
 function hasMoreThanOneMatchHappendHere(td) {
