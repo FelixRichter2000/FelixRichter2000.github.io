@@ -19,7 +19,7 @@
   "devDependencies": {
     "jest-websocket-mock": "^2.1.0",
     "mock-socket": "^9.0.3",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "dependencies": {
     "jest": "^26.1.0"
