@@ -454,7 +454,8 @@ document.querySelectorAll('[action]').forEach(function(e) {
 //Fancy Health-Bars
 setInterval(() => {
     let health_values = [...document.getElementsByName('health')]
-        .map(e => `${Math.max(parseInt(e.innerHTML) / configTools.config.resources.startingHP * 100, 0)}%`);
+        .map(e => `${Math.max(parseInt(e.innerHTML) 
+            / configTools.get_starting_hp() * 100, 0)}%`);
     [...document.getElementsByName('health-bar')]
     .forEach((e, i) => e.style.width = health_values[i]);
 }, 1000 / 60);
