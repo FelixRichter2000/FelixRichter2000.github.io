@@ -15,7 +15,7 @@ const UNIT_TYPE = 14;
 const UPGRADED = 10;
 
 mockMatchViewer.get_value_at.mockImplementation(() => 'returnValue');
-mockConfigTools.getRange.mockImplementation(() => 'returnedRange');
+mockConfigTools.get_range.mockImplementation(() => 'returnedRange');
 
 const hoverInformation = new HoverInformation(mockMatchViewer, mockFlatMatchViewer, mockConfigTools, mockActionEventSystem);
 
@@ -35,7 +35,7 @@ describe('test hover_information', () => {
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], UNIT_TYPE);
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], UPGRADED);
 
-        expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
+        expect(mockConfigTools.get_range).toHaveBeenCalledWith('returnValue', 'returnValue');
 
         expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
@@ -47,7 +47,7 @@ describe('test hover_information', () => {
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], UNIT_TYPE);
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([0, 0], UPGRADED);
 
-        expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
+        expect(mockConfigTools.get_range).toHaveBeenCalledWith('returnValue', 'returnValue');
 
         expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [0, 0], range: 'returnedRange' });
     });
@@ -62,7 +62,7 @@ describe('test hover_information', () => {
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([2, 3], UNIT_TYPE);
         expect(mockMatchViewer.get_value_at).toHaveBeenCalledWith([2, 3], UPGRADED);
 
-        expect(mockConfigTools.getRange).toHaveBeenCalledWith('returnValue', 'returnValue');
+        expect(mockConfigTools.get_range).toHaveBeenCalledWith('returnValue', 'returnValue');
 
         expect(mockFlatMatchViewer.update_data).toHaveBeenCalledWith({ location: [2, 3], range: 'returnedRange' });
     });

@@ -7,14 +7,16 @@ class ConfigTools {
         this.config = config;
     }
 
-    getRange(unit_type, upgraded) {
+    get_range(unit_type, upgraded) {
         unit_type = this._adaptHighUnitTypes(unit_type);
-        return this._getRange(unit_type, upgraded);
-    }
-
-    _getRange(unit_type, upgraded) {
         const unitInformation = this._getUnitInformation(unit_type, upgraded);
         return this._determineMaxRange(unitInformation);
+    }
+
+    get_start_health(unit_type, upgraded) {
+        unit_type = this._adaptHighUnitTypes(unit_type);
+        const unitInformation = this._getUnitInformation(unit_type, upgraded);
+        return unitInformation.startHealth || 0;
     }
 
     _determineMaxRange(unitInformation) {
