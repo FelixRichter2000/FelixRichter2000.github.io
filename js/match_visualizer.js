@@ -45,6 +45,10 @@ const ping3_img = '<img class="match-changing-img" src="images/Ping3.svg">';
 const emp3_img = '<img class="match-changing-img" src="images/Emp3.svg">';
 const scrambler3_img = '<img class="match-changing-img" src="images/Scrambler3.svg">';
 
+//ConfigTools
+let configTools = new ConfigTools();
+actionEventSystem.register(configTools);
+
 //Match_Utils
 let match_utils = new MatchUtils(match_utils_config, match_utils_functions);
 let match_utils_flat = new MatchUtils({
@@ -184,10 +188,6 @@ let changeDetector = new ChangeDetector();
 //Controller
 let controller = new Controller(actionEventSystem, changeDetector);
 actionEventSystem.register(controller);
-
-//ConfigTools
-let configTools = new ConfigTools();
-actionEventSystem.register(configTools);
 
 //HoverInformation
 let hoverInformation = new HoverInformation(match_viewer, flat_match_viewer, configTools, actionEventSystem);

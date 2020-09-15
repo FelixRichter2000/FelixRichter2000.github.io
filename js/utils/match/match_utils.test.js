@@ -313,7 +313,7 @@ describe('Test create_new_array', function() {
         });
 
         expect(mu_special.create_new_array())
-            .toEqual(new Int8Array(8));
+            .toEqual(new Uint8Array(8));
     });
     test('arena_settings: { size: 4, half: 2 }, group_size: 8 => Int8Array(96)', () => {
         const mu_special = new MatchUtils({
@@ -322,7 +322,7 @@ describe('Test create_new_array', function() {
         });
 
         expect(mu_special.create_new_array())
-            .toEqual(new Int8Array(96));
+            .toEqual(new Uint8Array(96));
     });
 });
 describe('Test parse_file_to_raw_array', function() {
@@ -489,7 +489,7 @@ describe('Test get_locations_in_range', function() {
             group_size: 1,
         });
         expect(mu_special.get_locations_in_range([0, 0], 1))
-            .toEqual(new Int8Array([1, 0, 1, 1]));
+            .toEqual(new Uint8Array([1, 0, 1, 1]));
     });
 });
 

@@ -100,7 +100,7 @@
         return (size * size / 2 + size) * this.config.group_size;
     }
     create_new_array() {
-        return new Int8Array(this.array_size);
+        return new Uint8Array(this.array_size);
     }
     parse_file_to_raw_array(file) {
         return file.split("\n")
