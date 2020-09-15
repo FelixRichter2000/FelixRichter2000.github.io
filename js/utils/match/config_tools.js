@@ -19,6 +19,10 @@ class ConfigTools {
         return unitInformation.startHealth || 0;
     }
 
+    get_starting_hp() {
+        return this.config ? this.config.resources ? this.config.resources.startingHP || 0 : 0 : 0;
+    }
+
     _determineMaxRange(unitInformation) {
         return Object.getOwnPropertyNames(unitInformation)
             .filter(el => el.includes("Range"))

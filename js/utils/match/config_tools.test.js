@@ -110,3 +110,18 @@ describe('test get_health', () => {
         expect(result).toBe(2);
     });
 });
+
+describe('test get_starting_hp', () => {
+    it('should return zero before config is set', () => {
+        let config_tools = new ConfigTools();
+        let result = config_tools.get_starting_hp();
+        expect(result).toBe(0);
+    });
+
+    it('should return starting_hp', () => {
+        let config = { resources: { startingHP: 40 } }
+        let config_tools = new ConfigTools(config);
+        let result = config_tools.get_starting_hp();
+        expect(result).toBe(40);
+    });
+});
