@@ -1,13 +1,23 @@
-﻿window.onload = () => main();
+﻿let urlParams = new URLSearchParams(window.location.search);
+let amount = urlParams.get('amount') || 10;
+let filter_per_player = urlParams.get('filter') || 'all';
+
+window.onload = () => main(amount, filter_per_player);
 let handled_match_ids = new Set();
 
-async function main() {
-    const leaderboard_data = await get_leaderboard_data();
+async function main(amount, all_per_player) {
+    const leaderboard_data = await get_leaderboard_data(amount);
     console.log(leaderboard_data)
-    const top_ten_user_ids = await get_top_ten_user_ids(leaderboard_data);
-    console.log(top_ten_user_ids)
-    const top_algo_ids = await get_top_ten_algo_ids(top_ten_user_ids);
-    console.log(top_algo_ids)
+    let top_algo_ids;
+
+    if (all_per_player == 'all') {
+        const top_ten_user_ids = await get_top_ten_user_ids(leaderboard_data);
+        console.log(top_ten_user_ids)
+        top_algo_ids = await get_top_ten_algo_ids(top_ten_user_ids);
+        console.log(top_algo_ids)
+    } else {
+        top_algo_ids = get_algo_ids(leaderboard_data);
+    }
     const set_algo_ids = new Set(top_algo_ids.map(e => e[1]));
 
     //Create empty table
@@ -17,9 +27,13 @@ async function main() {
     matches_between_top_algos.forEach(e => e.then(result => update_matches_in_table(result, top_algo_ids, set_algo_ids)));
 }
 
-async function get_leaderboard_data() {
+function get_algo_ids(leaderboard_data) {
+    return leaderboard_data.map((e, i) => [i, e.id, e.name]);
+}
+
+async function get_leaderboard_data(amount) {
     const leaderboard = await fetch_json('https://terminal.c1games.com/api/game/leaderboard')
-    return leaderboard.data.algos.slice(0, 10);
+    return leaderboard.data.algos.slice(0, amount);
 }
 
 async function get_top_ten_user_ids(leaderboard_data) {
