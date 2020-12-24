@@ -5,6 +5,7 @@ actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'pause');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'restart_socket');
+actionEventSystem.registerFollowUpEvent('set_replay_data_raw', 'set_replay_data');
 actionEventSystem.registerPreEvent('simulate', 'send_simulation_game_state');
 
 let replayDownloader = new ReplayDownloader(actionEventSystem);
@@ -20,15 +21,15 @@ if (match_id) {
 }
 
 //Drag and drop
-document.addEventListener("dragover", function(e) {
+document.addEventListener("dragover", function (e) {
     e.preventDefault();
 }, false);
-document.addEventListener("drop", function(e) {
+document.addEventListener("drop", function (e) {
     e.preventDefault();
     let file = e.dataTransfer.files[0];
     var reader = new FileReader();
     reader.readAsText(file, "UTF-8");
-    reader.onload = function(evt) {
+    reader.onload = function (evt) {
         let full_text = evt.target.result;
         actionEventSystem.release_event('handle_result', full_text);
     }
@@ -58,10 +59,10 @@ let match_utils_flat = new MatchUtils({
     },
     group_size: 1,
 }, {
-    update_function: function(group, switched_index, current_element, value) {
+    update_function: function (group, switched_index, current_element, value) {
         current_element.hidden = value == 0;
     },
-    parse_frame_data_to_flat_array: function(self, data) {
+    parse_frame_data_to_flat_array: function (self, data) {
         return self.get_locations_in_range(data.location, data.range);
     }
 });
@@ -95,12 +96,12 @@ let match_utils_simulator = new MatchUtils({
 
     group_size: 9
 }, {
-    td_to_elements_converter: function(td) {
+    td_to_elements_converter: function (td) {
         let ims = td.getElementsByClassName('match-changing-img');
         let quantity_label = td.getElementsByClassName('quantity');
         return [...ims, ...quantity_label];
     },
-    add_object_to_array: function(self, group, index, frame_data_array) {
+    add_object_to_array: function (self, group, index, frame_data_array) {
         ///Set flags
         //  Firewalls + Inforamtion + Removal + Upgrade
         if (group >= 0 && group <= 7) {
@@ -113,7 +114,7 @@ let match_utils_simulator = new MatchUtils({
             self.add_one(frame_data_array, index, 8);
         }
     },
-    parse_frame_data_to_flat_array: function(self, actions) {
+    parse_frame_data_to_flat_array: function (self, actions) {
 
         let frame_data_array = self.create_new_array();
 
@@ -139,7 +140,7 @@ let match_utils_simulator = new MatchUtils({
 
         return frame_data_array;
     },
-    update_function: function(group, switched_index, current_element, value) {
+    update_function: function (group, switched_index, current_element, value) {
         current_element.hidden = value == 0;
 
         // Quantity
@@ -147,7 +148,7 @@ let match_utils_simulator = new MatchUtils({
             current_element.innerHTML = value;
         }
     },
-    additional_flipping: function(self, index) {
+    additional_flipping: function (self, index) {
         return index;
     }
 });
@@ -195,20 +196,20 @@ actionEventSystem.register(hoverInformation);
 
 //Slider
 let replay_slider = new Slider($('#replay_slider'), actionEventSystem);
-replay_slider.set_replay_data = function(data) { this.set_max_value(data.length - 1); }
-replay_slider.update_frame_data = function(data) { this.set_current_value(data.turnInfo[3]); }
+replay_slider.set_replay_data = function (data) { this.set_max_value(data.length - 1); }
+replay_slider.update_frame_data = function (data) { this.set_current_value(data.turnInfo[3]); }
 actionEventSystem.register(replay_slider);
 
 //Downloader
 let downloader = new Downloader();
 downloader.filename = 'simulation.txt';
-downloader.set_user_data = function(userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
-downloader.set_replay_raw = function(content) { this.content = content };
+downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
+downloader.set_replay_raw = function (content) { this.content = content };
 actionEventSystem.register(downloader);
 
 //Play/Pause-AttributeToggler
 let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');
-playPauseAttributeToggler.toggle_play = function() { this.toggle_attributes(); }
+playPauseAttributeToggler.toggle_play = function () { this.toggle_attributes(); }
 actionEventSystem.register(playPauseAttributeToggler);
 
 //StateParser
@@ -226,7 +227,7 @@ actionEventSystem.register(simulationIntegrator);
 
 //Mode highlighter
 let modeHighlighter = {
-    set_action_mode: function(mode) {
+    set_action_mode: function (mode) {
         mode_buttons = document.querySelectorAll('button[action="set_action_mode"]');
         mode_buttons.forEach(e => {
             if (e.getAttribute('parameter') == mode)
@@ -267,195 +268,195 @@ actionEventSystem.register(player);
 //Setup shortcuts
 let shortcutController = new ShortcutController(actionEventSystem);
 [{
-        code: "ArrowRight",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "next_frame",
-        type: "keydown"
-    },
-    {
-        code: "ArrowLeft",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "previous_frame",
-        type: "keydown"
-    },
-    {
-        code: "ArrowRight",
-        ctrlKey: true,
-        shiftKey: false,
-        altKey: false,
-        callback: "next_turn",
-        type: "keydown"
-    },
-    {
-        code: "ArrowLeft",
-        ctrlKey: true,
-        shiftKey: false,
-        altKey: false,
-        callback: "previous_turn",
-        type: "keydown"
-    },
-    {
-        code: "ArrowUp",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "faster_playback",
-        type: "keydown"
-    },
-    {
-        code: "ArrowDown",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "slower_playback",
-        type: "keydown"
-    },
-    {
-        code: "Space",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "toggle_play",
-        type: "keydown"
-    },
-    {
-        code: "KeyX",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: true,
-        callback: "switch_view",
-        type: "keydown"
-    },
-    {
-        code: "ShiftLeft",
-        ctrlKey: false,
-        shiftKey: true,
-        altKey: false,
-        callback: "set_removal_mode",
-        type: "keydown"
-    },
-    {
-        code: "ShiftLeft",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "unset_removal_mode",
-        type: "keyup"
-    },
-    {
-        code: "ShiftRight",
-        ctrlKey: false,
-        shiftKey: true,
-        altKey: false,
-        callback: "set_removal_mode",
-        type: "keydown"
-    },
-    {
-        code: "ShiftRight",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "unset_removal_mode",
-        type: "keyup"
-    },
-    {
-        code: "Enter",
-        ctrlKey: true,
-        shiftKey: false,
-        altKey: false,
-        callback: "simulate",
-        type: "keydown"
-    },
-    {
-        code: "KeyF",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "FF",
-    },
-    {
-        code: "KeyE",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "EF",
-    },
-    {
-        code: "KeyD",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "DF",
-    },
-    {
-        code: "KeyP",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "PI",
-    },
-    {
-        code: "KeyM",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "EI",
-    },
-    {
-        code: "KeyS",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "SI",
-    },
-    {
-        code: "KeyU",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "UP",
-    },
-    {
-        code: "KeyR",
-        ctrlKey: false,
-        shiftKey: false,
-        altKey: false,
-        callback: "set_action_mode",
-        type: "keydown",
-        parameter: "RM",
-    }
-].forEach(function(shortcut) {
+    code: "ArrowRight",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "next_frame",
+    type: "keydown"
+},
+{
+    code: "ArrowLeft",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "previous_frame",
+    type: "keydown"
+},
+{
+    code: "ArrowRight",
+    ctrlKey: true,
+    shiftKey: false,
+    altKey: false,
+    callback: "next_turn",
+    type: "keydown"
+},
+{
+    code: "ArrowLeft",
+    ctrlKey: true,
+    shiftKey: false,
+    altKey: false,
+    callback: "previous_turn",
+    type: "keydown"
+},
+{
+    code: "ArrowUp",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "faster_playback",
+    type: "keydown"
+},
+{
+    code: "ArrowDown",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "slower_playback",
+    type: "keydown"
+},
+{
+    code: "Space",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "toggle_play",
+    type: "keydown"
+},
+{
+    code: "KeyX",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: true,
+    callback: "switch_view",
+    type: "keydown"
+},
+{
+    code: "ShiftLeft",
+    ctrlKey: false,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_removal_mode",
+    type: "keydown"
+},
+{
+    code: "ShiftLeft",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "unset_removal_mode",
+    type: "keyup"
+},
+{
+    code: "ShiftRight",
+    ctrlKey: false,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_removal_mode",
+    type: "keydown"
+},
+{
+    code: "ShiftRight",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "unset_removal_mode",
+    type: "keyup"
+},
+{
+    code: "Enter",
+    ctrlKey: true,
+    shiftKey: false,
+    altKey: false,
+    callback: "simulate",
+    type: "keydown"
+},
+{
+    code: "KeyF",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "FF",
+},
+{
+    code: "KeyE",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "EF",
+},
+{
+    code: "KeyD",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "DF",
+},
+{
+    code: "KeyP",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "PI",
+},
+{
+    code: "KeyM",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "EI",
+},
+{
+    code: "KeyS",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "SI",
+},
+{
+    code: "KeyU",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "UP",
+},
+{
+    code: "KeyR",
+    ctrlKey: false,
+    shiftKey: false,
+    altKey: false,
+    callback: "set_action_mode",
+    type: "keydown",
+    parameter: "RM",
+}
+].forEach(function (shortcut) {
     shortcutController.addNewShortcut(shortcut);
 })
 
 //Setup Button bindings
-document.querySelectorAll('[action]').forEach(function(e) {
+document.querySelectorAll('[action]').forEach(function (e) {
     e.addEventListener('click', () => actionEventSystem.release_event(e.getAttribute('action'), e.getAttribute('parameter')))
 });
 
 //Fancy Health-Bars
 setInterval(() => {
     let health_values = [...document.getElementsByName('health')]
-        .map(e => `${Math.max(parseInt(e.innerHTML) 
+        .map(e => `${Math.max(parseInt(e.innerHTML)
             / configTools.get_starting_hp() * 100, 0)}%`);
     [...document.getElementsByName('health-bar')]
-    .forEach((e, i) => e.style.width = health_values[i]);
+        .forEach((e, i) => e.style.width = health_values[i]);
 }, 1000 / 60);

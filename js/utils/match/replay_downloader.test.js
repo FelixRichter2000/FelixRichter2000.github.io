@@ -10,7 +10,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe('ReplayDownloader tests', function() {
+describe('ReplayDownloader tests', function () {
     test('create ReplayDownloader', () => {
         new ReplayDownloader(mockActionEventSystem, mock_fetch_json);
     });
@@ -24,7 +24,7 @@ describe('ReplayDownloader tests', function() {
                 expect(mockActionEventSystem.release_event)
                     .toHaveBeenCalledWith('set_config', { config: 123 });
                 expect(mockActionEventSystem.release_event)
-                    .toHaveBeenCalledWith('set_replay_data', [{ line: 1 }, { line: 2 }, { end: 99, turnInfo: [0, 11, -1, 11] }]);
+                    .toHaveBeenCalledWith('set_replay_data_raw', [{ line: 1 }, { line: 2 }, { end: 99, turnInfo: [0, 11, -1, 11] }]);
                 expect(mockActionEventSystem.release_event)
                     .toHaveBeenCalledWith('set_replay_raw', '{"config":123}\n{"line":1}\n\n{"line":2}\n{"end":99, "turnInfo":[10, 10, 10, 10]}');
             });
