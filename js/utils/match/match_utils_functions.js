@@ -59,9 +59,11 @@
                     unit_type -= 3;
 
                 //Set percental health for damage-bar
-                let health = location[2];
                 let upgraded = is_upgraded(self, frame_data_array, index);
                 let total_health = configTools.get_start_health(unit_type, upgraded);
+                let health = location[2];
+                if (!health)
+                    health = total_health;
                 let percental_health_left = health / total_health * 100;
                 let shield_amount = Math.max(0, health - total_health);
 

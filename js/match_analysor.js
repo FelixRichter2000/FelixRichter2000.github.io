@@ -53,8 +53,69 @@ const scrambler3_img = '<img class="match-changing-img" src="images/Scrambler3.s
 let configTools = new ConfigTools();
 actionEventSystem.register(configTools);
 
+match_utils_functions.parse_single_object_to_array = function (self, data) {
+    array = self.create_new_array();
+
+    data.p0;
+    data.p1;
+    data.frame;
+
+    for (let i = 0; i < data.frame; i++) {
+        const element = data.p0[i];
+        const location = element[0];
+        const group = element[1];
+        let index = self.location_to_index(location);
+        self.config.add_object_to_array(self, group, index, array);
+    }
+
+    // {
+    //     p0: [
+    //         [[10, 10], 0, '0', 0],
+    //     ],
+    //     p1: [
+    //         [[10, 15], 0, '1', 1],
+    //     ],
+    //     frame: 0,
+    // }
+
+    return array;
+}
+
 match_utils_functions.parse_frame_data_to_flat_array = function (self, data) {
-    return self.create_new_array();
+    array = self.create_new_array();
+
+    data.p0;
+    data.p1;
+    data.frame;
+
+    const unit_type_to_group = {
+        0: 0,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 9,
+        7: 10,
+    }
+
+    for (let i = 0; i < data.frame; i++) {
+        let elements = [];
+        if (data.p0.length > i)
+            elements.push(data.p0[i]);
+        if (data.p1.length > i)
+            elements.push(data.p1[i]);
+
+        for (const element of elements){
+            const location = element[0];
+            const unit_type = element[1];
+            const group = unit_type_to_group[unit_type];
+            let index = self.location_to_index(location);
+            self.config.add_object_to_array(self, group, location, index, array);
+        }
+    }
+
+    return array;
 }
 
 //Match_Utils
@@ -198,7 +259,7 @@ let controller = new Controller(actionEventSystem, changeDetector);
 controller.set_layout_data = function (data) {
     this.set_replay_data(data)
 }.bind(controller);
-controller._handle_actions = function () {};
+controller._handle_actions = function () { };
 actionEventSystem.register(controller);
 
 //HoverInformation

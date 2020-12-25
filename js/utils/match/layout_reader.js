@@ -1,15 +1,6 @@
 class LayoutReader {
     constructor(actionEventSystem) {
         this.actionEventSystem = actionEventSystem;
-        this.layout_data = [{
-            p0: [
-                [[10, 10], 0, '0', 0],
-            ],
-            p1: [
-                [[10, 15], 0, '1', 1],
-            ],
-            frame: 0,
-        }]
     }
 
     set_config() {
