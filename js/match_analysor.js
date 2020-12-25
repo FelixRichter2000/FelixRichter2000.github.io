@@ -106,7 +106,7 @@ match_utils_functions.parse_frame_data_to_flat_array = function (self, data) {
         if (data.p1.length > i)
             elements.push(data.p1[i]);
 
-        for (const element of elements){
+        for (const element of elements) {
             const location = element[0];
             const unit_type = element[1];
             const group = unit_type_to_group[unit_type];
@@ -285,8 +285,8 @@ playPauseAttributeToggler.toggle_play = function () { this.toggle_attributes(); 
 actionEventSystem.register(playPauseAttributeToggler);
 
 //StateParser
-// let stateParser = new StateParser(actionEventSystem);
-// actionEventSystem.register(stateParser);
+let stateParser = new StateParser(actionEventSystem);
+actionEventSystem.register(stateParser);
 
 //Simulator
 let startStringGenerator = new StartStringGenerator();
