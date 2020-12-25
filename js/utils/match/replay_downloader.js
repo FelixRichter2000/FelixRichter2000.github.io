@@ -19,8 +19,8 @@ class ReplayDownloader {
 
         this._fix_last_frame_turnInfo();
 
-        this.actionEventSystem.release_event('set_replay_data_raw', this.replay);
         this.actionEventSystem.release_event('set_config', this.config);
+        this.actionEventSystem.release_event('set_replay_data_raw', this.replay);
         this.actionEventSystem.release_event('set_replay_raw', this.raw);
     }
 
