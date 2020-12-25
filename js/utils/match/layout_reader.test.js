@@ -36,6 +36,21 @@ let mock_replay_data_2 = [
     }
 ]
 
+let mock_replay_data_3 = [
+    {
+        events: {
+            spawn: [
+                [[10, 10], 0, '0', 1],
+                [[10, 11], 3, '1', 1],
+                [[10, 12], 4, '2', 1],
+                [[10, 13], 5, '3', 1],
+                [[10, 14], 6, '4', 1],
+                [[10, 15], 7, '5', 1],
+            ]
+        }
+    }
+]
+
 
 afterEach(() => {
     jest.clearAllMocks();
@@ -108,3 +123,34 @@ it('should handle simple analyse_replay_data event 2', () => {
             }
         ]);
 });
+
+it('should ignore everything that is not a firewall or upgrade', () => {
+    layout_reader = new LayoutReader(mockActionEventSystem);
+    layout_reader.set_config(mock_config);
+    layout_reader.analyse_replay_data(mock_replay_data_3);
+
+    expect(mockActionEventSystem.release_event)
+        .toHaveBeenCalledWith('set_replay_data', [
+            {
+                p0: [
+                    [[10, 10], 0, '0', 0],
+                    [[10, 15], 7, '5', 0],
+                ],
+                p1: [
+                ],
+                frame: 0,
+                turnInfo: [1, 0, 0, 0],
+            },
+            {
+                p0: [
+                    [[10, 10], 0, '0', 0],
+                    [[10, 15], 7, '5', 0],
+                ],
+                p1: [
+                ],
+                frame: 1,
+                turnInfo: [1, 0, 1, 1],
+            }
+        ]);
+});
+

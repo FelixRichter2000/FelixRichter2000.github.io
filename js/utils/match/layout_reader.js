@@ -16,7 +16,8 @@ class LayoutReader {
                 let spawns = frame.events.spawn;
                 for (const spawn of spawns){
                     spawn[3] -= 1;
-                    firewalls[spawn[3]].push(spawn)
+                    if ([0, 1, 2, 7].includes(spawn[1]))
+                        firewalls[spawn[3]].push(spawn)
                 }
             }
         });
