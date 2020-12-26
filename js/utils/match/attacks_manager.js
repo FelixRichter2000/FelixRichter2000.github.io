@@ -22,6 +22,20 @@ class AttacksManager {
         this.mode = mode;
     }
 
+    create_new_attack() {
+        this.attacks[+this.switched].push([]);
+        this.attack_index = this.attacks[+this.switched].length - 2;
+        this.next_attack();
+    }
+
+    delete_current_attack() {
+        this.attacks[+this.switched].splice(this.attack_index, 1);
+        this.attack_index -= 1;
+        if (this.attacks[+this.switched].length == 0)
+            this.create_new_attack();
+        this.next_attack();
+    }
+
     _release_set_actions_event() {
         this.actionEventSystem.release_event('set_actions', this.attacks[+this.switched][this.attack_index]);
     }

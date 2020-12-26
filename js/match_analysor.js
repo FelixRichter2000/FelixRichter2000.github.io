@@ -541,6 +541,24 @@ let shortcutController = new ShortcutController(actionEventSystem);
     callback: "set_mode",
     type: "keydown",
     parameter: "layout",
+},
+{
+    code: "KeyC",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "create_new_attack",
+    type: "keydown",
+    parameter: "",
+},
+{
+    code: "KeyD",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "delete_current_attack",
+    type: "keydown",
+    parameter: "",
 }
 ].forEach(function (shortcut) {
     shortcutController.addNewShortcut(shortcut);
