@@ -12,7 +12,7 @@ class AttacksReader {
         let attacks = [[], []]
         data.forEach(frame => {
             if ('events' in frame && 'spawn' in frame.events) {
-                let spawns = frame.events.spawn;
+                let spawns = JSON.parse(JSON.stringify(frame.events.spawn));
                 let current_turn = [{}, {}];
                 for (const spawn of spawns) {
                     let location = spawn[0];

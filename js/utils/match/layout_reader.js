@@ -14,7 +14,7 @@ class LayoutReader {
         let firewalls = [[], []]
         data.forEach(frame => {
             if ('events' in frame && 'spawn' in frame.events) {
-                let spawns = frame.events.spawn;
+                let spawns = JSON.parse(JSON.stringify(frame.events.spawn));
                 for (const spawn of spawns) {
                     spawn[3] -= 1;
                     spawn[2] = ''

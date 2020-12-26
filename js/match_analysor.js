@@ -11,6 +11,9 @@ actionEventSystem.registerPreEvent('simulate', 'send_simulation_game_state');
 let layoutReader = new LayoutReader(actionEventSystem);
 actionEventSystem.register(layoutReader);
 
+let attacksReader = new AttacksReader(actionEventSystem);
+actionEventSystem.register(attacksReader);
+
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
 
@@ -183,7 +186,6 @@ let match_utils_simulator = new MatchUtils({
         }
     },
     parse_frame_data_to_flat_array: function (self, actions) {
-
         let frame_data_array = self.create_new_array();
 
         const type_to_index = {
@@ -197,14 +199,12 @@ let match_utils_simulator = new MatchUtils({
             'UP': 7,
         }
 
-        actions.forEach(a =>
-            a.forEach(e => {
-                let type = e[0];
-                let location = [e[1], e[2]]
-                let group = type_to_index[type];
-                let index = self.location_to_index(location);
-                self.config.add_object_to_array(self, group, index, frame_data_array);
-            }));
+        actions.forEach(e => {
+            let location = e[0];
+            let group = e[1];
+            let index = self.location_to_index(location);
+            self.config.add_object_to_array(self, group, index, frame_data_array);
+        });
 
         return frame_data_array;
     },
@@ -241,7 +241,7 @@ actionEventSystem.register(match_viewer);
 
 //Create SimulationMatchViewer
 let simulation_match_viewer = new MatchViewer(match_utils_simulator, simulation_elements);
-simulation_match_viewer.set_actions = e => simulation_match_viewer.update_data(e);
+simulation_match_viewer.set_attacks = e => simulation_match_viewer.update_data(e[0][0]);
 actionEventSystem.register(simulation_match_viewer);
 
 //Create ViewModel
