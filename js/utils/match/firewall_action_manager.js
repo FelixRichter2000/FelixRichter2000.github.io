@@ -1,7 +1,6 @@
-class GeneralActionManager {
+class FirewallActionManager {
     constructor(actionEventSystem, enabled = true) {
         this.actionEventSystem = actionEventSystem;
-        this.actions = [];
         this.action_mode = 0;
         this.switched = false;
         this.information_units = [3, 4, 5];
@@ -20,11 +19,12 @@ class GeneralActionManager {
     }
 
     set_mode(mode) {
-        this.enabled = mode == 'attack';
+        this.enabled = mode == 'layout';
     }
 
-    set_actions(actions) {
-        this.actions = JSON.parse(JSON.stringify(actions));
+    update_frame_data(actions) {
+        this.firewalls = JSON.parse(JSON.stringify(actions));
+        this.index = this.firewalls.frame;
     }
 
     set_action_mode(action_mode) {
@@ -48,7 +48,7 @@ class GeneralActionManager {
 
         location = this._switch_location_if_needed(location);
 
-        let new_action = [location, this.action_mode, +this.switched, 1];
+        let new_action = [location, this.action_mode, '', +this.switched];
 
         let index = this._get_index_of_action(new_action);
         let action_exists = index != -1;
@@ -57,29 +57,24 @@ class GeneralActionManager {
             if (action_exists)
                 this._remove_action(index);
         } else {
-            if (action_exists && this.complete_match) {
-                if (this._is_information_mode()) {
-                    this.actions[index][3] += 1;
-                }
-            }
-            else {
-                this._append_action(new_action);
-            }
+            if (!action_exists || !this.complete_match)
+                this._insert_action(new_action);
         }
 
         this._release_set_actions_event();
     }
 
-    _append_action(new_action) {
-        this.actions.push(new_action);
-
+    _insert_action(new_action) {
+        this.firewalls[`p${+this.switched}`].splice(this.index, 0, new_action);
+        this.firewalls.frame += 1;
     }
 
     _remove_action(index) {
-        if (this.actions[index][3] > 1)
-            this.actions[index][3] -= 1;
+        if (this.firewalls[`p${+this.switched}`][index][3] > 1)
+            this.firewalls[`p${+this.switched}`][index][3] -= 1;
         else
-            this.actions.splice(index, 1);
+            this.firewalls[`p${+this.switched}`].splice(index, 1);
+        this.firewalls.frame -= 1;
     }
 
     _switch_location_if_needed(location) {
@@ -89,10 +84,10 @@ class GeneralActionManager {
     }
 
     _get_index_of_action(new_action) {
-        let index = this.actions.findIndex(e => JSON.stringify(e.slice(0, 3)) == JSON.stringify(new_action.slice(0, 3)));
+        let index = this.firewalls[`p${+this.switched}`].findIndex(e => JSON.stringify(e.slice(0, 2)) == JSON.stringify(new_action.slice(0, 2)));
         this.complete_match = true;
         if (index == -1) {
-            index = this.actions.findIndex(e => JSON.stringify(e.slice(0, 1)) == JSON.stringify(new_action.slice(0, 1)));
+            index = this.firewalls[`p${+this.switched}`].findIndex(e => JSON.stringify(e.slice(0, 1)) == JSON.stringify(new_action.slice(0, 1)));
             this.complete_match = false;
         }
         return index;
@@ -110,14 +105,16 @@ class GeneralActionManager {
     }
 
     _release_set_actions_event() {
-        this.actionEventSystem.release_event('set_actions', this._get_formatted_actions());
+        this.actionEventSystem.release_event('set_firewalls', this._get_formatted_actions());
+        this.actionEventSystem.release_event('set_frame', this.firewalls.frame);
     }
 
     _get_formatted_actions() {
-        return this.actions;
+        let arr = [this.firewalls.p0, this.firewalls.p1];
+        return arr;
     }
 }
 
 
 if (typeof process !== 'undefined')
-    module.exports = GeneralActionManager;
+    module.exports = FirewallActionManager;

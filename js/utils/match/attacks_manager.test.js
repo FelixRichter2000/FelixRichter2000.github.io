@@ -229,3 +229,15 @@ it('should replace the actions on the current spot when set_actions is called', 
         ['new first p0'],
     ]);
 });
+
+it('should set replay data', () => {
+    let attacks_manager = new AttacksManager(mockActionEventSystem);
+    let replay_data = [
+        'dummy_data'
+    ];
+    attacks_manager.set_replay_data(replay_data);
+    attacks_manager.set_mode('layout');
+    expect(mockActionEventSystem).toHaveBeenCalledWith('set_actions', replay_data);
+});
+
+

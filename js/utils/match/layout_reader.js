@@ -9,8 +9,6 @@ class LayoutReader {
     }
 
     analyse_replay_data(data) {
-        let layout_data = []
-
         let firewalls = [[], []]
         data.forEach(frame => {
             if ('events' in frame && 'spawn' in frame.events) {
@@ -32,13 +30,22 @@ class LayoutReader {
                 }
             }
         });
+        this._release_set_replay_data_event(firewalls);
+    }
+
+    set_firewalls(firewalls) {
+        this._release_set_replay_data_event(firewalls);
+    }
+
+    _release_set_replay_data_event(firewalls) {
+        let layout_data = []
 
         //drop duplicates
         for (let i = 0; i < firewalls.length; i++)
-            firewalls[i] = Array.from(new Set(firewalls[i].map(JSON.stringify)), JSON.parse)
+            firewalls[i] = Array.from(new Set(firewalls[i].map(JSON.stringify)), JSON.parse);
 
 
-        let length = Math.max(firewalls[0].length, firewalls[1].length)
+        let length = Math.max(firewalls[0].length, firewalls[1].length);
         for (let i = 0; i < length; i++) {
             layout_data.push({
                 p0: firewalls[0],
@@ -48,7 +55,7 @@ class LayoutReader {
             });
         }
 
-        this.actionEventSystem.release_event('set_replay_data', layout_data)
+        this.actionEventSystem.release_event('set_replay_data', layout_data);
     }
 }
 

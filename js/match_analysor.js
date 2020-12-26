@@ -335,8 +335,12 @@ window.addEventListener('click', (e) => {
 });
 
 //GeneralActionManager
-let actionManager = new GeneralActionManager(actionEventSystem);
+let actionManager = new GeneralActionManager(actionEventSystem, false);
 actionEventSystem.register(actionManager);
+
+//FirewallActionManager
+let firewallActionManager = new FirewallActionManager(actionEventSystem, true);
+actionEventSystem.register(firewallActionManager);
 
 //Player
 let player = new Player(actionEventSystem);
@@ -519,6 +523,24 @@ let shortcutController = new ShortcutController(actionEventSystem);
     callback: "set_action_mode",
     type: "keydown",
     parameter: "RM",
+},
+{
+    code: "KeyA",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_mode",
+    type: "keydown",
+    parameter: "attack",
+},
+{
+    code: "KeyL",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_mode",
+    type: "keydown",
+    parameter: "layout",
 }
 ].forEach(function (shortcut) {
     shortcutController.addNewShortcut(shortcut);
