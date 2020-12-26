@@ -14,6 +14,9 @@ actionEventSystem.register(layoutReader);
 let attacksReader = new AttacksReader(actionEventSystem);
 actionEventSystem.register(attacksReader);
 
+let attacksManager = new AttacksManager(actionEventSystem);
+actionEventSystem.register(attacksManager);
+
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
 
@@ -203,7 +206,9 @@ let match_utils_simulator = new MatchUtils({
             let location = e[0];
             let group = e[1];
             let index = self.location_to_index(location);
-            self.config.add_object_to_array(self, group, index, frame_data_array);
+            let amount = e[3];
+            for (let i = 0; i < amount; i++)
+                self.config.add_object_to_array(self, group, index, frame_data_array);
         });
 
         return frame_data_array;
@@ -241,7 +246,7 @@ actionEventSystem.register(match_viewer);
 
 //Create SimulationMatchViewer
 let simulation_match_viewer = new MatchViewer(match_utils_simulator, simulation_elements);
-simulation_match_viewer.set_attacks = e => simulation_match_viewer.update_data(e[0][0]);
+simulation_match_viewer.set_actions = e => simulation_match_viewer.update_data(e);
 actionEventSystem.register(simulation_match_viewer);
 
 //Create ViewModel
@@ -329,8 +334,8 @@ window.addEventListener('click', (e) => {
         actionEventSystem.release_event('click_on_location', location)
 });
 
-//ActionManager
-let actionManager = new ActionManager(actionEventSystem);
+//GeneralActionManager
+let actionManager = new GeneralActionManager(actionEventSystem);
 actionEventSystem.register(actionManager);
 
 //Player
