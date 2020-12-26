@@ -46,9 +46,14 @@ class FirewallActionManager {
     click_on_location(location) {
         if (!this.enabled) return;
 
+        this.player = +this.switched;
+        console.log(location)
+        if (location[1] > 13)
+            this.player = (this.player + 1) % 2;
+
         location = this._switch_location_if_needed(location);
 
-        let new_action = [location, this.action_mode, '', +this.switched];
+        let new_action = [location, this.action_mode, '', +this.player];
 
         let index = this._get_index_of_action(new_action);
         let action_exists = index != -1;
@@ -65,15 +70,15 @@ class FirewallActionManager {
     }
 
     _insert_action(new_action) {
-        this.firewalls[`p${+this.switched}`].splice(this.index, 0, new_action);
+        this.firewalls[`p${+this.player}`].splice(this.index, 0, new_action);
         this.firewalls.frame += 1;
     }
 
     _remove_action(index) {
-        if (this.firewalls[`p${+this.switched}`][index][3] > 1)
-            this.firewalls[`p${+this.switched}`][index][3] -= 1;
+        if (this.firewalls[`p${+this.player}`][index][3] > 1)
+            this.firewalls[`p${+this.player}`][index][3] -= 1;
         else
-            this.firewalls[`p${+this.switched}`].splice(index, 1);
+            this.firewalls[`p${+this.player}`].splice(index, 1);
         this.firewalls.frame -= 1;
     }
 
@@ -84,10 +89,10 @@ class FirewallActionManager {
     }
 
     _get_index_of_action(new_action) {
-        let index = this.firewalls[`p${+this.switched}`].findIndex(e => JSON.stringify(e.slice(0, 2)) == JSON.stringify(new_action.slice(0, 2)));
+        let index = this.firewalls[`p${+this.player}`].findIndex(e => JSON.stringify(e.slice(0, 2)) == JSON.stringify(new_action.slice(0, 2)));
         this.complete_match = true;
         if (index == -1) {
-            index = this.firewalls[`p${+this.switched}`].findIndex(e => JSON.stringify(e.slice(0, 1)) == JSON.stringify(new_action.slice(0, 1)));
+            index = this.firewalls[`p${+this.player}`].findIndex(e => JSON.stringify(e.slice(0, 1)) == JSON.stringify(new_action.slice(0, 1)));
             this.complete_match = false;
         }
         return index;
