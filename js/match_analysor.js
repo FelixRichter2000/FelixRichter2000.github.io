@@ -365,7 +365,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
     ctrlKey: true,
     shiftKey: false,
     altKey: false,
-    callback: "next_turn",
+    callback: "next_attack",
     type: "keydown"
 },
 {
@@ -373,7 +373,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
     ctrlKey: true,
     shiftKey: false,
     altKey: false,
-    callback: "previous_turn",
+    callback: "previous_attack",
     type: "keydown"
 },
 {
