@@ -27,6 +27,8 @@ class AttacksManager {
         this.attack_index -= 1;
         if (this.attacks[+this.switched].length == 0)
             this.create_new_attack();
+        if (!this._next_possible())
+            this.previous_attack();
         this.next_attack();
     }
 
