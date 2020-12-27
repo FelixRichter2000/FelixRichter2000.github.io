@@ -229,3 +229,71 @@ it('should replace the actions on the current spot when set_actions is called', 
         ['new first p0'],
     ]);
 });
+
+it('should release update_view event with current attack index', () => {
+    let attacks_manager = new AttacksManager(mockActionEventSystem);
+    let attacks = [
+        [
+            ['first p0'],
+            ['second p0'],
+        ],
+        [
+            ['first p1'],
+            ['second p1'],
+        ],
+    ];
+    attacks_manager.set_attacks(attacks);
+    jest.clearAllMocks();
+    attacks_manager.next_attack();
+    expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', { attack_index: [1] });
+    jest.clearAllMocks();
+    attacks_manager.previous_attack();
+    expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', { attack_index: [0] });
+    jest.clearAllMocks();
+});
+
+it('should switch attacks right', () => {
+    let attacks_manager = new AttacksManager(mockActionEventSystem);
+    let attacks = [
+        [
+            ['first p0'],
+            ['second p0'],
+        ],
+        [
+            ['first p1'],
+            ['second p1'],
+        ],
+    ];
+    attacks_manager.set_attacks(attacks);
+    jest.clearAllMocks();
+    attacks_manager.switch_right();
+    expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', { attack_index: [1] });
+    expect(attacks_manager.get_attacks()).toEqual([
+        ['second p0'],
+        ['first p0'],
+    ]);
+});
+
+it('should switch attacks left', () => {
+    let attacks_manager = new AttacksManager(mockActionEventSystem);
+    let attacks = [
+        [
+            ['first p0'],
+            ['second p0'],
+        ],
+        [
+            ['first p1'],
+            ['second p1'],
+        ],
+    ];
+    attacks_manager.set_attacks(attacks);
+    attacks_manager.next_attack();
+    jest.clearAllMocks();
+    attacks_manager.switch_left();
+    expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', { attack_index: [0] });
+    expect(attacks_manager.get_attacks()).toEqual([
+        ['second p0'],
+        ['first p0'],
+    ]);
+});
+

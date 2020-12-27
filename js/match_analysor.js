@@ -578,6 +578,24 @@ let shortcutController = new ShortcutController(actionEventSystem);
     callback: "delete_current_attack",
     type: "keydown",
     parameter: "",
+},
+{
+    code: "ArrowRight",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "switch_right",
+    type: "keydown",
+    parameter: "",
+},
+{
+    code: "ArrowLeft",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "switch_left",
+    type: "keydown",
+    parameter: "",
 }
 ].forEach(function (shortcut) {
     shortcutController.addNewShortcut(shortcut);

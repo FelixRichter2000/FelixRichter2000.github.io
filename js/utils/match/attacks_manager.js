@@ -32,6 +32,7 @@ class AttacksManager {
 
     _release_set_actions_event() {
         this.actionEventSystem.release_event('set_actions', this.attacks[+this.switched][this.attack_index]);
+        this.actionEventSystem.release_event('update_view', { attack_index: [this.attack_index] });
     }
 
     set_actions(actions) {
@@ -45,17 +46,45 @@ class AttacksManager {
     }
 
     next_attack() {
-        if (this.attacks[+this.switched].length > this.attack_index + 1) {
+        if (this._next_possible()) {
             this.attack_index += 1;
             this._release_set_actions_event();
         }
     }
 
+    _next_possible() {
+        return this.attacks[+this.switched].length > this.attack_index + 1;
+    }
+
     previous_attack() {
-        if (this.attack_index > 0) {
+        if (this._previous_possible()) {
             this.attack_index -= 1;
             this._release_set_actions_event();
         }
+    }
+
+    _previous_possible() {
+        return this.attack_index > 0;
+    }
+
+    switch_right() {
+        if (this._next_possible()) {
+            this._switch_attack_with(+1)
+            this.next_attack();
+        }
+    }
+
+    switch_left() {
+        if (this._previous_possible()) {
+            this._switch_attack_with(-1)
+            this.previous_attack();
+        }
+    }
+
+    _switch_attack_with(diff) {
+        let temp = this.attacks[+this.switched][this.attack_index];
+        this.attacks[+this.switched][this.attack_index] = this.attacks[+this.switched][this.attack_index + diff];
+        this.attacks[+this.switched][this.attack_index + diff] = temp;
     }
 
     get_attacks() {
