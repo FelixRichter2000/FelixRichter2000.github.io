@@ -1,9 +1,10 @@
 class AnalyzorDownloader {
-    constructor() {
+    constructor(attacks_manager) {
         this.content = null;
         this.switched = false;
-        this.replay_data = null;
-        this.attacks = [];
+        this.replay_data = [];
+        this.attacks_manager = attacks_manager;
+        this.replay_data = [{p0: [], p1:[]}];
     }
 
     switch_view() {
@@ -14,25 +15,19 @@ class AnalyzorDownloader {
         this.replay_data = data;
     }
 
-    set_attacks(data) {
-        this.attacks = data;
-    }
-
     download_layout() {
-        if (this.replay_data != null) {
-            let data = {
-                firewalls: this.replay_data[0][`p${+ this.switched}`],
-                attacks: this.attacks[+this.switched],
-            }
-
-            if (this.switched) {
-                data.firewalls.forEach(e => this._flip_location(e));
-                data.attacks.forEach(a => a.forEach(e => this._flip_location(e)));
-            }
-
-            data = JSON.stringify(data);
-            this._executeDownload(data, 'layout');
+        let data = {
+            firewalls: this.replay_data[0][`p${+ this.switched}`],
+            attacks: this.attacks_manager.attacks[+this.switched],
         }
+
+        if (this.switched) {
+            data.firewalls.forEach(e => this._flip_location(e));
+            data.attacks.forEach(a => a.forEach(e => this._flip_location(e)));
+        }
+
+        data = JSON.stringify(data);
+        this._executeDownload(data, 'layout');
     }
 
     _flip_location(entry) {

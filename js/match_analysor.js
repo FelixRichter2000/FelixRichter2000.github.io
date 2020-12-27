@@ -11,6 +11,18 @@ actionEventSystem.registerPreEvent('simulate', 'send_simulation_game_state');
 let layoutReader = new LayoutReader(actionEventSystem);
 actionEventSystem.register(layoutReader);
 
+//Initial config
++async function () {
+    let url = 'https://raw.githubusercontent.com/correlation-one/C1GamesStarterKit/master/game-configs.json';
+    let response = await fetch(url);
+    let config = await response.json();
+    actionEventSystem.release_event('set_config', config)
+
+    //Initial replay_data
+    // let replay_data = {"p0":[],"p1":[],"frame":0,"turnInfo":[1,0,0,0]};
+    // actionEventSystem.release_event('update_frame_data', replay_data);
+}();
+
 let attacksReader = new AttacksReader(actionEventSystem);
 actionEventSystem.register(attacksReader);
 
@@ -299,7 +311,7 @@ actionEventSystem.register(replay_slider);
 // downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
 // downloader.set_replay_raw = function (content) { this.content = content };
 // actionEventSystem.register(downloader);
-let analyzorDownloader = new AnalyzorDownloader();
+let analyzorDownloader = new AnalyzorDownloader(attacksManager);
 actionEventSystem.register(analyzorDownloader);
 
 

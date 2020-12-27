@@ -6,6 +6,11 @@ class FirewallActionManager {
         this.information_units = [3, 4, 5];
         this.removal_mode = false;
         this.enabled = enabled;
+        this.firewalls = {
+            p0: [],
+            p1: [],
+            frame: -1,
+        }
         this.action_mode_converter = {
             'FF': 0,
             'EF': 1,

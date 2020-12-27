@@ -55,6 +55,12 @@ class LayoutReader {
             });
         }
 
+        // if (layout_data.length > 0) {
+        //     let dummy = JSON.parse(JSON.stringify(layout_data[layout_data.length - 1]))
+        //     dummy.frame += 1;
+        //     layout_data.push(dummy);
+        // }
+
         this.actionEventSystem.release_event('set_replay_data', layout_data);
     }
 }
