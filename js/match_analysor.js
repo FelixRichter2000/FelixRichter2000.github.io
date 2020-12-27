@@ -40,7 +40,23 @@ document.addEventListener("drop", function (e) {
     reader.readAsText(file, "UTF-8");
     reader.onload = function (evt) {
         let full_text = evt.target.result;
-        actionEventSystem.release_event('handle_result', full_text);
+
+        let d = JSON.parse(full_text);
+        console.log(d);
+
+        let firewalls = [
+            d.firewalls,
+            []
+        ]
+
+        let attacks = [
+            d.attacks,
+            []
+        ]
+
+
+        actionEventSystem.release_event('set_firewalls', firewalls);
+        actionEventSystem.release_event('set_attacks', attacks);
     }
 }, false);
 
@@ -207,7 +223,7 @@ let match_utils_simulator = new MatchUtils({
             let group = e[1];
             let index = self.location_to_index(location);
             let amount = e[3];
-            for (let i = 0; i < amount; i++)
+            for (let i = 0; i < Math.max(amount, 1); i++)
                 self.config.add_object_to_array(self, group, index, frame_data_array);
         });
 
@@ -278,11 +294,14 @@ replay_slider.update_frame_data = function (data) { this.set_current_value(data.
 actionEventSystem.register(replay_slider);
 
 //Downloader
-let downloader = new Downloader();
-downloader.filename = 'simulation.txt';
-downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
-downloader.set_replay_raw = function (content) { this.content = content };
-actionEventSystem.register(downloader);
+// let downloader = new Downloader();
+// downloader.filename = 'simulation.txt';
+// downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
+// downloader.set_replay_raw = function (content) { this.content = content };
+// actionEventSystem.register(downloader);
+let analyzorDownloader = new AnalyzorDownloader();
+actionEventSystem.register(analyzorDownloader);
+
 
 //Play/Pause-AttributeToggler
 let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');

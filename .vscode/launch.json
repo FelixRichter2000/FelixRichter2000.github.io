@@ -8,13 +8,13 @@
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Open watch.html",
-            "file": "${workspaceFolder}\\watch.html"
+            "file": "${workspaceFolder}\\watch.html?id=7479955"
         },
         {
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Open analyze.html",
-            "file": "${workspaceFolder}\\analyze.html"
+            "file": "${workspaceFolder}\\analyze.html?id=7479955"
         }
     ]
 }

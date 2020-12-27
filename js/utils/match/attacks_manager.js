@@ -4,17 +4,11 @@ class AttacksManager {
         this.switched = false;
         this.attack_index = 0;
         this.attacks = [[[]], [[]]];
-        this.replay_data = [];
         this.mode = 'attacks'
     }
 
     set_attacks(attacks) {
         this.attacks = attacks;
-        this._release_set_actions_event();
-    }
-
-    set_replay_data(replay_data) {
-        this.replay_data = replay_data;
         this._release_set_actions_event();
     }
 
