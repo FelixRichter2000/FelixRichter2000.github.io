@@ -1,12 +1,13 @@
 ﻿let urlParams = new URLSearchParams(window.location.search);
 let amount = urlParams.get('amount') || 10;
 let filter_per_player = urlParams.get('filter') || 'all';
+let season = urlParams.get('season') || null;
 
-window.onload = () => main(amount, filter_per_player);
+window.onload = () => main(amount, filter_per_player, season);
 let handled_match_ids = new Set();
 
-async function main(amount, all_per_player) {
-    const leaderboard_data = await get_leaderboard_data(amount);
+async function main(amount, all_per_player, season) {
+    const leaderboard_data = await get_leaderboard_data(amount, season);
     console.log(leaderboard_data)
     let top_algo_ids;
 
@@ -31,9 +32,14 @@ function get_algo_ids(leaderboard_data) {
     return leaderboard_data.map((e, i) => [i, e.id, e.name]);
 }
 
-async function get_leaderboard_data(amount) {
-    const leaderboard = await fetch_json('https://terminal.c1games.com/api/game/leaderboard')
-    return leaderboard.data.algos.slice(0, amount);
+async function get_leaderboard_data(amount, season) {
+    let query = `https://terminal.c1games.com/api/game/leaderboard?page=1&season=7&limit=${amount}`;
+
+    if (season != null)
+        query += `&season=${season}`;
+
+    const leaderboard = await fetch_json(query);
+    return leaderboard.data.algos;
 }
 
 async function get_top_ten_user_ids(leaderboard_data) {
