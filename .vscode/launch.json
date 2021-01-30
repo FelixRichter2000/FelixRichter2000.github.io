@@ -27,8 +27,14 @@
         {
             "type": "pwa-chrome",
             "request": "launch",
-            "name": "Open visualize_top_ten.html",
+            "name": "Open visualize_top_ten.html Top 3",
             "file": "${workspaceFolder}\\visualize_top_ten.html?amount=3&filter=one"
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Open visualize_top_ten.html",
+            "file": "${workspaceFolder}\\visualize_top_ten.html"
         }
     ]
 }

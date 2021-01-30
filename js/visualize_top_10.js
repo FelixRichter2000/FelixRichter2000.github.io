@@ -33,7 +33,7 @@ function get_algo_ids(leaderboard_data) {
 }
 
 async function get_leaderboard_data(amount, season) {
-    let query = `https://terminal.c1games.com/api/game/leaderboard?page=1&season=7&limit=${amount}`;
+    let query = `https://terminal.c1games.com/api/game/leaderboard?page=1&limit=${amount}`;
 
     if (season != null)
         query += `&season=${season}`;
@@ -102,7 +102,7 @@ function createTable(leaderboard_data, top_algo_ids) {
     });
 
     //Set header hights correctly
-    $('table th').height(Math.max(...$('table th span').map(function() { return $(this).width() })));
+    $('table th').height(Math.max(...$('table th span').map(function () { return $(this).width() })));
 }
 
 function update_matches_in_table(result, top_algo_ids, set_algo_ids) {
