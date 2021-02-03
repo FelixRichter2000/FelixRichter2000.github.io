@@ -17,8 +17,8 @@ class StartStringGenerator {
             "p2_use_old_config": false,
             "start_string": JSON.stringify(game_state),
             "match_name": "",
-            "config_id": null,
-            "config_type": null
+            "config_id": 39,
+            "config_type": "built-in"
         }));
     }
 }

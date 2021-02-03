@@ -18,11 +18,10 @@
             ]
         },
         {
-            "type": "chrome",
+            "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "http://localhost:5500",
-            "webRoot": "${workspaceFolder}"
+            "file": "${workspaceFolder}\\watch.html"
         },
         {
             "type": "pwa-chrome",
