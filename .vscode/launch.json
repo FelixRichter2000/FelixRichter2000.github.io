@@ -5,17 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "pwa-chrome",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/ts/hello.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/js/**/*.js"
-            ]
+            "name": "Open watch.html",
+            "file": "${workspaceFolder}\\watch.html?id=7479955"
         },
         {
             "type": "pwa-chrome",
@@ -34,6 +27,12 @@
             "request": "launch",
             "name": "Open visualize_top_ten.html",
             "file": "${workspaceFolder}\\visualize_top_ten.html"
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Open analyze.html",
+            "file": "${workspaceFolder}\\analyze.html?id=7479955"
         }
     ]
 }

@@ -32,4 +32,23 @@ describe('test StateParser', () => {
 
         expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', expected_output_data);
     });
+
+    it('should ignore stats that are not given', () => {
+        let stateParser = new StateParser(mockActionEventSystem);
+
+        const input_data = {
+            turnInfo: ['turnType', 'turnNumber', 'actionPhaseFrameNumber', 'totalFrameNumber']
+        }
+
+        const expected_output_data = {
+            turn_type: ['turnType'],
+            turn_number: ['turnNumber'],
+            action_phase_frame_number: ['actionPhaseFrameNumber'],
+            total_frame_number: ['totalFrameNumber']
+        }
+
+        stateParser.update_frame_data(input_data);
+
+        expect(mockActionEventSystem.release_event).toHaveBeenCalledWith('update_view', expected_output_data);
+    });
 });

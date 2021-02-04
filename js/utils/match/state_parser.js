@@ -7,18 +7,24 @@ class StateParser {
     }
 
     update_frame_data(data) {
-        let stats = [data.p1Stats, data.p2Stats];
+        let result = {};
+
+        if (data.p1Stats && data.p2Stats) {
+            let stats = [data.p1Stats, data.p2Stats];
+            let stats_object = this._createObjectWithStats(stats);
+            result = stats_object;
+        }
+
         let turn_values = data.turnInfo;
+        if (turn_values)
+            result = this._addTurnProperties(result, turn_values);
 
-        let transformed = this._createObjectWithStats(stats);
-        transformed = this._addTurnProperties(transformed, turn_values);
-
-        this.actionEventSystem.release_event('update_view', transformed);
+        this.actionEventSystem.release_event('update_view', result);
     }
 
     _addTurnProperties(transformed, turn_values) {
         transformed = this.turn_names
-            .reduce((a, turn_name, index) => ({...a, [turn_name]: [turn_values[index]] }), transformed);
+            .reduce((a, turn_name, index) => ({ ...a, [turn_name]: [turn_values[index]] }), transformed);
         return transformed;
     }
 
@@ -29,7 +35,7 @@ class StateParser {
     }
 
     _addStatProperty() {
-        return (a, values, index) => ({...a, [this.stat_names[index]]: values });
+        return (a, values, index) => ({ ...a, [this.stat_names[index]]: values });
     }
 
     _getValuesFromGivenStatName(stats) {

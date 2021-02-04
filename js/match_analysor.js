@@ -5,8 +5,29 @@ actionEventSystem.registerFollowUpEvent('update_frame_data', 'update_hover');
 actionEventSystem.registerFollowUpEvent('set_user_data', 'update_view');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'pause');
 actionEventSystem.registerFollowUpEvent('start_of_turn', 'restart_socket');
-actionEventSystem.registerFollowUpEvent('set_replay_data_raw', 'set_replay_data');
+actionEventSystem.registerFollowUpEvent('set_replay_data_raw', 'analyse_replay_data');
 actionEventSystem.registerPreEvent('simulate', 'send_simulation_game_state');
+
+let layoutReader = new LayoutReader(actionEventSystem);
+actionEventSystem.register(layoutReader);
+
+//Initial config
++async function () {
+    let url = 'https://raw.githubusercontent.com/correlation-one/C1GamesStarterKit/master/game-configs.json';
+    let response = await fetch(url);
+    let config = await response.json();
+    actionEventSystem.release_event('set_config', config)
+
+    //Initial replay_data
+    // let replay_data = {"p0":[],"p1":[],"frame":0,"turnInfo":[1,0,0,0]};
+    // actionEventSystem.release_event('update_frame_data', replay_data);
+}();
+
+let attacksReader = new AttacksReader(actionEventSystem);
+actionEventSystem.register(attacksReader);
+
+let attacksManager = new AttacksManager(actionEventSystem);
+actionEventSystem.register(attacksManager);
 
 let replayDownloader = new ReplayDownloader(actionEventSystem);
 actionEventSystem.register(replayDownloader);
@@ -31,7 +52,23 @@ document.addEventListener("drop", function (e) {
     reader.readAsText(file, "UTF-8");
     reader.onload = function (evt) {
         let full_text = evt.target.result;
-        actionEventSystem.release_event('handle_result', full_text);
+
+        let d = JSON.parse(full_text);
+        console.log(d);
+
+        let firewalls = [
+            d.firewalls,
+            []
+        ]
+
+        let attacks = [
+            d.attacks,
+            []
+        ]
+
+
+        actionEventSystem.release_event('set_firewalls', firewalls);
+        actionEventSystem.release_event('set_attacks', attacks);
     }
 }, false);
 
@@ -49,6 +86,71 @@ const scrambler3_img = '<img class="match-changing-img" src="images/Scrambler3.s
 //ConfigTools
 let configTools = new ConfigTools();
 actionEventSystem.register(configTools);
+
+match_utils_functions.parse_single_object_to_array = function (self, data) {
+    array = self.create_new_array();
+
+    data.p0;
+    data.p1;
+    data.frame;
+
+    for (let i = 0; i < data.frame; i++) {
+        const element = data.p0[i];
+        const location = element[0];
+        const group = element[1];
+        let index = self.location_to_index(location);
+        self.config.add_object_to_array(self, group, index, array);
+    }
+
+    // {
+    //     p0: [
+    //         [[10, 10], 0, '0', 0],
+    //     ],
+    //     p1: [
+    //         [[10, 15], 0, '1', 1],
+    //     ],
+    //     frame: 0,
+    // }
+
+    return array;
+}
+
+match_utils_functions.parse_frame_data_to_flat_array = function (self, data) {
+    array = self.create_new_array();
+
+    data.p0;
+    data.p1;
+    data.frame;
+
+    const unit_type_to_group = {
+        0: 0,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 9,
+        7: 10,
+    }
+
+    for (let i = 0; i < data.frame; i++) {
+        let elements = [];
+        if (data.p0.length > i)
+            elements.push(data.p0[i]);
+        if (data.p1.length > i)
+            elements.push(data.p1[i]);
+
+        for (const element of elements) {
+            const location = element[0];
+            const unit_type = element[1];
+            const group = unit_type_to_group[unit_type];
+            let index = self.location_to_index(location);
+            self.config.add_object_to_array(self, group, location, index, array);
+        }
+    }
+
+    return array;
+}
 
 //Match_Utils
 let match_utils = new MatchUtils(match_utils_config, match_utils_functions);
@@ -115,7 +217,6 @@ let match_utils_simulator = new MatchUtils({
         }
     },
     parse_frame_data_to_flat_array: function (self, actions) {
-
         let frame_data_array = self.create_new_array();
 
         const type_to_index = {
@@ -129,14 +230,14 @@ let match_utils_simulator = new MatchUtils({
             'UP': 7,
         }
 
-        actions.forEach(a =>
-            a.forEach(e => {
-                let type = e[0];
-                let location = [e[1], e[2]]
-                let group = type_to_index[type];
-                let index = self.location_to_index(location);
+        actions.forEach(e => {
+            let location = e[0];
+            let group = e[1];
+            let index = self.location_to_index(location);
+            let amount = e[3];
+            for (let i = 0; i < Math.max(amount, 1); i++)
                 self.config.add_object_to_array(self, group, index, frame_data_array);
-            }));
+        });
 
         return frame_data_array;
     },
@@ -188,6 +289,10 @@ let changeDetector = new ChangeDetector();
 
 //Controller
 let controller = new Controller(actionEventSystem, changeDetector);
+controller.set_layout_data = function (data) {
+    this.set_replay_data(data)
+}.bind(controller);
+controller._handle_actions = function () { };
 actionEventSystem.register(controller);
 
 //HoverInformation
@@ -197,15 +302,18 @@ actionEventSystem.register(hoverInformation);
 //Slider
 let replay_slider = new Slider($('#replay_slider'), actionEventSystem);
 replay_slider.set_replay_data = function (data) { this.set_max_value(data.length - 1); }
-replay_slider.update_frame_data = function (data) { this.set_current_value(data.turnInfo[3]); }
+replay_slider.update_frame_data = function (data) { this.set_current_value(data.frame); }
 actionEventSystem.register(replay_slider);
 
 //Downloader
-let downloader = new Downloader();
-downloader.filename = 'simulation.txt';
-downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
-downloader.set_replay_raw = function (content) { this.content = content };
-actionEventSystem.register(downloader);
+// let downloader = new Downloader();
+// downloader.filename = 'simulation.txt';
+// downloader.set_user_data = function (userdata) { this.filename = `${userdata.name.join('_VS_')}___${userdata.match_id[0]}.txt`; };
+// downloader.set_replay_raw = function (content) { this.content = content };
+// actionEventSystem.register(downloader);
+let analyzorDownloader = new AnalyzorDownloader(attacksManager);
+actionEventSystem.register(analyzorDownloader);
+
 
 //Play/Pause-AttributeToggler
 let playPauseAttributeToggler = new AttributeToggler(document.getElementsByName('play_button_img'), 'hidden');
@@ -257,9 +365,13 @@ window.addEventListener('click', (e) => {
         actionEventSystem.release_event('click_on_location', location)
 });
 
-//ActionManager
-let actionManager = new ActionManager(actionEventSystem);
+//GeneralActionManager
+let actionManager = new GeneralActionManager(actionEventSystem, false);
 actionEventSystem.register(actionManager);
+
+//FirewallActionManager
+let firewallActionManager = new FirewallActionManager(actionEventSystem, true);
+actionEventSystem.register(firewallActionManager);
 
 //Player
 let player = new Player(actionEventSystem);
@@ -288,7 +400,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
     ctrlKey: true,
     shiftKey: false,
     altKey: false,
-    callback: "next_turn",
+    callback: "next_attack",
     type: "keydown"
 },
 {
@@ -296,7 +408,7 @@ let shortcutController = new ShortcutController(actionEventSystem);
     ctrlKey: true,
     shiftKey: false,
     altKey: false,
-    callback: "previous_turn",
+    callback: "previous_attack",
     type: "keydown"
 },
 {
@@ -442,6 +554,60 @@ let shortcutController = new ShortcutController(actionEventSystem);
     callback: "set_action_mode",
     type: "keydown",
     parameter: "RM",
+},
+{
+    code: "KeyA",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_mode",
+    type: "keydown",
+    parameter: "attack",
+},
+{
+    code: "KeyL",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "set_mode",
+    type: "keydown",
+    parameter: "layout",
+},
+{
+    code: "KeyC",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "create_new_attack",
+    type: "keydown",
+    parameter: "",
+},
+{
+    code: "KeyD",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "delete_current_attack",
+    type: "keydown",
+    parameter: "",
+},
+{
+    code: "ArrowRight",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "switch_right",
+    type: "keydown",
+    parameter: "",
+},
+{
+    code: "ArrowLeft",
+    ctrlKey: true,
+    shiftKey: true,
+    altKey: false,
+    callback: "switch_left",
+    type: "keydown",
+    parameter: "",
 }
 ].forEach(function (shortcut) {
     shortcutController.addNewShortcut(shortcut);

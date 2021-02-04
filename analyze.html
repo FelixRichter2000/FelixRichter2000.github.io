@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Analyzor</title>
+    <link rel="shortcut icon" href="images/simulator_icon.svg">
+    <link rel="stylesheet" href="lib/jquery_ui.css" />
+    <link rel="stylesheet" href="css/watch.css" />
+</head>
+
+<body>
+    <div class="full_size" style="margin-left: 0; margin-right: auto;">
+
+        <!-- Main view tables -->
+        <table id="watch_table" class="full_size abs"></table>
+        <table id="simulation_table" class="full_size abs"></table>
+
+        <!-- Inside table elements -->
+        <div id="grid_overlay" class="full_size">
+            <overlay class="top-left">
+                <img class="left-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+                <img name="health-bar" class="left-mask bar" src="images/green_health_bar.svg"
+                    style="position: absolute;" />
+                <span name="health" class="left smaller-text top-fix" style="position: absolute; left: 80%;"></span>
+
+                <span name="user" class="left smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
+                <span name="name" class="left smaller-text green algo-name top-fix" style="position: absolute;">BY
+                    ALGO</span>
+
+                <label class="left top-4 very-small-text" style="position: absolute;">CORES:</label>
+                <span name="core" class="left-indented top-4 very-small-text" style="position: absolute;"></span>
+
+                <label class="left top-5 very-small-text" style="position: absolute;">BITS:</label>
+                <span name="bit" class="left-indented top-5 very-small-text" style="position: absolute;"></span>
+
+                <label class="left top-7 very-small-text" style="position: absolute;">MS:</label>
+                <span name="ms" class="left-indented top-7 very-small-text" style="position: absolute;"></span>
+            </overlay>
+            <overlay class="top-right">
+                <img class="right-mask bar" src="images/gray_health_bar.svg" style="position: absolute;" />
+                <img name="health-bar" class="right-mask bar" src="images/red_health_bar.svg"
+                    style="position: absolute; right: 0;" />
+                <span name="health" class="right smaller-text top-fix" style="position: absolute; right: 80%;"></span>
+
+                <span name="user" class="right smaller-text top-fix black" style="position: absolute;">BY PLAYER</span>
+                <span name="name" class="right smaller-text red algo-name" style="position: absolute;">BY ALGO</span>
+
+                <label class="right-indented top-4 very-small-text top-fix" style="position: absolute;">CORES:</label>
+                <span name="core" class="right top-4 very-small-text" style="position: absolute;"></span>
+
+                <label class="right-indented top-5 very-small-text" style="position: absolute;">BITS:</label>
+                <span name="bit" class="right top-5 very-small-text" style="position: absolute;"></span>
+
+                <label class="right-indented top-7 very-small-text" style="position: absolute;">MS:</label>
+                <span name="ms" class="right top-7 very-small-text" style="position: absolute;"></span>
+            </overlay>
+            <overlay class="bottom-left">
+                <button class="very-small-text bottom-9 fancy-blue black"
+                    onclick="window.location.href ='https://terminal.c1games.com/watchLive/' + new URLSearchParams(window.location.search).get('id')">
+                    >_ Terminal&nbsp;
+                </button>
+
+                <label class="left bottom-5 very-small-text">Attack:</label>
+                <span class="left-indented bottom-5 very-small-text" name="attack_index">0</span>
+
+                <button action="simulate" class="btn-normal bottom-3 black very-small-text fancy-blue"
+                    title="Run Simulation [ctrl + enter]">
+                    &nbsp;
+                    <img src="images/simulator_icon.svg" alt="" class="very-small-text">
+                    &nbsp;Simulate&nbsp;
+                </button>
+                <label action="simulate" class="btn-normal bottom-3 right-indented very-small-text "
+                    title="Keep shift pressed and click on location to remove things. (only blue objects can be removed!)">
+                    &nbsp;Remove&nbsp;
+                </label>
+                <section class="editor-section left bottom-1">
+                    <button action="set_action_mode" parameter="FF"
+                        class="very-small-text tile-size editor-button selected" title="Select Filter [f]">
+                        <img src="images/Filter3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="EF" class="very-small-text tile-size editor-button"
+                        title="Select Encryptor [e]">
+                        <img src="images/Encryptor3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="DF" class="very-small-text tile-size editor-button"
+                        title="Select Destructor [d]">
+                        <img src="images/Destructor3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="PI" class="very-small-text tile-size editor-button"
+                        title="Select Ping [p]">
+                        <img src="images/Ping3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="EI" class="very-small-text tile-size editor-button"
+                        title="Select Emp [m]">
+                        <img src="images/Emp3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="SI" class="very-small-text tile-size editor-button"
+                        title="Select Scrambler [s]">
+                        <img src="images/Scrambler3.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="UP" class="very-small-text tile-size editor-button"
+                        title="Upgrade Mode [u]">
+                        <img src="images/Upgrade2.svg" />
+                    </button>
+                    <button action="set_action_mode" parameter="RM" class="very-small-text tile-size editor-button"
+                        title="Remove Mode [r]">
+                        <img src="images/Remove2.svg" />
+                    </button>
+                </section>
+            </overlay>
+            <overlay class="bottom-right">
+
+                <label class="right-indented bottom-9 very-small-text" style="position: absolute;">Health:</label>
+                <span name="hover_health" class="right bottom-9 very-small-text" style="position: absolute;"></span>
+
+                <label class="right-indented bottom-8 very-small-text" style="position: absolute;">X, Y:</label>
+                <span name="hover_location" class="right bottom-8 very-small-text" style="position: absolute;"></span>
+
+                <label class="right-indented bottom-6 very-small-text" style="position: absolute;">TURN:</label>
+                <span name="turn_number" class="right bottom-6 very-small-text" style="position: absolute;">0</span>
+
+                <label class="right-indented bottom-5 very-small-text" style="position: absolute;">FRAME:</label>
+                <span name="total_frame_number" class="right bottom-5 very-small-text"
+                    style="position: absolute;">0</span>
+
+                <label class="right-indented bottom-4 very-small-text" style="position: absolute;"
+                    title="Turn-Frame: frame number during a turn">T_FRAME:</label>
+                <span name="action_phase_frame_number" class="right bottom-4 very-small-text"
+                    style="position: absolute;">0</span>
+
+                <div class="right bottom-3" style="width: 73%; height: 3%;">
+                    <div id="replay_slider" class="slider"></div>
+                </div>
+
+                <section class="playback-section bottom-4 left-indented">
+                    <button action="switch_view" title="Turn Board Around [ALT + x]">
+                        <img class="playback-button" src="images/switch_view.svg" />
+                    </button>
+                </section>
+                <section class="playback-section right bottom-1">
+                    <button action="download_layout" title="Download Replay [ALT + r]">
+                        <img class="playback-button" src="images/download.svg" />
+                    </button>
+                    <button action="previous_attack" title="Previous Turn [CTRL + ArrowLeft]">
+                        <img class="playback-button" src="images/next_turn.svg" style="transform: rotate(180deg);" />
+                    </button>
+                    <button action="previous_frame" title="Previous Frame [ArrowLeft]">
+                        <img class="playback-button" src="images/next_frame.svg" style="transform: rotate(180deg);" />
+                    </button>
+                    <button action="toggle_play" title="Toggle Play [Spacebar]">
+                        <img name="play_button_img" class="playback-button" src="images/play.svg" hidden />
+                        <img name="play_button_img" class="playback-button" src="images/pause.svg" />
+                    </button>
+                    <button action="next_frame" title="Next Frame [ArrowRight]">
+                        <img class="playback-button" src="images/next_frame.svg" />
+                    </button>
+                    <button action="next_attack" title="Next Turn [CTRL + ArrowRight]">
+                        <img class="playback-button" src="images/next_turn.svg" />
+                    </button>
+                </section>
+            </overlay>
+        </div>
+    </div>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/jquery_ui.js"></script>
+    <script src="js/utils/general/dynamic_css.js"></script>
+    <script src="js/utils/general/fetch.js"></script>
+    <script src="js/utils/general/slider.js"></script>
+    <script src="js/utils/match/analyzer_downloader.js"></script>
+    <script src="js/utils/match/layout_reader.js"></script>
+    <script src="js/utils/match/attacks_reader.js"></script>
+    <script src="js/utils/match/attacks_manager.js"></script>
+    <script src="js/utils/match/match_utils_config.js"></script>
+    <script src="js/utils/match/match_utils_functions.js"></script>
+    <script src="js/utils/match/match_utils.js"></script>
+    <script src="js/utils/match/match_viewer.js"></script>
+    <script src="js/utils/match/replay_downloader.js"></script>
+    <script src="js/utils/match/user_data_downloader.js"></script>
+    <script src="js/utils/match/field_generator.js"></script>
+    <script src="js/utils/match/controller.js"></script>
+    <script src="js/utils/match/player.js"></script>
+    <script src="js/utils/match/hover_information.js"></script>
+    <script src="js/utils/match/config_tools.js"></script>
+    <script src="js/utils/match/view_model.js"></script>
+    <script src="js/utils/match/state_parser.js"></script>
+    <script src="js/utils/match/attribute_toggler.js"></script>
+    <script src="js/utils/match/socket.js"></script>
+    <script src="js/utils/match/start_string_generator.js"></script>
+    <script src="js/utils/match/simulation_integrator.js"></script>
+    <script src="js/utils/match/conditional_event_forwarder.js"></script>
+    <script src="js/utils/match/change_detector.js"></script>
+    <script src="js/utils/match/general_action_manager.js"></script>
+    <script src="js/utils/match/firewall_action_manager.js"></script>
+    <script src="js/utils/general/action_event_system.js"></script>
+    <script src="js/utils/general/shortcut_controller.js"></script>
+    <script src="js/match_analysor.js"></script>
+</body>
+
+</html>

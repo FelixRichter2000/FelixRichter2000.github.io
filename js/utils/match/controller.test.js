@@ -23,7 +23,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe('Controller tests', function() {
+describe('Controller tests', function () {
     test('set replayData is possible', () => {
         const controller = new Controller();
         controller.set_replay_data([1, 2, 3]);
